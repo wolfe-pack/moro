@@ -1,0 +1,13 @@
+@(doc: controllers.doc.Document)
+
+@import helper._
+
+@main(doc.name) {
+    <div class="container">
+        @doc.cells.map { cell =>
+            <div class="cell">
+                @Html(cell.staticHTML)
+            </div>
+        }
+    </div>
+}

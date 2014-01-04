@@ -1,0 +1,82 @@
+{
+  "name" : "tutorial",
+  "cells" : [ {
+    "id" : 0,
+    "format" : "heading",
+    "content" : "Heading",
+    "extra" : {
+      "level" : "1"
+    }
+  }, {
+    "id" : 1,
+    "format" : "heading",
+    "content" : "Heading",
+    "extra" : {
+      "level" : "2"
+    }
+  }, {
+    "id" : 2,
+    "format" : "heading",
+    "content" : "Heading",
+    "extra" : {
+      "level" : "3"
+    }
+  }, {
+    "id" : 3,
+    "format" : "heading",
+    "content" : "Heading",
+    "extra" : {
+      "level" : "4"
+    }
+  }, {
+    "id" : 4,
+    "format" : "heading",
+    "content" : "Heading",
+    "extra" : {
+      "level" : "5"
+    }
+  }, {
+    "id" : 4,
+    "format" : "markdown",
+    "content" : "This notebook can support **bold**, _italics_, [Images](http://sameersingh.org/), and `Latex` too!",
+    "extra" : { }
+  }, {
+    "id" : 5,
+    "format" : "latex",
+    "content" : "\\alpha+\\beta=\\sum_{i=0}^{n}\\gamma\\cfrac{1}{\\mathcal{Z}}",
+    "extra" : {
+      "surroundWithAlign" : "true"
+    }
+  }, {
+    "id" : 6,
+    "format" : "markdown",
+    "content" : "And the equations can be inlined if definining \\\\(\\theta\\\\) and \\\\(\\pi\\\\) in text.",
+    "extra" : { }
+  }, {
+    "id" : 7,
+    "format" : "imageurl",
+    "content" : "http://www0.cs.ucl.ac.uk/people/photos/S.Riedel.jpg",
+    "extra" : { }
+  }, {
+    "id" : 8,
+    "format" : "scala",
+    "content" : "def f(x:Int) = x * x\\nf(10)",
+    "extra" : {
+      "output" : "100"
+    }
+  }, {
+    "id" : 9,
+    "format" : "heading",
+    "content" : "Another Example",
+    "extra" : {
+      "level" : "3"
+    }
+  }, {
+    "id" : 10,
+    "format" : "scala",
+    "content" : "def f2(x:Int) = x + x\\nf2(10)",
+    "extra" : {
+      "output" : "20"
+    }
+  } ]
+}

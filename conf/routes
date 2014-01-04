@@ -1,0 +1,26 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index
+
+# Language compiling code
+GET /language                               controllers.Application.language
+POST /language/compile                      controllers.Application.compileCode
+POST /language/reset                        controllers.Application.reset
+
+# compiler Json interface
+POST /compiler/compile                      controllers.Application.compileJson
+
+# Documents and rendering
+GET /doc/static                                 controllers.Application.staticDoc(file = "doc.json")
+GET /doc/static/*file                           controllers.Application.staticDoc(file)
+GET /doc/editor                                 controllers.Application.editor
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+
+
+
