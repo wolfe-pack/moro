@@ -4,28 +4,190 @@
 
 @main(doc.name) {
 
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Project name</a>
-        </div>
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
+    <div class="editContainer container">
+        <h1>@Html(doc.name)</h1>
+        <div id="cells"></div>
 
-    <div class="container">
-        @doc.name
+        <div id="postCells">
+            <button id="add" type="button" class="btn btn-default" onclick="addCell()">Add Cell</button>
+        </div>
+        <script>
+            function compileCode (codeStr, usage, mode) {
+                $.ajax({
+                   type: "POST",
+                   contentType: "application/json",
+                   url: '/compiler/' + mode,
+                   data: JSON.stringify({ code: codeStr }),
+                   dataType: "json",
+                   success: usage,
+                   error: function(j, t, e) {}
+                });
+            };
+
+            var heightUpdateFunction = function(editor, id) {
+
+                // http://stackoverflow.com/questions/11584061/
+                var newHeight =
+                          editor.getSession().getScreenLength()
+                          * editor.renderer.lineHeight
+                          + editor.renderer.scrollBar.getWidth();
+
+                $(id).height(newHeight.toString() + "px");
+                // $('#editor-section').height(newHeight.toString() + "px");
+
+                // This call is required for the editor to fix all of
+                // its inner structure for adapting to a change in size
+                editor.resize();
+            };
+
+            var cellsDiv = $('#cells');
+            var postCellsDic = $('#postCells');
+            var numCells = 0;
+
+            var cells = new Object();
+
+            function changeMode(id, newMode) {
+                  cells[id].mode = newMode;
+                  cells[id].editor.getSession().setMode("ace/mode/" + newMode);
+            }
+
+            function runCode(id) {
+              compileCode(cells[id].editor.getSession().getValue(),
+                function(x) {
+                  //cells[id].outputDisplay.getSession().setValue(x.result);
+                  cells[id].renderDisplay.html(x.result.replace(/\n/g , "<br>"));
+                  // post compiling work
+                  switch(cells[id].mode) {
+                    case "scala": break;
+                    case "markdown":
+                        $('#toggleEditor'+id).click();
+                        MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
+                        break;
+                    case "latex":
+                        $('#toggleEditor'+id).click();
+                        MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
+                        break;
+                  }
+                }, cells[id].mode);
+            }
+
+            function newCellDiv(id) {
+               return '<div id="cell' + id + '" class="cellWrapper">' +
+               '<div id="editCell' + id + '" class="editCell" ondblclick="toggleEditor(' + id + ')">' +
+               //'  cell ' + id + ' contents' +
+               '  <div class="input">' +
+               '    <div id="modeForm' + id + '" class="btn-group btn-group-xs" data-toggle="buttons">' +
+               '      <label class="btn btn-default active"><input type="radio" name="mode" value="scala"> Scala</label>' +
+               '      <label class="btn btn-default"><input type="radio" name="mode" value="markdown"> Markdown</label>' +
+               '      <label class="btn btn-default"><input type="radio" name="mode" value="latex"> Latex</label>' +
+               '    </div>' +
+               '      <button id="runCode' + id + '" type="button" class="btn btn-default btn-xs" onclick="runCode(' + id + ')"><span class="glyphicon glyphicon-play"></span></button>' +
+               //'    <textarea id="codeTextArea' + id + '" rows="5" cols="20" hidden>def f(x: Int) = x*x&#13;&#10;f(10)</textarea>' +
+               '    <div id="editor' + id + '" class="cell"></div>' +
+               '  </div>' +
+               // '<div id="outputDisplay' + id + '" class="cell">100</div>' +
+               '  <div id="renderDisplay' + id + '" class="cell">100</div>' +
+               '</div>' +
+               '<div class="sidebarCell">' +
+               '  <div class="btn-group btn-group-xs">' +
+               '    <button id="addAbove' + id + '" type="button" class="btn btn-default" onclick="addCellAbove(' + id + ')"><span class="glyphicon glyphicon-chevron-up"></span></button>' +
+               '    <button id="toggleEditor' + id + '" type="button" class="btn btn-info edit-btn" data-toggle="button" onclick="toggleEditor(' + id + ')"><span class="glyphicon glyphicon-pencil"></span></button>' +
+               '    <button id="remove' + id + '" type="button" class="btn btn-danger" onclick="removeCell(' + id + ')"><span class="glyphicon glyphicon-minus-sign"></span></button>' +
+               '    <button id="addBelow' + id + '" type="button" class="btn btn-default" onclick="addCellBelow(' + id + ')"><span class="glyphicon glyphicon-chevron-down"></span></button>' +
+               '  </div>' +
+               '</div>' +
+               '</div>'
+            }
+
+            function makeCellFunctional(id) {
+                cells[id] = new Object();
+                cells[id].id = id;
+                cells[id].mode = "scala";
+                cells[id].renderDisplay = $('#renderDisplay' + id);
+
+                cells[id].editor = ace.edit("editor"+id);
+                cells[id].editor.setTheme("ace/theme/solarized_light");
+                cells[id].editor.getSession().setMode("ace/mode/scala");
+                cells[id].editor.focus();
+                cells[id].editor.navigateFileEnd();
+                cells[id].showEditor = true;
+
+                heightUpdateFunction(cells[id].editor, '#editor'+id);
+                cells[id].editor.getSession().on('change', function () {
+                    heightUpdateFunction(cells[id].editor, '#editor'+id);
+                });
+
+                cells[id].editor.commands.addCommand({
+                    name: "runCode",
+                    bindKey: {win: "Ctrl-Enter", mac: "Ctrl-Enter"},
+                    exec: function(editor) {
+                        document.getElementById("runCode"+id).click();
+                    }
+                })
+
+                //cells[id].outputDisplay = ace.edit("outputDisplay"+id);
+                //heightUpdateFunction(cells[id].outputDisplay, '#outputDisplay'+id);
+                //cells[id].outputDisplay.setTheme("ace/theme/github");
+                //cells[id].outputDisplay.getSession().setMode("ace/mode/markdown");
+                //cells[id].outputDisplay.setReadOnly(true);  // false to make it editable
+                //cells[id].outputDisplay.setShowPrintMargin(true);
+                //cells[id].outputDisplay.setHighlightActiveLine(false);
+                //cells[id].outputDisplay.setShowInvisibles(true);
+                //cells[id].outputDisplay.renderer.setShowGutter(false);
+                //cells[id].outputDisplay.getSession().on('change', function () {
+                //    heightUpdateFunction(cells[id].outputDisplay, '#outputDisplay'+id);
+                //});
+
+                $('.btn').button();
+
+                var sz = $('#modeForm'+id+' label');
+                for (var i=0, len=sz.length; i<len; i++) {
+                    sz[i].onclick = function() {
+                        newMode = this.querySelector('input').value;
+                        console.log(cells[id].mode, newMode);
+                        if(cells[id].mode != newMode) {
+                          changeMode(id, newMode);
+                        }
+                    };
+                }
+            }
+
+            function addCell() {
+              cellsDiv.append(newCellDiv(numCells));
+              makeCellFunctional(numCells);
+              numCells += 1;
+            }
+
+            function addCellAbove(id) {
+              console.log("TODO: adding above " + id);
+              $( "#cell"+id ).before(newCellDiv(numCells));
+              makeCellFunctional(numCells);
+              numCells += 1;
+            }
+
+            function addCellBelow(id) {
+              console.log("TODO: adding below " + id);
+              $( "#cell"+id ).after(newCellDiv(numCells));
+              makeCellFunctional(numCells);
+              numCells += 1;
+            }
+
+            function toggleEditor(id) {
+              cells[id].showEditor = !cells[id].showEditor;
+              if(cells[id].showEditor) {
+                console.log("showing editor" + id);
+                $('#editCell' + id + ' .input').show();
+              } else {
+                console.log("hiding editor" + id);
+                $('#editCell' + id + ' .input').hide();
+              }
+            }
+
+            function removeCell(id) {
+              console.log("removing " + id);
+              $('#cell' + id).remove();
+              delete cells[id];
+            }
+        </script>
     </div>
 }

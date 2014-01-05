@@ -4,29 +4,28 @@
 
 @main("Scala PPL Compiler") {
 <div class="container">
-    <h1>Evaluate new Model</h1>
+    <h1>Evaluate:</h1>
     <div class="input">
       <form id="modeForm">
-        <input type="radio" name="mode" value="scala" checked="true">Scala<br>
-        <input type="radio" name="mode" value="markdown">Markdown<br>
-        <input type="radio" name="mode" value="latex">Latex<br>
+        <input type="radio" name="mode" value="scala" checked="true"> Scala
+        <input type="radio" name="mode" value="markdown"> Markdown
+        <input type="radio" name="mode" value="latex"> Latex
       </form>
-      <textarea id="codeTextArea" rows="5" cols="20" hidden>def f(x: Int) = x*x&#13;&#10;f(10)</textarea>
-      <div id="editor" class="editor"></div>
-      <button id="runCode" onclick="runCode()">Run</button>(or press Ctrl + Enter)
+      <div id="editor" class="cell">def f(x: Int) = x*x&#13;&#10;f(10)</div>
+      <button id="runCode" type="button" class="btn btn-default" onclick="runCode()">Run</button>(or press Ctrl + Enter)
     </div>
     <h2>Output</h2>
-    <div id="outputDisplay" class="outputDisplay">100</div>
+    <div id="outputDisplay" class="cell">100</div>
     <h2>Render</h2>
-    <div id="renderDisplay" class="renderDisplay">100</div>
+    <div id="renderDisplay" class="cell">100</div>
     <script>
         currentMode = "scala";
 
-        function compileCode (codeStr, usage) {
+        function compileCode (codeStr, usage, mode) {
             $.ajax({
                type: "POST",
                contentType: "application/json",
-               url: '/compiler/' + currentMode,
+               url: '/compiler/' + mode,
                data: JSON.stringify({ code: codeStr }),
                dataType: "json",
                success: usage,
@@ -50,23 +49,18 @@
             editor.resize();
         };
 
-        var textarea = $('#codeTextArea');
         var renderDisplay = $('#renderDisplay');
 
         var editor = ace.edit("editor");
         editor.setTheme("ace/theme/solarized_light");
         editor.getSession().setMode("ace/mode/scala");
         editor.focus();
-        editor.getSession().setValue(textarea.val());
         editor.navigateFileEnd();
 
         heightUpdateFunction(editor, '#editor');
         editor.getSession().on('change', function () {
-            textarea.val(editor.getSession().getValue());
             heightUpdateFunction(editor, '#editor');
         });
-
-        textarea.val(editor.getSession().getValue());
 
         editor.commands.addCommand({
             name: "runCode",
@@ -86,7 +80,6 @@
         outputDisplay.setShowInvisibles(true);
         //outputDisplay.renderer.setShowGutter(false);
         outputDisplay.getSession().on('change', function () {
-            textarea.val(editor.getSession().getValue());
             heightUpdateFunction(outputDisplay, '#outputDisplay');
         });
 
@@ -106,7 +99,7 @@
               outputDisplay.getSession().setValue(x.result);
               renderDisplay.html(x.result);
               MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"]);
-            });
+            }, currentMode);
         }
 
         function changeMode(newMode) {

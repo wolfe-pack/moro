@@ -13,10 +13,13 @@ POST /compiler/scala                      controllers.Application.compileScalaJs
 POST /compiler/markdown                      controllers.Application.compileMarkdownJson
 POST /compiler/latex                      controllers.Application.compileLatexJson
 
-# Documents and rendering
-GET /doc/static                                 controllers.Application.staticDoc(file = "doc.json")
+# Static document rendering
+GET /doc/static                                 controllers.Application.staticDoc(file = "test")
 GET /doc/static/*file                           controllers.Application.staticDoc(file)
-GET /doc/editor                                 controllers.Application.editor
+
+# Document editing
+GET /doc/editor                                 controllers.Application.editor(file = "test")
+GET /doc/editor/*file                           controllers.Application.editor(file)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

@@ -49,7 +49,7 @@ object Application extends Controller {
 
   object Notebook {
     def doc = {
-      val d = new Document("tutorial", ArrayBuffer(
+      val d = new Document("Wolfe tutorial", ArrayBuffer(
         Heading(0, "Heading", 1),
         Heading(1, "Heading", 2),
         Heading(2, "Heading", 3),
@@ -63,21 +63,21 @@ object Application extends Controller {
         Heading(9, "Another Example", 3),
         Scala(10, "def f2(x:Int) = x + x\\nf2(10)", "20")
       ))
-      Document.save(d, "public/docs/doc.json")
-      Document.load(Application.getClass.getResourceAsStream("/public/docs/doc.json"))
+      Document.save(d, "public/docs/test.json")
+      Document.load(Application.getClass.getResourceAsStream("/public/docs/test.json"))
     }
   }
 
-  def editor = TODO
-
-  def static = Action {
-    Ok(views.html.static(Notebook.doc))
+  def editor(file: String) = Action {
+    Notebook.doc
+    println("/public/docs/" + file + ".json")
+    Ok(views.html.editor(Document.load(Application.getClass.getResourceAsStream("/public/docs/" + file+ ".json"))))
   }
 
   def staticDoc(file: String) = Action {
     Notebook.doc
-    println("/public/docs/" + file)
-    Ok(views.html.static(Document.load(Application.getClass.getResourceAsStream("/public/docs/" + file))))
+    println("/public/docs/" + file + ".json")
+    Ok(views.html.static(Document.load(Application.getClass.getResourceAsStream("/public/docs/" + file+ ".json"))))
   }
 
 }
