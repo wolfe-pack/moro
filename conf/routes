@@ -5,13 +5,13 @@
 # Home page
 GET     /                           controllers.Application.index
 
-# Language compiling code
+# Scala Interface
 GET /language                               controllers.Application.language
-POST /language/compile                      controllers.Application.compileCode
-POST /language/reset                        controllers.Application.reset
 
 # compiler Json interface
-POST /compiler/compile                      controllers.Application.compileJson
+POST /compiler/scala                      controllers.Application.compileScalaJson
+POST /compiler/markdown                      controllers.Application.compileMarkdownJson
+POST /compiler/latex                      controllers.Application.compileLatexJson
 
 # Documents and rendering
 GET /doc/static                                 controllers.Application.staticDoc(file = "doc.json")

@@ -12,44 +12,32 @@ import play.api.libs.json.Json
 
 object Application extends Controller {
 
-  val compiler = new TwitterEvalServer // new NSCLoopServer
-  compiler.start
-
-  val modelForm = Form(
-    "code" -> Forms.text
-  )
-
-  var code: String = "10"
-  var result: String = "10"
+  object Compilers {
+    val scala = new TwitterEvalServer
+    // new NSCLoopServer
+    val markdown = new ActuriusCompiler
+    // new NSCLoopServer
+    val latex = new LatexCompiler // new NSCLoopServer
+    scala.start
+    markdown.start
+    latex.start
+  }
 
   def index = Action {
     Redirect(routes.Application.language)
   }
 
   def language = Action {
-    Ok(views.html.index(result, modelForm.fill(code)))
+    Ok(views.html.index())
   }
 
-  def compileCode = Action {
-    implicit request =>
-      modelForm.bindFromRequest.fold(
-        errors => BadRequest(views.html.index("ERROR!", errors)),
-        snippet => {
-          code = snippet
-          result = compiler.compile(code)
-          Redirect(routes.Application.language)
-        }
-      )
-  }
+  def compileScalaJson = compileJson(Compilers.scala)
 
-  def reset = Action {
-    compiler.reset
-    code = ""
-    result = ""
-    Redirect(routes.Application.language)
-  }
+  def compileMarkdownJson = compileJson(Compilers.markdown)
 
-  def compileJson = Action {
+  def compileLatexJson = compileJson(Compilers.latex)
+
+  def compileJson(compiler: Compiler) = Action {
     request =>
       request.body.asJson.map {
         json => val code = (json \ "code").as[String];

@@ -1,35 +1,39 @@
-@(result: String, modelForm: Form[String])
+@()
 
 @import helper._
 
 @main("Scala PPL Compiler") {
 <div class="container">
     <h1>Evaluate new Model</h1>
-    @form(routes.Application.compileCode, 'id -> "runForm") {
-    @textarea(modelForm("code"), 'rows -> "5", 'cols -> "20", '_label -> "Write the model below:", 'hidden -> true)
-    <div id="editor" class="editor"></div>
-    <input type="submit" value="Run" id="run"> (or press Ctrl + Enter)
-    }
-    @form(routes.Application.reset, 'id -> "resetForm") {
-    <input type="submit" value="Reset"> (or press Shift + Enter)
-    }
-
-    <h2>Output size: @result.size</h2>
-
-    <div id="outputDisplay" class="outputDisplay">@result</div>
-
+    <div class="input">
+      <form id="modeForm">
+        <input type="radio" name="mode" value="scala" checked="true">Scala<br>
+        <input type="radio" name="mode" value="markdown">Markdown<br>
+        <input type="radio" name="mode" value="latex">Latex<br>
+      </form>
+      <textarea id="codeTextArea" rows="5" cols="20" hidden>def f(x: Int) = x*x&#13;&#10;f(10)</textarea>
+      <div id="editor" class="editor"></div>
+      <button id="runCode" onclick="runCode()">Run</button>(or press Ctrl + Enter)
+    </div>
+    <h2>Output</h2>
+    <div id="outputDisplay" class="outputDisplay">100</div>
+    <h2>Render</h2>
+    <div id="renderDisplay" class="renderDisplay">100</div>
     <script>
+        currentMode = "scala";
+
         function compileCode (codeStr, usage) {
             $.ajax({
                type: "POST",
                contentType: "application/json",
-               url: '/compiler/compile',
+               url: '/compiler/' + currentMode,
                data: JSON.stringify({ code: codeStr }),
                dataType: "json",
                success: usage,
                error: function(j, t, e) {}
             });
         };
+
         var heightUpdateFunction = function(editor, id) {
 
             // http://stackoverflow.com/questions/11584061/
@@ -46,7 +50,8 @@
             editor.resize();
         };
 
-        var textarea = $('#code');
+        var textarea = $('#codeTextArea');
+        var renderDisplay = $('#renderDisplay');
 
         var editor = ace.edit("editor");
         editor.setTheme("ace/theme/solarized_light");
@@ -67,18 +72,9 @@
             name: "runCode",
             bindKey: {win: "Ctrl-Enter", mac: "Ctrl-Enter"},
             exec: function(editor) {
-                document.getElementById("runForm").submit();
+                document.getElementById("runCode").click();
             }
         })
-        editor.commands.addCommand({
-            name: "resetCode",
-            bindKey: {win: "Shift-Enter", mac: "Shift-Enter"},
-            exec: function(editor) {
-                console.log("resetting.")
-                document.getElementById("resetForm").submit();
-            }
-        })
-
 
         var outputDisplay = ace.edit("outputDisplay");
         heightUpdateFunction(outputDisplay, '#outputDisplay');
@@ -94,7 +90,30 @@
             heightUpdateFunction(outputDisplay, '#outputDisplay');
         });
 
-        compileCode("math.exp(1)", function(x) {console.log(x);});
+        var sz = document.forms['modeForm'].elements['mode'];
+        for (var i=0, len=sz.length; i<len; i++) {
+            sz[i].onclick = function() {
+                console.log(currentMode, this.value);
+                if(currentMode != this.value) {
+                  changeMode(this.value);
+                }
+            };
+        }
+
+        function runCode() {
+          compileCode(editor.getSession().getValue(),
+            function(x) {
+              outputDisplay.getSession().setValue(x.result);
+              renderDisplay.html(x.result);
+              MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"]);
+            });
+        }
+
+        function changeMode(newMode) {
+          currentMode = newMode;
+          editor.getSession().setMode("ace/mode/" + currentMode);
+        }
+
     </script>
 </div>
 }

@@ -8,7 +8,7 @@ import java.io.File
  * @author sameer
  */
 
-trait ScalaServer {
+trait Compiler {
   def compile(code: String): String
 
   def stop {}
@@ -18,7 +18,17 @@ trait ScalaServer {
   def reset {}
 }
 
-class NSCLoopServer extends ScalaServer {
+class ActuriusCompiler extends Compiler {
+  import eu.henkelmann.actuarius.ActuariusTransformer
+  val transformer = new ActuariusTransformer()
+  def compile(code: String) = transformer(code)
+}
+
+class LatexCompiler extends Compiler {
+  def compile(latex: String) = "$$" + latex + "$$"
+}
+
+class NSCLoopServer extends Compiler {
   var engineIntp: IMain = _
 
   override def start = {
@@ -40,7 +50,7 @@ class NSCLoopServer extends ScalaServer {
   }
 }
 
-class TwitterEvalServer extends ScalaServer {
+class TwitterEvalServer extends Compiler {
 
   def compile(code: String) = {
     val eval = new Evaluator(None, Classpath.paths) // List("/Users/sameer/src/research/interactiveppl/lib/scalapplcodefest_2.10-0.1.0.jar"))

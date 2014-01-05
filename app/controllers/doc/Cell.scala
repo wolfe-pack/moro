@@ -19,7 +19,7 @@ case class HTML(id: Int, text: String) extends Cell {
 
 case class Markdown(id: Int, text: String) extends Cell {
 
-  def staticHTML = Cell.markdownTransformer(text).replaceAll("\\\\$", "\\$")
+  def staticHTML = Cell.markdownTransformer(text)
 }
 
 case class Latex(id: Int, latex: String, surroundWithAlign: Boolean = true) extends Cell {
