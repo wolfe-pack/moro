@@ -1,50 +1,63 @@
-@(doc: controllers.doc.Document)
+@(doc: controllers.doc.Document, file: String)
 
 @import helper._
 
 @main(doc.name) {
-
+    <div id="docNameDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="docNameLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+            <h3 class="modal-title">Please enter a new title for this window.</h3>
+        </div>
+        <div class="modal-body">
+            <div class="divDialogElements">
+                <input id="docNameInput" name="docNameInput" type="text" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
+            <a href="#" class="btn btn-primary" onclick="okClicked ();">OK</a>
+        </div>
+        </div>
+        </div>
+    </div>
     <div class="editContainer container">
-        <h1>@Html(doc.name)</h1>
+        <div class="row">
+            <div class="col-md-8"><h1 id="docName">@(doc.name)</h1></div>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <a data-toggle="modal" href="#docNameDialog" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="saveDoc()"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                    </span>
+                    <input id="filePath" type="text" class="form-control" value="@file">
+                </div>
+            </div>
+        </div>
         <div id="cells"></div>
 
         <div id="postCells">
-            <button id="add" type="button" class="btn btn-default" onclick="addCell()">Add Cell</button>
+            <button id="add" type="button" class="btn btn-default" onclick="addCell()"><span class="glyphicon glyphicon-plus"></span></button>
         </div>
         <script>
-            function compileCode (codeStr, usage, mode) {
-                $.ajax({
-                   type: "POST",
-                   contentType: "application/json",
-                   url: '/compiler/' + mode,
-                   data: JSON.stringify({ code: codeStr }),
-                   dataType: "json",
-                   success: usage,
-                   error: function(j, t, e) {}
-                });
-            };
-
-            var heightUpdateFunction = function(editor, id) {
-
-                // http://stackoverflow.com/questions/11584061/
-                var newHeight =
-                          editor.getSession().getScreenLength()
-                          * editor.renderer.lineHeight
-                          + editor.renderer.scrollBar.getWidth();
-
-                $(id).height(newHeight.toString() + "px");
-                // $('#editor-section').height(newHeight.toString() + "px");
-
-                // This call is required for the editor to fix all of
-                // its inner structure for adapting to a change in size
-                editor.resize();
-            };
-
             var cellsDiv = $('#cells');
             var postCellsDic = $('#postCells');
             var numCells = 0;
 
             var cells = new Object();
+            var docName = "@(doc.name)";
+
+            $(document).ready(function() {
+				$('#docNameDialog').bind('show', function () {
+					document.getElementById ("docNameInput").value = docName;
+					});
+				});
+			function okClicked () {
+				docName = document.getElementById ("docNameInput").value;
+				$('#docNameDialog').modal('hide');
+				$('#docName').text(docName);
+			};
 
             function changeMode(id, newMode) {
                   cells[id].mode = newMode;
@@ -188,6 +201,40 @@
               $('#cell' + id).remove();
               delete cells[id];
             }
+
+            function saveDoc() {
+              console.log("saving doc to " + $('#filePath')[0].value);
+              doc = docToJson(docName, cells);
+              console.log(doc);
+            }
+
+            function compileCode (codeStr, usage, mode) {
+                $.ajax({
+                   type: "POST",
+                   contentType: "application/json",
+                   url: '/compiler/' + mode,
+                   data: JSON.stringify({ code: codeStr }),
+                   dataType: "json",
+                   success: usage,
+                   error: function(j, t, e) {}
+                });
+            };
+
+            var heightUpdateFunction = function(editor, id) {
+
+                // http://stackoverflow.com/questions/11584061/
+                var newHeight =
+                          editor.getSession().getScreenLength()
+                          * editor.renderer.lineHeight
+                          + editor.renderer.scrollBar.getWidth();
+
+                $(id).height(newHeight.toString() + "px");
+                // $('#editor-section').height(newHeight.toString() + "px");
+
+                // This call is required for the editor to fix all of
+                // its inner structure for adapting to a change in size
+                editor.resize();
+            };
         </script>
     </div>
 }

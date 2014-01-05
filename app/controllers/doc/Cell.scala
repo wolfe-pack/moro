@@ -90,9 +90,9 @@ object Cell {
     case Formats.raw => RawText(c.id, c.content)
     case Formats.html => HTML(c.id, c.content)
     case Formats.markdown => Markdown(c.id, c.content)
-    case Formats.latex => Latex(c.id, c.content, c.extra("surroundWithAlign").toBoolean)
-    case Formats.scala => Scala(c.id, c.content, c.extra("output"))
+    case Formats.latex => Latex(c.id, c.content, c.extra.getOrElse("surroundWithAlign", "true").toBoolean)
+    case Formats.scala => Scala(c.id, c.content, c.extra.getOrElse("output", ""))
     case Formats.imageurl => ImageURL(c.id, c.content)
-    case Formats.heading => Heading(c.id, c.content, c.extra("level").toInt)
+    case Formats.heading => Heading(c.id, c.content, c.extra.getOrElse("level", "1").toInt)
   }
 }

@@ -28,28 +28,6 @@ class LatexCompiler extends Compiler {
   def compile(latex: String) = "$$" + latex + "$$"
 }
 
-class NSCLoopServer extends Compiler {
-  var engineIntp: IMain = _
-
-  override def start = {
-    val settings = new Settings
-    settings.usejavacp.value = true
-    settings.deprecation.value = true
-    settings.bootclasspath.value += scala.tools.util.PathResolver.Environment.javaBootClassPath + File.pathSeparator + "lib/scala-library.jar"
-    settings.bootclasspath.value += scala.tools.util.PathResolver.Environment.javaBootClassPath + File.pathSeparator + "lib/scala-compiler.jar"
-    engineIntp = new IMain(settings) {
-      override protected def parentClassLoader = settings.getClass.getClassLoader()
-    }
-  }
-
-  def compile(code: String) = {
-    println("compiling code : " + code)
-    val result = engineIntp.interpret(code)
-    println(result.toString)
-    result.toString
-  }
-}
-
 class TwitterEvalServer extends Compiler {
 
   def compile(code: String) = {

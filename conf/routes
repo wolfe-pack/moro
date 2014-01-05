@@ -5,9 +5,6 @@
 # Home page
 GET     /                           controllers.Application.index
 
-# Scala Interface
-GET /language                               controllers.Application.language
-
 # compiler Json interface
 POST /compiler/scala                      controllers.Application.compileScalaJson
 POST /compiler/markdown                      controllers.Application.compileMarkdownJson
@@ -20,6 +17,7 @@ GET /doc/static/*file                           controllers.Application.staticDo
 # Document editing
 GET /doc/editor                                 controllers.Application.editor(file = "test")
 GET /doc/editor/*file                           controllers.Application.editor(file)
+POST /doc/save/*file                            controllers.Application.save(file)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

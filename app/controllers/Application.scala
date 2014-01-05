@@ -14,20 +14,14 @@ object Application extends Controller {
 
   object Compilers {
     val scala = new TwitterEvalServer
-    // new NSCLoopServer
     val markdown = new ActuriusCompiler
-    // new NSCLoopServer
-    val latex = new LatexCompiler // new NSCLoopServer
+    val latex = new LatexCompiler
     scala.start
     markdown.start
     latex.start
   }
 
   def index = Action {
-    Redirect(routes.Application.language)
-  }
-
-  def language = Action {
     Ok(views.html.index())
   }
 
@@ -71,13 +65,26 @@ object Application extends Controller {
   def editor(file: String) = Action {
     Notebook.doc
     println("/public/docs/" + file + ".json")
-    Ok(views.html.editor(Document.load(Application.getClass.getResourceAsStream("/public/docs/" + file+ ".json"))))
+    Ok(views.html.editor(Document.load(Application.getClass.getResourceAsStream("/public/docs/" + file + ".json")), file))
   }
 
   def staticDoc(file: String) = Action {
     Notebook.doc
     println("/public/docs/" + file + ".json")
-    Ok(views.html.static(Document.load(Application.getClass.getResourceAsStream("/public/docs/" + file+ ".json"))))
+    Ok(views.html.static(Document.load(Application.getClass.getResourceAsStream("/public/docs/" + file + ".json"))))
+  }
+
+  def save(file: String) = Action {
+    request =>
+      request.body.asJson.map {
+        json => val d = Document.loadJson(json.toString())
+          println(d + " --> " + file)
+          println(routes.Assets.at("public/docs/"+ file + ".json"))
+          Document.save(d, "public/docs/" + file + ".json")
+          Ok("Save successful: " + d)
+      }.getOrElse {
+        BadRequest("Expecting Json data")
+      }
   }
 
 }

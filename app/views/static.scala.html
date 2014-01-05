@@ -4,6 +4,7 @@
 
 @main(doc.name) {
     <div class="container">
+        <h1>@Html(doc.name)</h1>
         @doc.cells.map { cell =>
             <div class="cell">
                 @Html(cell.staticHTML)

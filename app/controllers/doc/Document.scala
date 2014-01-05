@@ -34,13 +34,18 @@ object Document {
     writer.close()
   }
 
-  def load(is: InputStream): Document = {
-    val reader = Source.fromInputStream(is)
-    val dd = JacksonWrapper.deserialize[DocumentData](reader.getLines().mkString("\n"))
-    reader.close()
+  def loadJson(fromJson: String): Document = {
+    val dd = JacksonWrapper.deserialize[DocumentData](fromJson)
     val doc = new Document(dd.name)
     doc.cells ++= dd.cells.map(c => Cell.toCell(c))
     doc
+  }
+
+  def load(is: InputStream): Document = {
+    val reader = Source.fromInputStream(is)
+    val dd = loadJson(reader.getLines().mkString("\n"))
+    reader.close()
+    dd
   }
 
   def load(filepath: String): Document = {
