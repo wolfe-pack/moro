@@ -6,48 +6,23 @@
 <div class="container">
     <h1>Evaluate:</h1>
     <div class="input">
-      <form id="modeForm">
-        <input type="radio" name="mode" value="scala" checked="true"> Scala
-        <input type="radio" name="mode" value="markdown"> Markdown
-        <input type="radio" name="mode" value="latex"> Latex
-      </form>
-      <div id="editor" class="cell">def f(x: Int) = x*x&#13;&#10;f(10)</div>
+      <div id="modeForm" class="btn-group btn-group-xs" data-toggle="buttons">
+         <label class="btn btn-default active"><input type="radio" name="mode" value="scala"> Scala</label>
+         <label class="btn btn-default"><input type="radio" name="mode" value="markdown"> Markdown</label>
+         <label class="btn btn-default"><input type="radio" name="mode" value="latex"> Latex</label>
+         <label class="btn btn-default"><input type="radio" name="mode" value="heading1"> <span class="glyphicon glyphicon-header">1</span></label>
+         <label class="btn btn-default"><input type="radio" name="mode" value="heading2"> <span class="glyphicon glyphicon-header">2</span></label>
+         <label class="btn btn-default"><input type="radio" name="mode" value="heading3"> <span class="glyphicon glyphicon-header">3</span></label>
+      </div>
+      <div id="editor" class="cell light-border">def f(x: Int) = x*x&#13;&#10;f(10)</div>
       <button id="runCode" type="button" class="btn btn-default" onclick="runCode()">Run</button>(or press Ctrl + Enter)
     </div>
     <h2>Output</h2>
-    <div id="outputDisplay" class="cell">100</div>
+    <div id="outputDisplay" class="cell light-border">100</div>
     <h2>Render</h2>
-    <div id="renderDisplay" class="cell">100</div>
+    <div id="renderDisplay" class="cell light-border">100</div>
     <script>
         currentMode = "scala";
-
-        function compileCode (codeStr, usage, mode) {
-            $.ajax({
-               type: "POST",
-               contentType: "application/json",
-               url: '/compiler/' + mode,
-               data: JSON.stringify({ code: codeStr }),
-               dataType: "json",
-               success: usage,
-               error: function(j, t, e) {}
-            });
-        };
-
-        var heightUpdateFunction = function(editor, id) {
-
-            // http://stackoverflow.com/questions/11584061/
-            var newHeight =
-                      editor.getSession().getScreenLength()
-                      * editor.renderer.lineHeight
-                      + editor.renderer.scrollBar.getWidth();
-
-            $(id).height(newHeight.toString() + "px");
-            // $('#editor-section').height(newHeight.toString() + "px");
-
-            // This call is required for the editor to fix all of
-            // its inner structure for adapting to a change in size
-            editor.resize();
-        };
 
         var renderDisplay = $('#renderDisplay');
 
@@ -83,28 +58,49 @@
             heightUpdateFunction(outputDisplay, '#outputDisplay');
         });
 
-        var sz = document.forms['modeForm'].elements['mode'];
+            $('.btn').button();
+
+        var sz = $('#modeForm label');
         for (var i=0, len=sz.length; i<len; i++) {
             sz[i].onclick = function() {
-                console.log(currentMode, this.value);
-                if(currentMode != this.value) {
-                  changeMode(this.value);
+                newMode = this.querySelector('input').value;
+                console.log(currentMode, newMode);
+                if(currentMode != newMode) {
+                  changeMode(newMode);
                 }
             };
         }
 
-        function runCode() {
-          compileCode(editor.getSession().getValue(),
-            function(x) {
-              outputDisplay.getSession().setValue(x.result);
-              renderDisplay.html(x.result);
+        function outputResult(result) {
+              outputDisplay.getSession().setValue(result);
+              renderDisplay.html(result);
               MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"]);
-            }, currentMode);
+        }
+
+        function runCode() {
+          var code = editor.getSession().getValue();
+          switch(currentMode) {
+            case "heading1": outputResult("<h1>" + code + "</h1>"); break;
+            case "heading2": outputResult("<h2>" + code + "</h2>"); break;
+            case "heading3": outputResult("<h3>" + code + "</h3>"); break;
+            default:
+              compileCode(code,
+                function(x) {
+                  outputResult(x.result);
+                }, currentMode); break;
+          }
         }
 
         function changeMode(newMode) {
           currentMode = newMode;
-          editor.getSession().setMode("ace/mode/" + currentMode);
+          var editorMode = currentMode;
+          switch(currentMode) {
+            case "heading1": editorMode = "html"; break;
+            case "heading2": editorMode = "html"; break;
+            case "heading3": editorMode = "html"; break;
+            default: break;
+          }
+          editor.getSession().setMode("ace/mode/" + editorMode);
         }
 
     </script>

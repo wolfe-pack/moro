@@ -1,0 +1,23 @@
+{
+  "name" : "Wolfe Tutorial (by Vivek)",
+  "cells" : [ {
+    "id" : 0,
+    "format" : "markdown",
+    "content" : "This is **awesome** markdown.\n\n```\n  Has some code too!\n```",
+    "extra" : { }
+  }, {
+    "id" : 1,
+    "format" : "scala",
+    "content" : "def f(x:Int) = math.exp(x)\nf(1)",
+    "extra" : {
+      "output" : "2.7182818284590455"
+    }
+  }, {
+    "id" : 2,
+    "format" : "latex",
+    "content" : "\\\\alpha + \\mathcal{N}",
+    "extra" : {
+      "surroundWithAlign" : "true"
+    }
+  } ]
+}

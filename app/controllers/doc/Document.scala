@@ -26,8 +26,10 @@ object Document {
   case class DocumentData(name: String,
                           cells: Seq[CellData])
 
+  def toDData(doc: Document) = DocumentData(doc.name, doc.cells.map(c => Cell.toCellData(c)))
+
   def save(doc: Document, filepath: String) = {
-    val dd = DocumentData(doc.name, doc.cells.map(c => Cell.toCellData(c)))
+    val dd = toDData(doc)
     val writer = new PrintWriter(filepath)
     writer.println(JacksonWrapper.serializePretty(dd))
     writer.flush()
