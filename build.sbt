@@ -9,11 +9,12 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 
+/*
 libraryDependencies ++= Seq(
   jdbc,
   anorm,
   cache
-)
+)*/
 
 //publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository")))
 
