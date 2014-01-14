@@ -8,29 +8,57 @@ import java.io.File
  * @author sameer
  */
 
+object OutputFormats extends Enumeration {
+  val string, html, javascript = Value
+}
+
+case class Input(code: String, outputFormat: OutputFormats.Value)
+
+case class Result(result: String, format: OutputFormats.Value)
+
 trait Compiler {
-  def compile(code: String): String
+  def name: String
 
-  def stop {}
+  def editorMode: String = name
 
-  def start {}
+  def hideAfterCompile: Boolean = true
 
-  def reset {}
+  def compile(input: Input): Result
+
+  def start = {}
 }
 
 class ActuriusCompiler extends Compiler {
+
   import eu.henkelmann.actuarius.ActuariusTransformer
+
+  def name = "markdown"
+
   val transformer = new ActuariusTransformer()
-  def compile(code: String) = transformer(code)
+
+  def compile(input: Input) = {
+    assert(input.outputFormat == OutputFormats.string)
+    Result(transformer(input.code), OutputFormats.string)
+  }
 }
 
 class LatexCompiler extends Compiler {
-  def compile(latex: String) = "$$" + latex + "$$"
+  def name = "latex"
+
+  def compile(input: Input) = {
+    assert(input.outputFormat == OutputFormats.string)
+    Result("$$" + input.code + "$$", OutputFormats.string)
+  }
+
 }
 
 class TwitterEvalServer extends Compiler {
 
-  def compile(code: String) = {
+  def name = "scala"
+
+  def compile(input: Input) = {
+    assert(input.outputFormat == OutputFormats.string)
+    val code = input.code;
     val eval = new Evaluator(None, Classpath.paths) // List("/Users/sameer/src/research/interactiveppl/lib/scalapplcodefest_2.10-0.1.0.jar"))
     println("compiling code : " + code)
     val result = try {
@@ -41,7 +69,7 @@ class TwitterEvalServer extends Compiler {
       "Compile Error!!"
     }
     println("result: " + result)
-    result.toString
+    Result(result.toString, OutputFormats.string)
   }
 }
 
@@ -117,5 +145,6 @@ object Classpath {
                    |	- /Users/sameer/src/third/play-2.2.1/framework/../repository/cache/jfree/jcommon/jars/jcommon-1.0.15.jar
                    |	- /Users/sameer/src/third/play-2.2.1/framework/../repository/cache/org.apache.commons/commons-math3/jars/commons-math3-3.0.jar
                    |	- /Users/sameer/src/third/play-2.2.1/repository/local/org.scala-tools.testing/test-interface/0.5/jars/test-interface.jar""".replaceAll("\\|", "").replaceAll("\\s\\-\\s", "").replaceAll(" +", "").replaceAll("\\n", ",").split(",").map(_.trim).toList
+
   def paths = rawPaths
 }

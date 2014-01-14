@@ -9,6 +9,7 @@ import scala.collection.mutable.ArrayBuffer
 import controllers.doc.Heading
 import controllers.doc.Markdown
 import play.api.libs.json.Json
+import controllers.util.JacksonWrapper
 
 object Application extends Controller {
 
@@ -34,8 +35,9 @@ object Application extends Controller {
   def compileJson(compiler: Compiler) = Action {
     request =>
       request.body.asJson.map {
-        json => val code = (json \ "code").as[String];
-          Ok(Json.obj("result" -> compiler.compile(code)))
+        json =>
+          val input = JacksonWrapper.deserialize[Input](json.toString())
+          Ok(JacksonWrapper.serialize(compiler.compile(input)))
       }.getOrElse {
         BadRequest("Expecting Json data")
       }
