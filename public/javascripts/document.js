@@ -1,7 +1,9 @@
-function cellToJson(cell) {
+function cellToJson(cell, compilers) {
   var json = new Object();
   json.id = cell.id;
-  json.content = cell.editor.getSession().getValue();
+  json.compiler = cell.mode;
+  json.input = compilers[cell.mode].editorToInput(doc, cell.id);
+  /*
   json.extra = new Object();
   switch(cell.mode) {
     case "heading1": json.format = cell.mode; break;
@@ -14,17 +16,17 @@ function cellToJson(cell) {
     case "latex": json.format = cell.mode;
          json.extra["surroundWithAlign"] = "true"; break;
     case "markdown": json.format = cell.mode; break;
-  }
+  }*/
   return json;
 }
 
-function docToJson(doc) {
+function docToJson(doc, compilers) {
   var returnDoc = new Object();
   returnDoc.name = doc.name;
   returnDoc.cells = new Array();
   for (var id in doc.ids){
     if (doc.cells.hasOwnProperty(id)) {
-      returnDoc.cells.push(cellToJson(doc.cells[id]));
+      returnDoc.cells.push(cellToJson(doc.cells[id], compilers));
     }
   }
   return returnDoc;

@@ -4,7 +4,6 @@ import scala.collection.mutable.ArrayBuffer
 import controllers.util.JacksonWrapper
 import java.io.{FileInputStream, InputStream, PrintWriter}
 import scala.io.Source
-import controllers.doc.Cell.CellData
 
 /**
  * A Document that represents a single notebook.
@@ -24,9 +23,9 @@ class Document(val name: String, val cells: ArrayBuffer[Cell] = new ArrayBuffer(
 object Document {
 
   case class DocumentData(name: String,
-                          cells: Seq[CellData])
+                          cells: Seq[Cell])
 
-  def toDData(doc: Document) = DocumentData(doc.name, doc.cells.map(c => Cell.toCellData(c)))
+  def toDData(doc: Document) = DocumentData(doc.name, doc.cells)
 
   def save(doc: Document, filepath: String) = {
     val dd = toDData(doc)
@@ -39,7 +38,7 @@ object Document {
   def loadJson(fromJson: String): Document = {
     val dd = JacksonWrapper.deserialize[DocumentData](fromJson)
     val doc = new Document(dd.name)
-    doc.cells ++= dd.cells.map(c => Cell.toCell(c))
+    doc.cells ++= dd.cells
     doc
   }
 

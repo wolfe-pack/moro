@@ -1,0 +1,30 @@
+@(tree: Tree)
+
+@import helper._
+
+@showItem(node: TreeNode) = {
+    <li><b>@{node.name}</b>: @{node.pathToRoot}</li>
+}
+
+@listFile(node: Directory) = {
+    <div class="dirCell">
+        <b>@{node.name}</b>
+        <ul>
+            @for(c <- node.children) {
+                @showItem(c)
+            }
+        </ul>
+        @for(c <- node.children) {
+            @if(c.isInstanceOf[Directory]) {
+              @listFile(c.asInstanceOf[Directory])
+            }
+        }
+    </div>
+}
+
+@main(tree.root.name) {
+    <div class="container">
+        <pre>@tree</pre>
+        @listFile(tree.root)
+    </div>
+}

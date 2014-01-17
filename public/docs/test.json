@@ -1,82 +1,100 @@
 {
-  "name" : "Wolfe tutorial",
+  "name" : "Wolfe tutorial 3",
   "cells" : [ {
     "id" : 0,
-    "format" : "heading1",
-    "content" : "Heading",
-    "extra" : {
-      "level" : "1"
+    "compiler" : "heading1",
+    "input" : {
+      "code" : "Heading",
+      "outputFormat" : "html",
+      "extraFields" : null
     }
   }, {
     "id" : 1,
-    "format" : "heading1",
-    "content" : "Heading",
-    "extra" : {
-      "level" : "2"
+    "compiler" : "heading2",
+    "input" : {
+      "code" : "Heading",
+      "outputFormat" : "html",
+      "extraFields" : null
     }
   }, {
     "id" : 2,
-    "format" : "heading1",
-    "content" : "Heading",
-    "extra" : {
-      "level" : "3"
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Heading",
+      "outputFormat" : "html",
+      "extraFields" : null
     }
   }, {
     "id" : 3,
-    "format" : "heading1",
-    "content" : "Heading",
-    "extra" : {
-      "level" : "4"
+    "compiler" : "heading4",
+    "input" : {
+      "code" : "Heading",
+      "outputFormat" : "html",
+      "extraFields" : null
     }
   }, {
     "id" : 4,
-    "format" : "heading1",
-    "content" : "Heading",
-    "extra" : {
-      "level" : "5"
+    "compiler" : "heading5",
+    "input" : {
+      "code" : "Heading",
+      "outputFormat" : "html",
+      "extraFields" : null
     }
-  }, {
-    "id" : 4,
-    "format" : "markdown",
-    "content" : "This notebook can support **bold**, _italics_, [Images](http://sameersingh.org/), and `Latex` too!",
-    "extra" : { }
   }, {
     "id" : 5,
-    "format" : "latex",
-    "content" : "\\alpha+\\beta=\\sum_{i=0}^{n}\\gamma\\cfrac{1}{\\mathcal{Z}}",
-    "extra" : {
-      "surroundWithAlign" : "true"
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "This notebook can support **bold**, _italics_, [Images](http://sameersingh.org/), and `Latex` too!",
+      "outputFormat" : "html",
+      "extraFields" : null
     }
   }, {
     "id" : 6,
-    "format" : "markdown",
-    "content" : "And the equations can be inlined if definining \\\\(\\theta\\\\) and \\\\(\\pi\\\\) in text.",
-    "extra" : { }
+    "compiler" : "latex",
+    "input" : {
+      "code" : "\\alpha+\\beta=\\sum_{i=0}^{n}\\gamma\\cfrac{1}{\\mathcal{Z}}",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
   }, {
     "id" : 7,
-    "format" : "imageurl",
-    "content" : "http://www0.cs.ucl.ac.uk/people/photos/S.Riedel.jpg",
-    "extra" : { }
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "And the equations can be inlined if definining \\\\(\\theta\\\\) and \\\\(\\pi\\\\) in text.",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
   }, {
     "id" : 8,
-    "format" : "scala",
-    "content" : "def f(x:Int) = x * x\\nf(10)",
-    "extra" : {
-      "output" : "100"
+    "compiler" : "imageurl",
+    "input" : {
+      "code" : "http://www0.cs.ucl.ac.uk/people/photos/S.Riedel.jpg",
+      "outputFormat" : "html",
+      "extraFields" : null
     }
   }, {
     "id" : 9,
-    "format" : "heading1",
-    "content" : "Another Example",
-    "extra" : {
-      "level" : "3"
+    "compiler" : "scala",
+    "input" : {
+      "code" : "def f(x:Int) = x * x\nf(10)",
+      "outputFormat" : "string",
+      "extraFields" : null
     }
   }, {
     "id" : 10,
-    "format" : "scala",
-    "content" : "def f2(x:Int) = x + x\\nf2(10)",
-    "extra" : {
-      "output" : "20"
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Another Example",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 11,
+    "compiler" : "scala",
+    "input" : {
+      "code" : "def f2(x:Int) = x + x\nf2(10)",
+      "outputFormat" : "string",
+      "extraFields" : null
     }
   } ]
 }

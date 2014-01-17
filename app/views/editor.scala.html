@@ -1,4 +1,4 @@
-@(document: controllers.doc.Document.DocumentData, file: String)
+@(document: controllers.doc.Document.DocumentData, file: String, compilers: Compilers)
 
 @import helper._
 
@@ -27,10 +27,10 @@
             <div class="col-md-8"><h1 id="docName">@(document.name)</h1></div>
             <div class="col-md-4">
                 <div class="input-group">
-                    <a data-toggle="modal" href="#docNameDialog" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
-                    <button class="btn btn-default"><span class="glyphicon glyphicon-forward" onclick="runAll(doc)"></span></button>
+                    <a data-toggle="modal" href="#docNameDialog" class="btn btn-default"><i class="fa fa-pencil fa-lg"></i></a>
+                    <button class="btn btn-default"><i class="fa fa-forward fa-lg" onclick="runAll(doc,compilers)"></i></button>
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" onclick="saveDoc(doc)"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                        <button class="btn btn-default" type="button" onclick="saveDoc(doc,compilers)"><i class="fa fa-save fa-lg"></i></button>
                     </span>
                     <input id="filePath" type="text" class="form-control" value="@file">
                 </div>
@@ -39,16 +39,34 @@
         <div id="cells"></div>
 
         <div id="postCells">
-            <button id="add" type="button" class="btn btn-default" onclick="addCell(doc)"><span class="glyphicon glyphicon-plus"></span></button>
+            <button id="add" type="button" class="btn btn-default" onclick="addCell(doc,compilers)"><i class="fa fa-plus fa-lg"></i></button>
         </div>
         <script>
+            function editorToolbar() {
+                return '' +
+                    @for(compiler <- compilers) {
+                      '      <label class="btn btn-default"><input type="radio" name="mode" value="@{compiler.name}"> @Html(compiler.toolbarIcon)</label>' +
+                    }
+                    ''
+            }
+
+            /* COMPILERS OBJECT */
+            var compilers = {};
+            @for(c <- compilers) {
+               compilers.@{c.name} = {};
+               compilers.@{c.name}.hideAfterCompile = @{c.hideAfterCompile};
+               compilers.@{c.name}.editor = @Html(c.editorJavascript);
+               compilers.@{c.name}.editorToInput = @Html(c.editorToInput);
+            }
+
+            /* DOCUMENT OBJECT */
             var doc = newDoc("@(document.name)");
             document.getElementById ("docNameInput").value = doc.name;
 
                 @for(cell <- document.cells) {
-                   var format = '@Html(cell.format)';
+                   var format = '@Html(cell.compiler)';
                    var content = '@Html(cell.escapedContent)';
-                   addCellFromJson(doc, format, content, "");
+                   addCellFromJson(doc, format, content,compilers);
                 }
 
             $(document).ready(function() {
@@ -58,7 +76,7 @@
 				$('#docNameDialog').bind('show', function () {
 					document.getElementById ("docNameInput").value = doc.name;
 					});
-                runAll(doc);
+                runAll(doc,compilers);
 
 			function okClicked () {
 				doc.name = document.getElementById ("docNameInput").value;

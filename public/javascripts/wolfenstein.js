@@ -1,9 +1,9 @@
-function compileCode (codeStr, usage, mode) {
+function compileCode (input, usage, mode) {
     $.ajax({
        type: "POST",
        contentType: "application/json",
        url: '/compiler/' + mode,
-       data: JSON.stringify({ code: codeStr }),
+       data: JSON.stringify(input),
        dataType: "json",
        success: usage,
        error: function(j, t, e) {}
@@ -12,6 +12,8 @@ function compileCode (codeStr, usage, mode) {
 
 var heightUpdateFunction = function(editor, id) {
     // http://stackoverflow.com/questions/11584061/
+    //console.log(id);
+    //console.log(editor);
     var newHeight =
               editor.getSession().getScreenLength()
               * editor.renderer.lineHeight
@@ -23,8 +25,14 @@ var heightUpdateFunction = function(editor, id) {
     editor.resize();
 };
 
-function outputResult(doc, id, result) {
-      doc.cells[id].renderDisplay.html(result.replace(/\n/g , "<br>"));
+function outputResult(doc, id, result, compilers) {
+      switch(result.format) {
+        case "html": doc.cells[id].renderDisplay.html(result.result); break;
+        case "string": doc.cells[id].renderDisplay.html("<pre>" + result.result + "</pre>"); break;
+      }
+      if(compilers[doc.cells[id].mode].hideAfterCompile) $('#toggleEditor'+id).click();
+      MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
+      /*
       // post compiling work
       switch(doc.cells[id].mode) {
         case "scala": break;
@@ -51,12 +59,17 @@ function outputResult(doc, id, result) {
         case "heading5":
             $('#toggleEditor'+id).click();
             break;
-      }
+      }*/
 }
 
 
-function runCode(doc, id) {
-  var code = doc.cells[id].editor.getSession().getValue();
+function runCode(doc, id, compilers) {
+  var input = compilers[doc.cells[id].mode].editorToInput(doc, id);
+  compileCode(input,
+      function(x) {
+        outputResult(doc, id, x, compilers);
+      }, doc.cells[id].mode);
+  /*
   switch(doc.cells[id].mode) {
     case "heading1": outputResult(doc,id,"<h1>" + code + "</h1>"); break;
     case "heading2": outputResult(doc,id,"<h2>" + code + "</h2>"); break;
@@ -68,23 +81,28 @@ function runCode(doc, id) {
         function(x) {
           outputResult(doc, id, x.result);
         }, doc.cells[id].mode); break;
-  }
+  }*/
 }
 
 function changeMode(id, newMode) {
    doc.cells[id].mode = newMode;
-      var editorMode = newMode;
-      switch(newMode) {
-        case "heading1": editorMode = "html"; break;
-        case "heading2": editorMode = "html"; break;
-        case "heading3": editorMode = "html"; break;
-        case "heading4": editorMode = "html"; break;
-        case "heading5": editorMode = "html"; break;
-        default: break;
-      }
+   /*
+   var editorMode = newMode;
+   switch(newMode) {
+     case "heading1": editorMode = "html"; break;
+     case "heading2": editorMode = "html"; break;
+     case "heading3": editorMode = "html"; break;
+     case "heading4": editorMode = "html"; break;
+     case "heading5": editorMode = "html"; break;
+     default: break;
+   }
    doc.cells[id].editor.getSession().setMode("ace/mode/" + editorMode);
    doc.cells[id].editor.focus();
    doc.cells[id].editor.navigateFileEnd();
+   */
+   //text = doc.cells[id].editor.getSession().getValue();
+   doc.cells[id].editor = compilers[newMode].editor(id);
+   doc.cells[id].editor.focus();
 }
 
 function newCellDiv(id) {
@@ -92,58 +110,32 @@ function newCellDiv(id) {
    '<div id="editCell' + id + '" class="editCell">' +
    //'  cell ' + id + ' contents' +
    '  <div class="input">' +
-   '    <div id="modeForm' + id + '" class="btn-group btn-group-xs" data-toggle="buttons">' +
-   '      <label class="btn btn-default active"><input type="radio" name="mode" value="scala"> Scala</label>' +
-   '      <label class="btn btn-default"><input type="radio" name="mode" value="markdown"> Markdown</label>' +
-   '      <label class="btn btn-default"><input type="radio" name="mode" value="latex"> Latex</label>' +
-   '      <label class="btn btn-default"><input type="radio" name="mode" value="heading1"> <span class="glyphicon glyphicon-header">1</span></label>' +
-   '      <label class="btn btn-default"><input type="radio" name="mode" value="heading2"> <span class="glyphicon glyphicon-header">2</span></label>' +
-   '      <label class="btn btn-default"><input type="radio" name="mode" value="heading3"> <span class="glyphicon glyphicon-header">3</span></label>' +
-   '      <label class="btn btn-default"><input type="radio" name="mode" value="heading4"> <span class="glyphicon glyphicon-header">4</span></label>' +
-   '      <label class="btn btn-default"><input type="radio" name="mode" value="heading5"> <span class="glyphicon glyphicon-header">5</span></label>' +
+   '    <div id="modeForm' + id + '" class="btn-group btn-group-xs" data-toggle="buttons">' + editorToolbar() +
    '    </div>' +
-   '      <button id="runCode' + id + '" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, ' + id + ')"><span class="glyphicon glyphicon-play"></span></button>' +
+   '      <button id="runCode' + id + '" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, ' + id + ',compilers)"><span class="glyphicon glyphicon-play"></span></button>' +
    '    <div id="editor' + id + '" class="cell light-border"></div>' +
    '  </div>' +
    '  <div id="renderDisplay' + id + '" class="cell"  ondblclick="toggleEditor(doc,' + id + ')"></div>' +
    '</div>' +
    '<div class="sidebarCell">' +
    '  <div class="btn-group btn-group-xs">' +
-   '    <button id="addAbove' + id + '" type="button" class="btn btn-default" onclick="addCellAbove(doc,' + id + ')"><span class="glyphicon glyphicon-chevron-up"></span></button>' +
-   '    <button id="toggleEditor' + id + '" type="button" class="btn btn-default edit-btn" data-toggle="button" onclick="toggleEditor(doc,' + id + ')"><span class="glyphicon glyphicon-pencil"></span></button>' +
-   '    <button id="remove' + id + '" type="button" class="btn btn-default" onclick="removeCell(doc,' + id + ')"><span class="glyphicon glyphicon-minus-sign"></span></button>' +
-   '    <button id="addBelow' + id + '" type="button" class="btn btn-default" onclick="addCellBelow(doc,' + id + ')"><span class="glyphicon glyphicon-chevron-down"></span></button>' +
+   '    <button id="addAbove' + id + '" type="button" class="btn btn-default" onclick="addCellAbove(doc,' + id + ',compilers)"><i class="fa fa-chevron-up"></i></button>' +
+   '    <button id="toggleEditor' + id + '" type="button" class="btn btn-default edit-btn" data-toggle="button" onclick="toggleEditor(doc,' + id + ')"><i class="fa fa-pencil fa-fw"></i></button>' +
+   '    <button id="remove' + id + '" type="button" class="btn btn-default" onclick="removeCell(doc,' + id + ')"><span class="fa fa-trash-o"></span></button>' +
+   '    <button id="addBelow' + id + '" type="button" class="btn btn-default" onclick="addCellBelow(doc,' + id + ',compilers)"><i class="fa fa-chevron-down"></i></button>' +
    '  </div>' +
    '</div>' +
    '</div>'
 }
 
-function makeCellFunctional(doc,id) {
+function makeCellFunctional(doc,id,compiler,compilers) {
     doc.cells[id] = new Object();
     doc.cells[id].id = id;
-    doc.cells[id].mode = "scala";
+    doc.cells[id].mode = compiler;
     doc.cells[id].renderDisplay = $('#renderDisplay' + id);
 
-    doc.cells[id].editor = ace.edit("editor"+id);
-    doc.cells[id].editor.setTheme("ace/theme/solarized_light");
-    doc.cells[id].editor.getSession().setMode("ace/mode/scala");
-    doc.cells[id].editor.focus();
-    doc.cells[id].editor.navigateFileEnd();
-    doc.cells[id].editor.setBehavioursEnabled(false);
+    doc.cells[id].editor = compilers[compiler].editor(id);
     doc.cells[id].showEditor = true;
-
-    heightUpdateFunction(doc.cells[id].editor, '#editor'+id);
-    doc.cells[id].editor.getSession().on('change', function () {
-        heightUpdateFunction(doc.cells[id].editor, '#editor'+id);
-    });
-
-    doc.cells[id].editor.commands.addCommand({
-        name: "runCode",
-        bindKey: {win: "Ctrl-Enter", mac: "Ctrl-Enter"},
-        exec: function(editor) {
-            document.getElementById("runCode"+id).click();
-        }
-    })
 
     $('.btn').button();
 
@@ -151,7 +143,7 @@ function makeCellFunctional(doc,id) {
     for (var i=0, len=sz.length; i<len; i++) {
         sz[i].onclick = function() {
             newMode = this.querySelector('input').value;
-            console.log(doc.cells[id].mode, newMode);
+            //console.log(doc.cells[id].mode, newMode);
             if(doc.cells[id].mode != newMode) {
               changeMode(id, newMode);
             }
@@ -159,43 +151,36 @@ function makeCellFunctional(doc,id) {
     }
 }
 
-function addCellFromJson(doc,format,content,output) {
+function addCellFromJson(doc,format,content,compilers) {
   $( "#cells" ).append(newCellDiv(doc.numCells));
   doc.ids.push(doc.numCells);
-  makeCellFunctional(doc,doc.numCells);
+  makeCellFunctional(doc,doc.numCells,format,compilers);
   doc.cells[doc.numCells].editor.getSession().setValue(content);
   $('#modeForm'+ doc.numCells +' label input[value='+ format +']').parent().click()
-  switch(format) {
-    case "scala":
-        doc.cells[doc.numCells].renderDisplay.text(output);
-        break;
-    default:
-        //runCode(doc, doc.numCells);
-        break;
-  }
+  //runCode(doc, doc.numCells, compilers);
   doc.numCells += 1;
 }
 
-function addCell(doc) {
+function addCell(doc,compilers) {
   $( "#cells" ).append(newCellDiv(doc.numCells));
   doc.ids.push(doc.numCells);
-  makeCellFunctional(doc,doc.numCells);
+  makeCellFunctional(doc,doc.numCells, "scala",compilers);
   doc.numCells += 1;
 }
 
-function addCellAbove(doc,id) {
+function addCellAbove(doc,id,compilers) {
   console.log("TODO: adding above " + id);
   $( "#cell"+id ).before(newCellDiv(doc.numCells));
   doc.ids.splice(doc.ids.indexOf(id),0,doc.numCells);
-  makeCellFunctional(doc,doc.numCells);
+  makeCellFunctional(doc,doc.numCells, "scala",compilers);
   doc.numCells += 1;
 }
 
-function addCellBelow(doc,id) {
+function addCellBelow(doc,id,compilers) {
   console.log("TODO: adding below " + id);
   $( "#cell"+id ).after(newCellDiv(doc.numCells));
   doc.ids.splice(doc.ids.indexOf(id)+1,0,doc.numCells);
-  makeCellFunctional(doc,doc.numCells);
+  makeCellFunctional(doc,doc.numCells, "scala",compilers);
   doc.numCells += 1;
 }
 
@@ -216,9 +201,9 @@ function removeCell(doc,id) {
   delete doc.cells[id];
 }
 
-function saveDoc(doc) {
+function saveDoc(doc, compilers) {
   console.log("saving doc to " + $('#filePath')[0].value);
-  var d = docToJson(doc);
+  var d = docToJson(doc,compilers);
   console.log(d);
   $.ajax({
        type: "POST",
@@ -231,10 +216,10 @@ function saveDoc(doc) {
     });
 }
 
-function runAll(doc) {
+function runAll(doc, compilers) {
   for (var id in doc.ids){
     if (doc.cells.hasOwnProperty(id)) {
-      runCode(doc, id);
+      runCode(doc, id, compilers);
     }
   }
 }

@@ -9,12 +9,11 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 
-/*
-libraryDependencies ++= Seq(
-  jdbc,
-  anorm,
-  cache
-)*/
+//libraryDependencies ++= Seq(
+//  jdbc,
+//  anorm,
+//  cache
+//)
 
 //publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository")))
 
@@ -24,7 +23,7 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.0" % "test",
   "com.nativelibs4java" %% "scalaxy-loops" % "0.3-SNAPSHOT" % "provided",
   "cc.factorie" % "factorie" % "1.0.0-M7",
-  "default" %% "scalapplcodefest" % "0.1.0",
+//  "default" %% "scalapplcodefest" % "0.1.0",
   "com.fasterxml.jackson.module" % "jackson-module-scala_2.10" % "2.2.3",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.2.2",
   "eu.henkelmann" % "actuarius_2.10.0" % "0.2.6",

@@ -1,14 +1,69 @@
-@(doc: controllers.doc.Document)
+@(document: controllers.doc.Document, compilers: Compilers)
 
 @import helper._
 
-@main(doc.name) {
-    <div class="container">
-        <h1>@Html(doc.name)</h1>
-        @doc.cells.map { cell =>
-            <div class="cell">
-                @Html(cell.staticHTML)
+@main(document.name) {
+<div class="container">
+    <h1>@Html(document.name)</h1>
+    @document.cells.map { cell =>
+    <div id="cell@{cell.id}" class="cellWrapper">
+        <div id="editCell@{cell.id}" class="cell">
+            <div class="input">
+                <button id="runCode@{cell.id}" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, @{cell.id},compilers)"><span class="glyphicon glyphicon-play"></span></button>
+                <div id="editor@{cell.id}" class="cell light-border">
+                </div>
             </div>
-        }
+        </div>
+        <div id="renderDisplay@{cell.id}" class="cell">
+                <pre>
+                  @Html(cell.toString)
+                </pre>
+        </div>
     </div>
+    }
+    <script>
+        function makeStaticCellFunctional(doc,id,compiler,compilers) {
+            doc.cells[id] = new Object();
+            doc.cells[id].id = id;
+            doc.cells[id].mode = compiler;
+            doc.cells[id].renderDisplay = $('#renderDisplay' + id);
+            $('.btn').button();
+        }
+
+        function addStaticCellFromJson(id,doc,mode,input,compilers) {
+          doc.ids.push(id);
+          makeStaticCellFunctional(doc,id,mode,compilers);
+          compileCode(input,
+              function(x) {
+                outputResult(doc, id, x, compilers);
+              }, doc.cells[id].mode);
+          if(!compilers[mode].hideAfterCompile) {
+            doc.cells[id].editor = compilers[mode].editor(id);
+            doc.cells[id].editor.getSession().setValue(input.code);
+          } else {
+            toggleEditor(doc,id);
+          }
+        }
+
+        /* COMPILERS OBJECT */
+        var compilers = {};
+        @for(c <- compilers) {
+           compilers.@{c.name} = {};
+           compilers.@{c.name}.hideAfterCompile = @{c.hideAfterCompile};
+           compilers.@{c.name}.editor = @Html(c.editorJavascript);
+           compilers.@{c.name}.editorToInput = @Html(c.editorToInput);
+        }
+
+        /* DOCUMENT OBJECT */
+        var doc = newDoc("@(document.name)");
+
+        @for(cell <- document.cells) {
+           var mode = '@Html(cell.compiler)';
+           var input = @Html(cell.inputJson);
+           var id = @{cell.id};
+           addStaticCellFromJson(id, doc, mode, input,compilers);
+        }
+    </script>
+
+</div>
 }
