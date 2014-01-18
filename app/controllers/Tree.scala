@@ -28,7 +28,7 @@ class Directory(val path: String) {
     val files = new File(DocsRoot.prefix + path).listFiles().filter(_.isDirectory)
     files.map(f => {
       val count = f.listFiles().filterNot(_.isDirectory).size
-      SubDirectory(f.getName, path + "/" + f.getName, count)
+      SubDirectory(f.getName, canonPath + "/" + f.getName, count)
     }).toSeq.sortBy(_.name)
   }
 
@@ -38,7 +38,7 @@ class Directory(val path: String) {
     files.map(f => {
       val d = Document.load(new FileInputStream(f))
       val name = f.getName.dropRight(5)
-      Notebook(name, d.name, if (path == "") "/" + name else "/" + path + "/" + name, sdf.format(f.lastModified()))
+      Notebook(name, d.name, canonPath + "/" + name, sdf.format(f.lastModified()))
     }).toSeq.sortBy(_.name)
   }
 
@@ -46,7 +46,7 @@ class Directory(val path: String) {
     val files = new File(DocsRoot.prefix + path).listFiles().filterNot(_.isDirectory).filterNot(_.getName.endsWith(".json"))
     files.map(f => {
       val name = f.getName
-      OtherFile(name, if (path == "") "/" + name else "/" + path + "/" + name)
+      OtherFile(name, canonPath + "/" + name)
     }).toSeq.sortBy(_.name)
   }
 
