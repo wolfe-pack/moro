@@ -56,13 +56,13 @@ object Application extends Controller {
   def editor(file: String) = Action {
     import Document._
     println("/public/docs/" + file + ".json")
-    Ok(views.html.editor(toDData(load(Application.getClass.getResourceAsStream("/public/docs/" + file + ".json"))), file, AllCompilers))
+    Ok(views.html.editor(toDData(load("public/docs/" + file + ".json")), file, AllCompilers))
   }
 
   def staticDoc(file: String) = Action {
     import Document._
     println("/public/docs/" + file + ".json")
-    Ok(views.html.static(load(Application.getClass.getResourceAsStream("/public/docs/" + file + ".json")), AllCompilers))
+    Ok(views.html.static(load("public/docs/" + file + ".json"), AllCompilers))
   }
 
   def save(file: String) = Action {
