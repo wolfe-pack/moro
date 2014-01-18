@@ -22,7 +22,7 @@ libraryDependencies ++= Seq(
   "org.scalautils" % "scalautils_2.10" % "2.0",
   "org.scalatest" %% "scalatest" % "2.0" % "test",
   "com.nativelibs4java" %% "scalaxy-loops" % "0.3-SNAPSHOT" % "provided",
-  "cc.factorie" % "factorie" % "1.0.0-M7",
+//  "cc.factorie" % "factorie" % "1.0.0-M7",
 //  "default" %% "scalapplcodefest" % "0.1.0",
   "com.fasterxml.jackson.module" % "jackson-module-scala_2.10" % "2.2.3",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.2.2",
