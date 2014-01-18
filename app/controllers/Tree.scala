@@ -1,76 +1,66 @@
 package controllers
 
 import scala.collection.mutable.ArrayBuffer
-import java.io.File
+import java.io.{FileInputStream, File}
+import controllers.doc.Document
+import java.text.SimpleDateFormat
 
 /**
  * @author sameer
  */
-trait TreeNode {
-  def parent: Directory
-  def name: String
-  def pathToRoot: String = parent.pathToRoot + "/" + name
-  def pathToBaseDir: String = parent.pathToBaseDir + "/" + name
-  def toString(level:Int): String = {
-    (0 until level).map(i => "  ").mkString("") + name + "\t" + pathToRoot + " : " + pathToBaseDir + "\n"
+class Directory(val path: String) {
+  val name = new File(DocsRoot.prefix + path).getName
+
+  val canonPath = if (path == "") "" else "/" + path
+
+  val superDirs = {
+    if (path == "") Seq.empty[SuperDirectory]
+    else {
+      val strs = (path.split("/").toSeq)
+      var currentPath = ""
+      (Seq(SuperDirectory("docs", "")) ++ strs.map(s => {
+        currentPath = currentPath + "/" + s
+        SuperDirectory(s, currentPath)
+      }).toSeq).dropRight(1)
+    }
   }
+  val subDirs = {
+    val files = new File(DocsRoot.prefix + path).listFiles().filter(_.isDirectory)
+    files.map(f => {
+      val count = f.listFiles().filterNot(_.isDirectory).size
+      SubDirectory(f.getName, path + "/" + f.getName, count)
+    }).toSeq.sortBy(_.name)
+  }
+
+  val files = {
+    val files = new File(DocsRoot.prefix + path).listFiles().filterNot(_.isDirectory).filter(_.getName.endsWith(".json"))
+    val sdf = new SimpleDateFormat("MMM dd, yyyy KK:mm:ss a z")
+    files.map(f => {
+      val d = Document.load(new FileInputStream(f))
+      val name = f.getName.dropRight(5)
+      Notebook(name, d.name, if (path == "") "/" + name else "/" + path + "/" + name, sdf.format(f.lastModified()))
+    }).toSeq.sortBy(_.name)
+  }
+
+  val otherFiles = {
+    val files = new File(DocsRoot.prefix + path).listFiles().filterNot(_.isDirectory).filterNot(_.getName.endsWith(".json"))
+    files.map(f => {
+      val name = f.getName
+      OtherFile(name, if (path == "") "/" + name else "/" + path + "/" + name)
+    }).toSeq.sortBy(_.name)
+  }
+
+  override def toString: String = "Dir(%s, %s, %s)\n\t%s\n\t%s" format(name, path, superDirs, subDirs.mkString(", "), files.mkString(", "))
 }
 
-trait Directory extends TreeNode {
-  val children = new ArrayBuffer[TreeNode]
-  override def toString(level:Int): String = {
-    var str = new StringBuffer(super.toString(level))
-    for(c <- children) {
-      str append c.toString(level + 1)
-    }
-    str.toString
-  }
-}
+case class OtherFile(name: String, href: String)
 
-trait Root extends Directory {
-  def parent: Directory = null
-  def baseDir: String
-  override def pathToRoot: String = name
+case class SuperDirectory(name: String, href: String)
 
-  override def pathToBaseDir: String = baseDir
-}
+case class SubDirectory(name: String, href: String, badgeCount: Int)
 
-class Tree(baseDir: String) {
-  self =>
-  val root = new Root {
-    def name: String = new File(baseDir).getName
+case class Notebook(name: String, title: String, href: String, lastModified: String)
 
-    def baseDir: String = self.baseDir
-  }
-  loadDir(root)
-  
-  def loadDir(node: Directory) {
-    val file = new File(node.pathToBaseDir)
-    assert(file.isDirectory)
-    val dirs = new ArrayBuffer[File]
-    val files = new ArrayBuffer[File]
-    for(child <- file.listFiles()) {
-      if(child.isDirectory) dirs += child
-      else files += child
-    }
-    for(d <- dirs) {
-      val childNode = new Directory {
-        def name: String = d.getName
-
-        def parent: Directory = node
-      }
-      node.children += childNode
-      loadDir(childNode)
-    }
-    for(f <- files) {
-      val childNode = new TreeNode {
-        def parent: Directory = node
-
-        def name: String = f.getName
-      }
-      node.children += childNode
-    }
-  }
-
-  override def toString: String = root.toString(0)
+object DocsRoot {
+  val prefix = "public/docs/"
 }

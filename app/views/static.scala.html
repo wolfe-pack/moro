@@ -7,7 +7,7 @@
     <h1>@Html(document.name)</h1>
     @document.cells.map { cell =>
     <div id="cell@{cell.id}" class="cellWrapper">
-        <div id="editCell@{cell.id}" class="cell">
+        <div id="editCell@{cell.id}" class="cell" hidden="true">
             <div class="input">
                 <button id="runCode@{cell.id}" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, @{cell.id},compilers)"><span class="glyphicon glyphicon-play"></span></button>
                 <div id="editor@{cell.id}" class="cell light-border">
@@ -38,6 +38,7 @@
                 outputResult(doc, id, x, compilers);
               }, doc.cells[id].mode);
           if(!compilers[mode].hideAfterCompile) {
+            $('#editCell' + id).show();
             doc.cells[id].editor = compilers[mode].editor(id);
             doc.cells[id].editor.getSession().setValue(input.code);
           } else {

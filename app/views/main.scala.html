@@ -12,11 +12,16 @@
         <script src="@routes.Assets.at("javascripts/ace/ace.js")" type="text/javascript" charset="utf-8"></script>
         <link href="@routes.Assets.at("javascripts/bootstrap/css/bootstrap.min.css")" rel="stylesheet" media="screen">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/markdown.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <script src="@routes.Assets.at("javascripts/bootstrap/js/bootstrap.js")" type="text/javascript"></script>
         <link href="@routes.Assets.at("stylesheets/font-awesome/css/font-awesome.min.css")" rel="stylesheet">
         <style type="text/css" media="screen">
+            .pull-left {
+              float: left !important;
+            }
+            .pull-right {
+              float: right !important;
+            }
             .container {
                 width: 800px;
             }
@@ -77,10 +82,42 @@
                 border: 1px solid lightgray;
                 padding: 25px;
             }
+            /* Sticky footer styles
+            -------------------------------------------------- */
+
+            html,
+            body {
+              height: 100%;
+              /* The html and body elements cannot have any padding or margin. */
+            }
+
+            /* Wrapper for page content to push down footer */
+            #wrap {
+              min-height: 100%;
+              height: auto;
+              /* Negative indent footer by its height */
+              margin: 0 auto -40px;
+              /* Pad bottom by footer height */
+              padding: 0 0 40px;
+            }
+
+            /* Set the fixed height of the footer here */
+            #footer {
+              height: 40px;
+              background-color: #f5f5f5;
+            }
+
         </style>
         <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     </head>
     <body>
+      <div id="wrap">
         @content
+      </div>
+      <div id="footer">
+          <div class="container">
+              <p class="text-muted">Check out the <a href="http://github.com/uclmr/wolfenstein">Wolfenstein project</a>.</p>
+          </div>
+      </div>
     </body>
 </html>

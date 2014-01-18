@@ -7,7 +7,8 @@ import play.api.data.Form
 import controllers.doc._
 import scala.collection.mutable.ArrayBuffer
 import play.api.libs.json.Json
-import controllers.util.JacksonWrapper
+import controllers.util.{MiscUtils, JacksonWrapper}
+import java.io.File
 
 object Application extends Controller {
 
@@ -77,10 +78,91 @@ object Application extends Controller {
   }
 
   def dir(path: String) = Action {
-    println(path)
-    val tree = new Tree(path)
-    println(tree)
-    Ok(views.html.dir(tree))
+    println("path: " + path)
+    val dir = new Directory(path)
+    println(dir)
+    Ok(views.html.dir(dir))
+  }
+
+  def dirAddFile(path: String) = Action {
+    request =>
+      request.body.asJson.map {
+        json => {
+          try {
+            val title = (json \ "title").as[String]
+            val name = (json \ "name").as[String]
+            val fname = if (path == "") "public/docs/" + name + ".json" else "public/docs/" + path + "/" + name + ".json"
+            val d = new Document(title)
+            Document.save(d, fname)
+            println("fname: %s, title: %s, name: %s, doc: %s" format(fname, title, name, d))
+            Ok("success")
+          } catch {
+            case e: Exception => BadRequest("Exception: " + e.getStackTrace.mkString("\n\t"))
+          }
+        }
+      }.getOrElse {
+        BadRequest("Expecting Json data")
+      }
+  }
+
+  def dirRemoveFile(path: String) = Action {
+    request =>
+      request.body.asJson.map {
+        json => {
+          try {
+            val name = (json \ "name").as[String]
+            val fname = if (path == "") "public/docs/" + name + ".json" else "public/docs/" + path + "/" + name + ".json"
+            val f = new File(fname)
+            println("fname: %s, name: %s" format(fname, name))
+            f.delete()
+            Ok("success")
+          } catch {
+            case e: Exception => BadRequest("Exception: " + e.getStackTrace.mkString("\n\t"))
+          }
+        }
+      }.getOrElse {
+        BadRequest("Expecting Json data")
+      }
+  }
+
+  def dirAddFolder(path: String) = Action {
+    request =>
+      request.body.asJson.map {
+        json => {
+          try {
+            val name = (json \ "name").as[String]
+            val fname = if (path == "") "public/docs/" + name else "public/docs/" + path + "/" + name
+            val f = new File(fname)
+            println("fname: %s, name: %s" format(fname, name))
+            f.mkdir()
+            Ok("success")
+          } catch {
+            case e: Exception => BadRequest("Exception: " + e.getStackTrace.mkString("\n\t"))
+          }
+        }
+      }.getOrElse {
+        BadRequest("Expecting Json data")
+      }
+  }
+
+  def dirRemoveFolder(path: String) = Action {
+    request =>
+      request.body.asJson.map {
+        json => {
+          try {
+            val name = (json \ "name").as[String]
+            val fname = if (path == "") "public/docs/" + name else "public/docs/" + path + "/" + name
+            val f = new File(fname)
+            println("fname: %s, name: %s" format(fname, name))
+            MiscUtils.delete(f)
+            Ok("success")
+          } catch {
+            case e: Exception => BadRequest("Exception: " + e.getStackTrace.mkString("\n\t"))
+          }
+        }
+      }.getOrElse {
+        BadRequest("Expecting Json data")
+      }
   }
 
 }

@@ -24,7 +24,7 @@
     </div>
     <div class="editContainer container">
         <div class="row">
-            <div class="col-md-8"><h1 id="docName">@(document.name)</h1></div>
+            <div class="col-md-8"><h1 id="docName" ondblclick="$('#docNameDialog').modal()">@(document.name)</h1></div>
             <div class="col-md-4">
                 <div class="input-group">
                     <a data-toggle="modal" href="#docNameDialog" class="btn btn-default"><i class="fa fa-pencil fa-lg"></i></a>

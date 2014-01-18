@@ -1,30 +1,233 @@
-@(tree: Tree)
+@(dir: Directory)
 
 @import helper._
 
-@showItem(node: TreeNode) = {
-    <li><b>@{node.name}</b>: @{node.pathToRoot}</li>
-}
+@main("Wolfenstein: " + dir.name) {
+    <div id="addFolderDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addFolderLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h3 class="modal-title">Add a new folder</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="divDialogElements">
+                        <label for="addFolderInput">Folder name (no spaces)</label>
+                        <input id="addFolderInput" name="addFolderInput" type="text" value="test" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                    <a href="#" class="btn btn-primary" onclick="addFolderClicked();">Add Folder</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="addNotebookDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addNotebookLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h3 class="modal-title">Add a new notebook</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="divDialogElements">
+                        <label for="addNotebookTitleInput">Notebook Title</label>
+                        <input id="addNotebookTitleInput" type="text" value="Test Notebook" />
+                        <label for="addNotebookNameInput">Notebook name (no spaces or extension)</label>
+                        <input id="addNotebookNameInput" type="text" value="test" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                    <a href="#" class="btn btn-primary" onclick="addNotebookClicked();">Add Notebook</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-@listFile(node: Directory) = {
-    <div class="dirCell">
-        <b>@{node.name}</b>
-        <ul>
-            @for(c <- node.children) {
-                @showItem(c)
+
+    <div class="container">
+        <ol class="breadcrumb">
+        @for(p <- dir.superDirs) {
+            <li><a href="/dir@{p.href}">@{p.name}</a></li>
+        }
+            <li class="text-muted">@{dir.name}</li>
+        </ol>
+        <div class="page-header">
+            <h2>@{util.MiscUtils.camelToSpaces(dir.name)}<!--small>@{dir.canonPath}</small--></h2>
+        </div>
+        <div id="alertDiv"></div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="btn-group">
+                    <a data-toggle="modal" href="#addFolderDialog" class="btn btn-default">
+                        <i class="fa fa-folder-o fa-1x"></i>
+                        <i class="fa fa-plus fa-1x"></i>
+                    </a>
+                    <a data-toggle="modal" href="#addNotebookDialog" class="btn btn-default">
+                        <i class="fa fa-file-o fa-1x"></i>
+                        <i class="fa fa-plus fa-1x"></i>
+                    </a>
+                </div>
+                <button id="btnRefresh" type="button" class="btn btn-default" onClick="window.location.reload()"><i class="fa fa-refresh fa-1x"></i></button>
+            </div>
+            <div class="col-md-4 text-right">
+                <span class="text-muted">
+                    @if(dir.subDirs.size > 0) {
+                      @{dir.subDirs.size} folders
+                    }
+                    @if(dir.files.size > 0) {
+                      @if(dir.subDirs.size > 0) {
+                        , @{dir.files.size} notebooks
+                      } else {
+                        @{dir.files.size} notebooks
+                      }
+                    }
+                    @if(dir.otherFiles.size > 0) {
+                      @if(dir.subDirs.size > 0 || dir.files.size > 0 ) {
+                        , @{dir.otherFiles.size} other files
+                      } else {
+                        @{dir.otherFiles.size} other files
+                      }
+                    }
+                    .
+                </span>
+            </div>
+        </div>
+        <ul class="list-group">
+            @for(c <- dir.subDirs) {
+            <li class="list-group-item">
+                <i class="fa fa-folder-o fa-1x fa-fw"></i>
+                <span class="badge">@{c.badgeCount}</span>
+                <a href="/dir@{c.href}">@{c.name}</a>
+                <span onclick="removeFolder('@{c.name}')"><i class="fa fa-trash-o text-muted fa-fw"></i></span>
+            </li>
             }
         </ul>
-        @for(c <- node.children) {
-            @if(c.isInstanceOf[Directory]) {
-              @listFile(c.asInstanceOf[Directory])
+        <ul class="list-group">
+            @for(f <- dir.files) {
+            <li class="list-group-item">
+                <i class="fa fa-file-o fa-1x fa-fw"></i>
+                <a href="/doc/static@{f.href}" class="text-primary">@{f.title}</a>
+                <span class="text-muted">@{f.name}</span>
+                <a href="/doc/editor@{f.href}"><i class="fa fa-pencil"></i></a>
+                <span onclick="removeNotebook('@{f.name}')"><i class="fa fa-trash-o text-muted fa-fw"></i></span>
+                <span class="text-muted pull-right">@{f.lastModified}</span>
+            </li>
             }
-        }
+        </ul>
+        <ul class="list-group">
+            @for(f <- dir.otherFiles) {
+            <li class="list-group-item">
+                <i class="fa fa-question-circle fa-1x fa-fw"></i>
+                <a href="/assets/doc@{f.href}" class="text-primary">@{f.name}</a>
+            </li>
+            }
+        </ul>
     </div>
-}
+    <script>
+        bootstrap_alert = function(alertType, title, message, time, onClose) {
+                    time = typeof time !== 'undefined' ? time : 5000;
+                    onClose = typeof onClose !== 'undefined' ? onClose : function() {};
+                    $('#alertDiv').html(
+                      '<div class="alert alert-' + alertType + ' fade in alert-dismissable"><a class="close" data-dismiss="alert">×</a><span>'+
+                      '<strong>' + title + '</strong>: ' +
+                      message +
+                      '</span></div>')
+                    setTimeout(function() { $("#alertDiv .alert").alert('close'); onClose(); }, time);
+                }
 
-@main(tree.root.name) {
-    <div class="container">
-        <pre>@tree</pre>
-        @listFile(tree.root)
-    </div>
+        $("#addFolderDialog").on('shown.bs.modal', function() {
+            $('#addFolderInput').focus();
+        });
+        function addFolderClicked () {
+            file = { name: document.getElementById ("addFolderInput").value };
+            console.log(file);
+            $('#addFolderDialog').modal('hide');
+            $.ajax({
+               type: "POST",
+               contentType: "application/json",
+               url: '/dir/folder/add@{dir.canonPath}',
+               data: JSON.stringify(file),
+               success: function(x) {
+                 window.location.reload();
+                 //bootstrap_alert('success', 'Success', 'Created folder!', 2000);
+               },
+               error: function(j, t, e) {
+                    console.log(j);
+                    console.log(t);
+                    console.log(e);
+                    bootstrap_alert('danger', 'Error', 'Could not create folder.');
+                }
+            });
+        };
+
+        function removeFolder(fname) {
+            file = { name: fname };
+            $.ajax({
+               type: "POST",
+               contentType: "application/json",
+               url: '/dir/folder/remove@{dir.canonPath}',
+               data: JSON.stringify(file),
+               success: function(x) {
+                 window.location.reload();
+                 //bootstrap_alert('success', 'Success', 'Deleted folder!', 2000);
+               },
+               error: function(j, t, e) {
+                    console.log(j);
+                    console.log(t);
+                    console.log(e);
+                    bootstrap_alert('danger', 'Error', 'Could not delete folder.');
+                }
+            });
+        }
+
+        $("#addNotebookDialog").on('shown.bs.modal', function() {
+            $('#addNotebookTitleInput').focus();
+        });
+
+        function addNotebookClicked () {
+            file = { title: document.getElementById ("addNotebookTitleInput").value, name: document.getElementById ("addNotebookNameInput").value };
+            console.log(file);
+            $('#addNotebookDialog').modal('hide');
+            $.ajax({
+               type: "POST",
+               contentType: "application/json",
+               url: '/dir/file/add@{dir.canonPath}',
+               data: JSON.stringify(file),
+               success: function(x) {
+                 window.location.reload();
+                 //bootstrap_alert('success', 'Success', 'Created notebook!', 2000);
+               },
+               error: function(j, t, e) {
+                    console.log(j);
+                    console.log(t);
+                    console.log(e);
+                    bootstrap_alert('danger', 'Error', 'Could not create notebook.');
+                }
+            });
+        };
+
+        function removeNotebook(fname) {
+            file = { name: fname };
+            console.log(file);
+            $.ajax({
+               type: "POST",
+               contentType: "application/json",
+               url: '/dir/file/remove@{dir.canonPath}',
+               data: JSON.stringify(file),
+               success: function(x) {
+                 window.location.reload();
+                 //bootstrap_alert('success', 'Success', 'Deleted folder!', 2000);
+               },
+               error: function(j, t, e) {
+                    console.log(j);
+                    console.log(t);
+                    console.log(e);
+                    bootstrap_alert('danger', 'Error', 'Could not delete folder.');
+                }
+            });
+        }
+</script>
 }
