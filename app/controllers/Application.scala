@@ -31,6 +31,7 @@ object Application extends Controller {
   }
 
   object Notebook {
+    /*
     def doc = {
       val d = new Document("Wolfe tutorial", ArrayBuffer(
         Cell(0, "heading1", Input("Heading")),
@@ -49,18 +50,17 @@ object Application extends Controller {
       //Document.save(d, "public/docs/test.json")
       Document.load(Application.getClass.getResourceAsStream("/public/docs/test.json"))
     }
+     */
   }
 
   def editor(file: String) = Action {
     import Document._
-    Notebook.doc
     println("/public/docs/" + file + ".json")
     Ok(views.html.editor(toDData(load(Application.getClass.getResourceAsStream("/public/docs/" + file + ".json"))), file, AllCompilers))
   }
 
   def staticDoc(file: String) = Action {
     import Document._
-    Notebook.doc
     println("/public/docs/" + file + ".json")
     Ok(views.html.static(load(Application.getClass.getResourceAsStream("/public/docs/" + file + ".json")), AllCompilers))
   }
