@@ -13,7 +13,8 @@ import java.io.File
 object Application extends Controller {
 
   def index = Action {
-    Ok(views.html.index())
+    Redirect(routes.Application.dir(""))
+    //Ok(views.html.index())
   }
 
   def compileJson(name: String) = Action {
