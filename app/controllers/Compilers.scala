@@ -27,5 +27,6 @@ object AllCompilers extends Compilers {
   for (i <- 1 to 5) this += new HeadingCompiler(i)
   this += new HTMLCompiler
   this += new ImageURLCompiler
+  this += new GoogleDocsViewer
   this.foreach(_.start)
 }

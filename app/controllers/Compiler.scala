@@ -176,7 +176,6 @@ class TwitterEvalServer extends Compiler with ACEEditor {
 
   def name = "scala"
 
-
   override def outputFormat: OutputFormats.Value = OutputFormats.string
 
   // whether to hide the editor after compilation or not (essentially replacing editor with the output)
@@ -196,5 +195,22 @@ class TwitterEvalServer extends Compiler with ACEEditor {
     }
     println("result: " + result)
     Result(result.toString, outputFormat)
+  }
+}
+
+class GoogleDocsViewer extends Compiler with ACEEditor {
+  // name of the compiler that should be unique in a collection of compilers
+  def name: String = "google_viewer"
+
+  // icon that is used in the toolbar
+  override def toolbarIcon: String = "<i class=\"fa fa-eye\"></i>"
+
+  override def editorMode: String = "text"
+
+  def compile(input: Input) = {
+    assert(input.outputFormat equalsIgnoreCase outputFormat)
+    Result(
+      "<iframe src=\"http://docs.google.com/viewer?url=http://infolab.stanford.edu/pub/papers/google.pdf&embedded=true\" style=\"width:800px; height:600px;\" frameborder=\"0\"></iframe>",
+      outputFormat)
   }
 }
