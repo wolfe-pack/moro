@@ -96,5 +96,13 @@
       "outputFormat" : "string",
       "extraFields" : null
     }
+  }, {
+    "id" : 12,
+    "compiler" : "google_viewer",
+    "input" : {
+      "code" : "http://www.riedelcastro.org//publications/papers/riedel13relation.pdf",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
   } ]
 }

@@ -10,7 +10,9 @@ import java.io.File
 
 object OutputFormats extends Enumeration {
   val string, html, javascript = Value
+
   implicit def outputFormatToString(f: Value): String = f.toString
+
   implicit def stringToOutputFormat(s: String): Value = withName(s)
 }
 
@@ -78,7 +80,7 @@ trait ACEEditor {
       |    })
       |    return editor;
       |}
-    """.stripMargin format(editorMode)
+    """.stripMargin format (editorMode)
 
   // javascript that extracts the code from the editor and creates a default input
   def editorToInput: String =
@@ -89,7 +91,7 @@ trait ACEEditor {
       |  input.outputFormat = "%s";
       |  return input;
       |};
-    """.stripMargin format(outputFormat)
+    """.stripMargin format (outputFormat)
 }
 
 /* --------------------------------------------------
@@ -210,7 +212,7 @@ class GoogleDocsViewer extends Compiler with ACEEditor {
   def compile(input: Input) = {
     assert(input.outputFormat equalsIgnoreCase outputFormat)
     Result(
-      "<iframe src=\"http://docs.google.com/viewer?url=http://infolab.stanford.edu/pub/papers/google.pdf&embedded=true\" style=\"width:800px; height:600px;\" frameborder=\"0\"></iframe>",
+      "<iframe src=\"http://docs.google.com/viewer?url=" + input.code + "&embedded=true\" style=\"width:800px; height:600px;\" frameborder=\"0\"></iframe>",
       outputFormat)
   }
 }
