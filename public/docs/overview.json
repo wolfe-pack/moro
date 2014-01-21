@@ -68,7 +68,7 @@
     "id" : 8,
     "compiler" : "imageurl",
     "input" : {
-      "code" : "http://www0.cs.ucl.ac.uk/people/photos/S.Riedel.jpg",
+      "code" : "http://game-server-hosting.net/wp-content/uploads/2008/12/Wolfenstein-logo.jpg",
       "outputFormat" : "html",
       "extraFields" : null
     }
