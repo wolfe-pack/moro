@@ -109,9 +109,9 @@
             @for(f <- dir.files) {
             <li class="list-group-item">
                 <i class="fa fa-file-o fa-1x fa-fw"></i>
-                <a href="/doc/static@{f.href}" class="text-primary">@{f.title}</a>
+                <a href="/doc/static@{f.href}" class="text-primary" target="_newtab">@{f.title}</a>
                 <span class="text-muted">@{f.name}</span>
-                <a href="/doc/editor@{f.href}"><i class="fa fa-pencil"></i></a>
+                <a href="/doc/editor@{f.href}" target="_newtab"><i class="fa fa-pencil"></i></a>
                 <span onclick="removeNotebook('@{f.name}')"><i class="fa fa-trash-o text-muted fa-fw"></i></span>
                 <span class="text-muted pull-right">@{f.lastModified}</span>
             </li>
