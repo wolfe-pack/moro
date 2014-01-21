@@ -24,7 +24,8 @@ function docToJson(doc, compilers) {
   var returnDoc = new Object();
   returnDoc.name = doc.name;
   returnDoc.cells = new Array();
-  for (var id in doc.ids){
+  for (var i = 0; i < doc.ids.length; i++) {
+    var id = doc.ids[i];
     if (doc.cells.hasOwnProperty(id)) {
       returnDoc.cells.push(cellToJson(doc.cells[id], compilers));
     }
