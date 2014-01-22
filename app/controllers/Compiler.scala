@@ -63,13 +63,16 @@ trait ACEEditor {
 
   def editorJavascript: String =
     """
-      |function(id) {
+      |function(id,content) {
       |    $("#editor"+id).empty();
       |    $("#editor"+id).height("auto");
       |    var editor = ace.edit("editor"+id);
       |    editor.setTheme("ace/theme/solarized_light");
       |    editor.getSession().setMode("ace/mode/%s");
-      |    editor.getSession().setValue("%s");
+      |    var contentToAdd = ""
+      |    if(content=="") contentToAdd = '%s';
+      |    else contentToAdd = content;
+      |    editor.getSession().setValue(contentToAdd);
       |    editor.focus();
       |    editor.navigateFileEnd();
       |    editor.setBehavioursEnabled(false);
@@ -129,20 +132,23 @@ trait TextInputEditor {
 
   def editorJavascript: String =
     """
-      |function(id) {
+      |function(id,content) {
       |   console.log("creating editor for cell " + id);
+      |    var contentToAdd = ""
+      |    if(content=="") contentToAdd = '%s';
+      |    else contentToAdd = content;
       |    $("#editor"+id).empty();
       |    $("#editor"+id).height("auto");
       |    $("#editor"+id).html(
       |      '<div class="input-group">' +
       |      '  <span class="input-group-addon">%s</span>' +
-      |      '  <input id="editorInput'+id+'" type="text" class="form-control" placeholder="%s">' +
+      |      '  <input id="editorInput'+id+'" type="text" class="form-control" placeholder="%s" value="'+contentToAdd+'">' +
       |      '</div>');
       |    $("#editorInput"+id).focus();
       |
       |    return $("#editorInput"+id);
       |}
-    """.stripMargin format (fieldLabel, initialValue)
+    """.stripMargin format (initialValue, fieldLabel, initialValue)
 
   // code to construct the editor for a cell of this type
   def removeEditorJavascript: String =
