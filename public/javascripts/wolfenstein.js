@@ -85,6 +85,7 @@ function runCode(doc, id, compilers) {
 }
 
 function changeMode(id, newMode) {
+   compilers[doc.cells[id].mode].removeEditor(id);
    doc.cells[id].mode = newMode;
    /*
    var editorMode = newMode;

@@ -32,6 +32,9 @@ trait Compiler {
   // code to construct the editor for a cell of this type
   def editorJavascript: String
 
+  // code to construct the editor for a cell of this type
+  def removeEditorJavascript: String
+
   // whether to hide the editor after compilation or not (essentially replacing editor with the output)
   def hideAfterCompile: Boolean = true
 
@@ -56,12 +59,17 @@ trait ACEEditor {
 
   def outputFormat: OutputFormats.Value = OutputFormats.html
 
+  def initialValue: String = ""
+
   def editorJavascript: String =
     """
       |function(id) {
+      |    $("#editor"+id).empty();
+      |    $("#editor"+id).height("auto");
       |    var editor = ace.edit("editor"+id);
       |    editor.setTheme("ace/theme/solarized_light");
       |    editor.getSession().setMode("ace/mode/%s");
+      |    editor.getSession().setValue("%s");
       |    editor.focus();
       |    editor.navigateFileEnd();
       |    editor.setBehavioursEnabled(false);
@@ -80,7 +88,21 @@ trait ACEEditor {
       |    })
       |    return editor;
       |}
-    """.stripMargin format (editorMode)
+    """.stripMargin format (editorMode, initialValue)
+
+  // code to construct the editor for a cell of this type
+  def removeEditorJavascript: String =
+    """
+      |function(id) {
+      |  var editor = doc.cells[id].editor
+      |  var value = editor.getValue()
+      |  editor.destroy()
+      |  var oldDiv = editor.container
+      |  var newDiv = oldDiv.cloneNode(false)
+      |  newDiv.textContent = value
+      |  oldDiv.parentNode.replaceChild(newDiv, oldDiv)
+      |}
+    """.stripMargin
 
   // javascript that extracts the code from the editor and creates a default input
   def editorToInput: String =
@@ -88,6 +110,54 @@ trait ACEEditor {
       |function (doc, id) {
       |  input = {}
       |  input.code = doc.cells[id].editor.getSession().getValue();
+      |  input.outputFormat = "%s";
+      |  return input;
+      |};
+    """.stripMargin format (outputFormat)
+}
+
+/**
+ * Compiler where the editor is a basic HTML TextInput
+ */
+trait TextInputEditor {
+  this: Compiler =>
+  def outputFormat: OutputFormats.Value = OutputFormats.html
+
+  def fieldLabel: String
+
+  def initialValue: String = ""
+
+  def editorJavascript: String =
+    """
+      |function(id) {
+      |   console.log("creating editor for cell " + id);
+      |    $("#editor"+id).empty();
+      |    $("#editor"+id).height("auto");
+      |    $("#editor"+id).html(
+      |      '<div class="input-group">' +
+      |      '  <span class="input-group-addon">%s</span>' +
+      |      '  <input id="editorInput'+id+'" type="text" class="form-control" placeholder="%s">' +
+      |      '</div>');
+      |    $("#editorInput"+id).focus();
+      |
+      |    return $("#editorInput"+id);
+      |}
+    """.stripMargin format (fieldLabel, initialValue)
+
+  // code to construct the editor for a cell of this type
+  def removeEditorJavascript: String =
+    """
+      |function(id) {
+      |  $("#editor"+id).empty();
+      |}
+    """.stripMargin
+
+  // javascript that extracts the code from the editor and creates a default input
+  def editorToInput: String =
+    """
+      |function (doc, id) {
+      |  input = {}
+      |  input.code = doc.cells[id].editor.val();
       |  input.outputFormat = "%s";
       |  return input;
       |};
@@ -110,10 +180,10 @@ class HTMLCompiler extends Compiler with ACEEditor {
   }
 }
 
-class HeadingCompiler(val level: Int) extends Compiler with ACEEditor {
+class HeadingCompiler(val level: Int) extends Compiler with TextInputEditor {
   def name: String = "heading" + level
 
-  override def editorMode: String = "text"
+  def fieldLabel: String = "Heading"
 
   // icon that is used in the toolbar
   override def toolbarIcon: String = "<span class=\"glyphicon glyphicon-header\">%d</span>" format (level)
@@ -124,10 +194,10 @@ class HeadingCompiler(val level: Int) extends Compiler with ACEEditor {
   }
 }
 
-class ImageURLCompiler extends Compiler with ACEEditor {
+class ImageURLCompiler extends Compiler with TextInputEditor {
   def name: String = "imageurl"
 
-  override def editorMode: String = "text"
+  def fieldLabel: String = "url"
 
   // icon that is used in the toolbar
   override def toolbarIcon: String = "<i class=\"fa fa-picture-o\"></i>"
@@ -200,14 +270,14 @@ class TwitterEvalServer extends Compiler with ACEEditor {
   }
 }
 
-class GoogleDocsViewer extends Compiler with ACEEditor {
+class GoogleDocsViewer extends Compiler with TextInputEditor {
   // name of the compiler that should be unique in a collection of compilers
   def name: String = "google_viewer"
 
+  def fieldLabel: String = "url"
+
   // icon that is used in the toolbar
   override def toolbarIcon: String = "<i class=\"fa fa-eye\"></i>"
-
-  override def editorMode: String = "text"
 
   def compile(input: Input) = {
     assert(input.outputFormat equalsIgnoreCase outputFormat)
