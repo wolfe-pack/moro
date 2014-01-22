@@ -41,21 +41,22 @@
             </div>
         </div>
     </div>
-    <div class="editContainer container">
-        <div class="row">
-            <div class="col-md-8"><h1 id="docName" ondblclick="$('#docNameDialog').modal()">@(document.name)</h1></div>
-            <div class="col-md-4">
-                <div class="input-group">
-                    <span class="input-group-btn text-right">
-                        <a data-toggle="modal" href="#docNameDialog" class="btn btn-default"><i class="fa fa-pencil fa-lg"></i></a>
-                        <button class="btn btn-default"><i class="fa fa-forward fa-lg" onclick="runAll(doc,compilers)"></i></button>
-                        <button class="btn btn-default" type="button" onclick="saveDoc(doc,compilers)"><i class="fa fa-save fa-lg"></i></button>
-                        <a data-toggle="modal" href="#saveAsDialog" class="btn btn-default"><i class="fa fa-save fa-lg"></i><i class="fa fa-plus fa-sm"></i></a>
-                    </span>
-                    <!--input id="filePath" type="text" class="form-control" value="@file"-->
-                </div>
+    <div class="row topbar">
+            <div id="alertDiv" class="alertDiv"></div>
+        <!--div class="col-md-2"-->
+            <div class="input-group text-right">
+                        <span class="input-group-btn text-right">
+                            <a data-toggle="modal" href="#docNameDialog" class="btn btn-default"><i class="fa fa-pencil fa-lg"></i></a>
+                            <button class="btn btn-default"><i class="fa fa-forward fa-lg" onclick="runAll(doc,compilers)"></i></button>
+                            <button class="btn btn-default" type="button" onclick="saveDoc(doc,compilers)"><i class="fa fa-save fa-lg"></i></button>
+                            <a data-toggle="modal" href="#saveAsDialog" class="btn btn-default"><i class="fa fa-save fa-lg"></i><i class="fa fa-plus fa-sm"></i></a>
+                        </span>
+                <!--input id="filePath" type="text" class="form-control" value="@file"-->
             </div>
-        </div>
+        <!--/div-->
+    </div>
+    <div class="container">
+        <h1 id="docName" ondblclick="$('#docNameDialog').modal()">@(document.name)</h1>
         <div id="cells"></div>
 
         <div id="postCells">
@@ -68,6 +69,18 @@
                       '      <label class="btn btn-default"><input type="radio" name="mode" value="@{compiler.name}"> @Html(compiler.toolbarIcon)</label>' +
                     }
                     ''
+            }
+
+            bootstrap_alert = function(alertType, title, message, time, onClose) {
+                    time = typeof time !== 'undefined' ? time : 2000;
+                    onClose = typeof onClose !== 'undefined' ? onClose : function() {};
+                    $('#alertDiv').html(
+                      '<div class="alert alert-' + alertType + ' fade in alert-dismissable"><a class="close" data-dismiss="alert">×</a><span>'+
+                      '<strong>' + title + '</strong>: ' +
+                      message +
+                      '</span></div>')
+                    if(time > 0)
+                      setTimeout(function() { $("#alertDiv .alert").alert('close'); onClose(); }, time);
             }
 
             /* COMPILERS OBJECT */

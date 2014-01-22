@@ -25,8 +25,41 @@
             .container {
                 width: 800px;
             }
-            .editContainer {
-                width: 1000px;
+            .topbar {
+                margin-right: auto;
+                margin-left: auto;
+                width: 800px;
+                /*background-color: #f5f5f5;*/
+                position: relative;
+            }
+            .alertDiv {
+                /*display: inline-block;*/
+                margin: 0 auto;
+                z-index: 10;
+                position: absolute;
+                margin-left: auto;
+                margin-right: auto;
+                left: 0;
+                right: 0;
+                text-align: center;
+            }
+            .alertWrapper {
+                position: absolute;
+                margin-left: auto;
+                margin-right: auto;
+                left: 0;
+                right: 0;
+                text-align: center;
+                z-index: -1;
+            }
+            .alert {
+                margin-bottom: auto;
+                margin-left: auto;
+                padding-top: 3px;
+                padding-bottom: 3px;
+                z-index: 100;
+                display: inline-block;
+                /*display: none;*/
             }
             .cell {
                 position: relative !important;
@@ -35,18 +68,12 @@
                 padding: 1px;
             }
             .light-border {
-                border: 1px solid lightgray;
+                border: 1px solid #F0F0F0;
             }
             .cellWrapper {
                 position: relative !important;
                 width: 100%;
                 overflow: hidden;
-            }
-            .editCell {
-                position: relative !important;
-                width: 80%;
-                float: left;
-                padding: 1px;
             }
             .sidebarCell {
                 position: absolute;
