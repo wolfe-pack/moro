@@ -106,24 +106,26 @@ function changeMode(id, newMode) {
 }
 
 function newCellDiv(id) {
-   return '<div id="cell' + id + '" class="cellWrapper">' +
-   '<div id="editCell' + id + '" class="editCell">' +
-   //'  cell ' + id + ' contents' +
-   '  <div class="input">' +
-   '    <div id="modeForm' + id + '" class="btn-group btn-group-xs" data-toggle="buttons">' + editorToolbar() +
-   '    </div>' +
-   '      <button id="runCode' + id + '" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, ' + id + ',compilers)"><span class="glyphicon glyphicon-play"></span></button>' +
-   '    <div id="editor' + id + '" class="cell light-border"></div>' +
-   '  </div>' +
-   '  <div id="renderDisplay' + id + '" class="cell"  ondblclick="toggleEditor(doc,' + id + ')"></div>' +
-   '</div>' +
-   '<div class="sidebarCell">' +
+   return '<div id="cell' + id + '" class="cellWrapper" onmouseover="document.getElementById(\'sidebarCell' + id + '\').style.display = \'block\';" onmouseout="document.getElementById(\'sidebarCell' + id + '\').style.display = \'none\';">' +
+   '<div id="editCell' + id + '" class="editCell light-border">' +
+   '<div id="sidebarCell' + id + '" class="sidebarCell text-right" style="display: none;">' +
    '  <div class="btn-group btn-group-xs">' +
+   '    <!--button id="moveAbove' + id + '" type="button" class="btn btn-default" onclick="moveCellAbove(doc,' + id + ',compilers)"><i class="fa fa-chevron-up"></i></button-->' +
    '    <button id="addAbove' + id + '" type="button" class="btn btn-default" onclick="addCellAbove(doc,' + id + ',compilers)"><i class="fa fa-sort-up"></i><i class="fa fa-plus"></i></button>' +
    '    <button id="toggleEditor' + id + '" type="button" class="btn btn-default edit-btn" onclick="toggleEditor(doc,' + id + ')"><i class="fa fa-pencil fa-fw"></i></button>' +
    '    <button id="remove' + id + '" type="button" class="btn btn-default" onclick="removeCell(doc,' + id + ')"><span class="fa fa-trash-o"></span></button>' +
    '    <button id="addBelow' + id + '" type="button" class="btn btn-default" onclick="addCellBelow(doc,' + id + ',compilers)"><i class="fa fa-plus"></i><i class="fa fa-sort-down"></i></button>' +
+   '    <!--button id="moveBelow' + id + '" type="button" class="btn btn-default" onclick="moveCellBelow(doc,' + id + ',compilers)"><i class="fa fa-chevron-down"></i></button-->' +
    '  </div>' +
+   '</div>' +
+   //'  cell ' + id + ' contents' +
+   '  <div class="input">' +
+   '    <div id="modeForm' + id + '" class="btn-group btn-group-xs" data-toggle="buttons">' + editorToolbar() +
+   '    </div>' +
+   '    <div id="editor' + id + '" class="cell light-border"></div>' +
+   '      <button id="runCode' + id + '" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, ' + id + ',compilers)"><span class="glyphicon glyphicon-play"></span> Ctrl/Cmd+Enter</button>' +
+   '  </div>' +
+   '  <div id="renderDisplay' + id + '" class="cell"  ondblclick="toggleEditor(doc,' + id + ')"></div>' +
    '</div>' +
    '</div>'
 }
@@ -184,6 +186,22 @@ function addCellBelow(doc,id,compilers) {
   doc.numCells += 1;
 }
 
+function moveCellAbove(doc,id,compilers) {
+  console.log("TODO: move cell up " + id);
+  //$( "#cell"+id ).before(newCellDiv(doc.numCells));
+  //doc.ids.splice(doc.ids.indexOf(id),0,doc.numCells);
+  //makeCellFunctional(doc,doc.numCells, "scala",compilers);
+  //doc.numCells += 1;
+}
+
+function moveCellBelow(doc,id,compilers) {
+  console.log("TODO: move cell down " + id);
+  //$( "#cell"+id ).after(newCellDiv(doc.numCells));
+  //doc.ids.splice(doc.ids.indexOf(id)+1,0,doc.numCells);
+  //makeCellFunctional(doc,doc.numCells, "scala",compilers);
+  //doc.numCells += 1;
+}
+
 function toggleEditor(doc,id) {
   doc.cells[id].showEditor = !doc.cells[id].showEditor;
   if(doc.cells[id].showEditor) {
@@ -202,13 +220,13 @@ function removeCell(doc,id) {
 }
 
 function saveDoc(doc, compilers) {
-  console.log("saving doc to " + $('#filePath')[0].value);
+  console.log("saving doc to " + $('#saveAsInput')[0].value);
   var d = docToJson(doc,compilers);
   console.log(d);
   $.ajax({
        type: "POST",
        contentType: "application/json",
-       url: '/doc/save/' + $('#filePath')[0].value,
+       url: '/doc/save/' + $('#saveAsInput')[0].value,
        data: JSON.stringify(d),
        success: function(d) {
          console.log(d);

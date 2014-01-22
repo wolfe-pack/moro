@@ -12,14 +12,33 @@
         </div>
         <div class="modal-body">
             <div class="divDialogElements">
-                <input id="docNameInput" name="docNameInput" type="text" />
+                <input id="docNameInput" name="docNameInput" class="form-control" type="text" />
             </div>
         </div>
         <div class="modal-footer">
             <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
-            <a href="#" class="btn btn-primary" onclick="okClicked ();">OK</a>
+            <a href="#" class="btn btn-primary" onclick="docNameOkClicked();">OK</a>
         </div>
         </div>
+        </div>
+    </div>
+    <div id="saveAsDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="saveAsLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                    <h3 class="modal-title">Save file as:</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="divDialogElements">
+                        <input id="saveAsInput" name="saveAsInput" class="form-control" type="text" value="@file"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                    <a href="#" class="btn btn-primary" onclick="saveAsOkClicked();">OK</a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="editContainer container">
@@ -27,12 +46,13 @@
             <div class="col-md-8"><h1 id="docName" ondblclick="$('#docNameDialog').modal()">@(document.name)</h1></div>
             <div class="col-md-4">
                 <div class="input-group">
-                    <a data-toggle="modal" href="#docNameDialog" class="btn btn-default"><i class="fa fa-pencil fa-lg"></i></a>
-                    <button class="btn btn-default"><i class="fa fa-forward fa-lg" onclick="runAll(doc,compilers)"></i></button>
-                    <span class="input-group-btn">
+                    <span class="input-group-btn text-right">
+                        <a data-toggle="modal" href="#docNameDialog" class="btn btn-default"><i class="fa fa-pencil fa-lg"></i></a>
+                        <button class="btn btn-default"><i class="fa fa-forward fa-lg" onclick="runAll(doc,compilers)"></i></button>
                         <button class="btn btn-default" type="button" onclick="saveDoc(doc,compilers)"><i class="fa fa-save fa-lg"></i></button>
+                        <a data-toggle="modal" href="#saveAsDialog" class="btn btn-default"><i class="fa fa-save fa-lg"></i><i class="fa fa-plus fa-sm"></i></a>
                     </span>
-                    <input id="filePath" type="text" class="form-control" value="@file">
+                    <!--input id="filePath" type="text" class="form-control" value="@file"-->
                 </div>
             </div>
         </div>
@@ -63,25 +83,31 @@
             var doc = newDoc("@(document.name)");
             document.getElementById ("docNameInput").value = doc.name;
 
-                @for(cell <- document.cells) {
-                   var format = '@Html(cell.compiler)';
-                   var content = '@Html(cell.escapedContent)';
-                   addCellFromJson(doc, format, content,compilers);
-                }
+            @for(cell <- document.cells) {
+               var format = '@Html(cell.compiler)';
+               var content = '@Html(cell.escapedContent)';
+               addCellFromJson(doc, format, content,compilers);
+            }
 
             $(document).ready(function() {
 
 			});
 
-				$('#docNameDialog').bind('show', function () {
-					document.getElementById ("docNameInput").value = doc.name;
-					});
-                runAll(doc,compilers);
+            $('#docNameDialog').bind('show', function () {
+                document.getElementById ("docNameInput").value = doc.name;
+            });
 
-			function okClicked () {
+            runAll(doc,compilers);
+
+			function docNameOkClicked () {
 				doc.name = document.getElementById ("docNameInput").value;
 				$('#docNameDialog').modal('hide');
 				$('#docName').text(doc.name);
+			};
+
+			function saveAsOkClicked () {
+				saveDoc(doc,compilers);
+				$('#saveAsDialog').modal('hide');
 			};
         </script>
     </div>
