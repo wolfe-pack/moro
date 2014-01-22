@@ -206,10 +206,10 @@ function moveCellBelow(doc,id,compilers) {
 function toggleEditor(doc,id) {
   doc.cells[id].showEditor = !doc.cells[id].showEditor;
   if(doc.cells[id].showEditor) {
-    console.log("showing editor" + id);
+    // console.log("showing editor" + id);
     $('#editCell' + id + ' .input').show();
   } else {
-    console.log("hiding editor" + id);
+    // console.log("hiding editor" + id);
     $('#editCell' + id + ' .input').hide();
   }
 }

@@ -133,7 +133,6 @@ trait TextInputEditor {
   def editorJavascript: String =
     """
       |function(id,content) {
-      |   console.log("creating editor for cell " + id);
       |    var contentToAdd = ""
       |    if(content=="") contentToAdd = '%s';
       |    else contentToAdd = content;
