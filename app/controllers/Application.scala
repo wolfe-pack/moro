@@ -65,6 +65,12 @@ object Application extends Controller {
     Ok(views.html.static(load("public/docs/" + file + ".json"), AllCompilers))
   }
 
+  def wolfeStaticDoc(file: String) = Action {
+    import Document._
+    println("/public/docs/" + file + ".json")
+    Ok(views.html.wolfeStatic(load("public/docs/" + file + ".json"), AllCompilers))
+  }
+
   def save(file: String) = Action {
     request =>
       request.body.asJson.map {

@@ -1,0 +1,44 @@
+{
+  "name" : "Possible Worlds",
+  "cells" : [ {
+    "id" : 0,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Possible worlds are the foundation of Wolfe.",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 1,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "### Atomic Worlds\nThe simplest type of possible worlds. ",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 2,
+    "compiler" : "scala",
+    "input" : {
+      "code" : "List(\"Verb\",\"Noun\")",
+      "outputFormat" : "string",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 3,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "### Multivariate Worlds\nBlah Blah",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 4,
+    "compiler" : "scala",
+    "input" : {
+      "code" : "val words = List(\"eat\",\"house\")\nval labels = List(\"Verb\",\"Noun\")\ncase class Token(word:String, label:String)\nall(Token) { words x labels }",
+      "outputFormat" : "string",
+      "extraFields" : null
+    }
+  } ]
+}

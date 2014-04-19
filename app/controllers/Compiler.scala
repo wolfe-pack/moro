@@ -64,10 +64,8 @@ trait ACEEditor {
   def editorJavascript: String =
     """
       |function(id,content) {
-      |    $("#editor"+id).empty();
-      |    $("#editor"+id).height("auto");
       |    var editor = ace.edit("editor"+id);
-      |    editor.setTheme("ace/theme/solarized_light");
+      |    editor.setTheme("ace/theme/wolfe");
       |    editor.getSession().setMode("ace/mode/%s");
       |    var contentToAdd = ""
       |    if(content=="") contentToAdd = '%s';
@@ -76,10 +74,11 @@ trait ACEEditor {
       |    editor.focus();
       |    editor.navigateFileEnd();
       |    editor.setBehavioursEnabled(false);
-      |
-      |    heightUpdateFunction(editor, '#editor'+id);
+      |    editor.setHighlightActiveLine(false);
+      |    editor.setShowPrintMargin(false);
+      |    wolfeHeightUpdateFunction(editor, '#editor'+id);
       |    editor.getSession().on('change', function () {
-      |        heightUpdateFunction(editor, '#editor'+id);
+      |        wolfeHeightUpdateFunction(editor, '#editor'+id);
       |    });
       |
       |    editor.commands.addCommand({

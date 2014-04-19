@@ -25,6 +25,27 @@ var heightUpdateFunction = function(editor, id) {
     editor.resize();
 };
 
+var wolfeHeightUpdateFunction = function(editor, id) {
+    // http://stackoverflow.com/questions/11584061/
+    //console.log(id);
+    //console.log(editor);
+    //todo: this is a hack due to lineHeight not being properly set at the time of the first call to heightUpdate.
+    var newHeight =
+              editor.getSession().getScreenLength()
+              * 15 * 1.3  //font size in pixels times line height
+              + 20; //padding?
+
+    console.log(editor.getSession().getScreenLength())
+    console.log(editor.renderer.scrollBar.getWidth())
+    console.log(editor.renderer.lineHeight)
+    console.log(newHeight)
+
+    $(id).height(newHeight.toString() + "px");
+    // This call is required for the editor to fix all of
+    // its inner structure for adapting to a change in size
+    editor.resize();
+};
+
 function outputResult(doc, id, result, compilers) {
       switch(result.format) {
         case "html": doc.cells[id].renderDisplay.html(result.result); break;

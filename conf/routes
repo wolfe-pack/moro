@@ -11,6 +11,7 @@ POST /compiler/:name                      controllers.Application.compileJson(na
 # Static document rendering
 GET /doc/static                                 controllers.Application.staticDoc(file = "test")
 GET /doc/static/*file                           controllers.Application.staticDoc(file)
+GET /doc/wolfe-static/*file                     controllers.Application.wolfeStaticDoc(file)
 
 # Document editing
 GET /doc/editor                                 controllers.Application.editor(file = "test")
