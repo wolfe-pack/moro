@@ -10,6 +10,19 @@
  */
 }
 
+.wolfe-editor-cell {
+  position:relative
+}
+
+.wolfe-editor {
+  float:left;
+  width: calc(100% - 80px)
+}
+.wolfe-run {
+  width:50px;
+  float:right;
+}
+
 .ace_content {
   padding:10px 0px;
 }
