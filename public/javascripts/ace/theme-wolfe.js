@@ -57,7 +57,7 @@ box-shadow: 0 1px 1px rgba(0,0,0,.3);\
 background-color: #3d3d3d;\
 color: #E6E1DC;\
 //padding: 20px;\
-margin: 0 0px 0 20px;\
+margin: 0 0px 20px 20px;\
 line-height: 1.3em;\
 font-size: 15px;\
 }\

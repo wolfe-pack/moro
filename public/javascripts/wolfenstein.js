@@ -35,10 +35,10 @@ var wolfeHeightUpdateFunction = function(editor, id) {
               * 15 * 1.3  //font size in pixels times line height
               + 20; //padding?
 
-    console.log(editor.getSession().getScreenLength())
-    console.log(editor.renderer.scrollBar.getWidth())
-    console.log(editor.renderer.lineHeight)
-    console.log(newHeight)
+//    console.log(editor.getSession().getScreenLength())
+//    console.log(editor.renderer.scrollBar.getWidth())
+//    console.log(editor.renderer.lineHeight)
+//    console.log(newHeight)
 
     $(id).height(newHeight.toString() + "px");
     // This call is required for the editor to fix all of
@@ -50,6 +50,7 @@ function outputResult(doc, id, result, compilers) {
       switch(result.format) {
         case "html": doc.cells[id].renderDisplay.html(result.result); break;
         case "string": doc.cells[id].renderDisplay.html("<pre>" + result.result + "</pre>"); break;
+        case "wolfe": doc.cells[id].renderDisplay.html("<div class=\"wolfe-result\"><pre>" + result.result + "</pre></div>"); break;
       }
       if(compilers[doc.cells[id].mode].hideAfterCompile) $('#toggleEditor'+id).click();
       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);

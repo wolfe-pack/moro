@@ -23,6 +23,11 @@
   float:right;
 }
 
+.wolfe-result {
+  margin-left: 40px;
+  margin-bottom: 20px;
+}
+
 .ace_content {
   padding:10px 0px;
 }

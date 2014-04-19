@@ -9,7 +9,7 @@ import java.io.File
  */
 
 object OutputFormats extends Enumeration {
-  val string, html, javascript = Value
+  val string, html, javascript, wolfe = Value
 
   implicit def outputFormatToString(f: Value): String = f.toString
 
@@ -285,6 +285,7 @@ class TwitterEvalServer extends Compiler with ACEEditor {
     Result(result.toString, outputFormat)
   }
 }
+
 
 class GoogleDocsViewer extends Compiler with TextInputEditor {
   // name of the compiler that should be unique in a collection of compilers

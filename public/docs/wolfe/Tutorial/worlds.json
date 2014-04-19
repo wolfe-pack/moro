@@ -18,7 +18,7 @@
     }
   }, {
     "id" : 2,
-    "compiler" : "scala",
+    "compiler" : "wolfe",
     "input" : {
       "code" : "List(\"Verb\",\"Noun\")",
       "outputFormat" : "string",
@@ -34,7 +34,7 @@
     }
   }, {
     "id" : 4,
-    "compiler" : "scala",
+    "compiler" : "wolfe",
     "input" : {
       "code" : "val words = List(\"eat\",\"house\")\nval labels = List(\"Verb\",\"Noun\")\ncase class Token(word:String, label:String)\nall(Token) { words x labels }",
       "outputFormat" : "string",
