@@ -17,7 +17,7 @@ class WolfeEvalServer extends Compiler with WolfeACEEditor {
   // whether to hide the editor after compilation or not (essentially replacing editor with the output)
   override def hideAfterCompile: Boolean = false
 
-  val userHome = "/Users/sriedel/"
+  val userHome = System.getProperty("user.home") + "/" //"/Users/sriedel/"
   val initialCode = "import ml.wolfe.Wolfe._;\n"
 
   def compile(input: Input) = {

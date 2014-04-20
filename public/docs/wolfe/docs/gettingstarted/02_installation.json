@@ -1,4 +1,44 @@
 {
   "name" : "Installation",
-  "cells" : [ ]
+  "cells" : [ {
+    "id" : 5,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Blah Blubb",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 4,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "SBT",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 0,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Blah Blah\n```shell\n$ g8 wolfe-pack/wolfe \n```",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 2,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Giter8",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 3,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Blah blah\n```\n$ g8 wolfe-pack/wolfe \n```",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  } ]
 }
