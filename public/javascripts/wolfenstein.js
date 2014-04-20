@@ -32,7 +32,7 @@ var wolfeHeightUpdateFunction = function(editor, id) {
     //todo: this is a hack due to lineHeight not being properly set at the time of the first call to heightUpdate.
     var newHeight =
               editor.getSession().getScreenLength()
-              * 15 * 1.3  //font size in pixels times line height
+              * 14 * 1.5  //font size in pixels times line height
               + 20; //padding?
 
 //    console.log(editor.getSession().getScreenLength())

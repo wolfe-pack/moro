@@ -4,7 +4,7 @@
     "id" : 0,
     "compiler" : "markdown",
     "input" : {
-      "code" : "Possible worlds are the foundation of Wolfe.",
+      "code" : "Machine learning models are often represented as scalar functions \n$$f:\\mathcal{S}\\mapsto\\mathbb{R}$$ \nfrom set of _possible worlds_ $a$ to reals $R$\n$$a = \\frac{1}{2}$$ AS",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -21,7 +21,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "List(\"Verb\",\"Noun\")",
-      "outputFormat" : "string",
+      "outputFormat" : "wolfe",
       "extraFields" : null
     }
   }, {
@@ -37,7 +37,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "val words = List(\"eat\",\"house\")\nval labels = List(\"Verb\",\"Noun\")\ncase class Token(word:String, label:String)\nall(Token) { words x labels }",
-      "outputFormat" : "string",
+      "outputFormat" : "wolfe",
       "extraFields" : null
     }
   } ]

@@ -6,7 +6,7 @@ package controllers
 /**
  * Scala server using the Twitter Eval implementation
  */
-class WolfeEvalServer extends Compiler with ACEEditor {
+class WolfeEvalServer extends Compiler with WolfeACEEditor {
 
   def name = "wolfe"
 
@@ -45,3 +45,72 @@ class WolfeEvalServer extends Compiler with ACEEditor {
     Result(result.toString, outputFormat)
   }
 }
+
+/**
+ * Compiler where the editor is a basic ACE editor
+ */
+trait WolfeACEEditor {
+  this: Compiler =>
+  def editorMode: String = name
+
+  def outputFormat: OutputFormats.Value = OutputFormats.html
+
+  def initialValue: String = ""
+
+  def editorJavascript: String =
+    """
+      |function(id,content) {
+      |    var editor = ace.edit("editor"+id);
+      |    editor.setTheme("ace/theme/wolfe");
+      |    editor.getSession().setMode("ace/mode/%s");
+      |    var contentToAdd = ""
+      |    if(content=="") contentToAdd = '%s';
+      |    else contentToAdd = content;
+      |    editor.getSession().setValue(contentToAdd);
+      |    editor.focus();
+      |    editor.navigateFileEnd();
+      |    editor.setBehavioursEnabled(false);
+      |    editor.setHighlightActiveLine(false);
+      |    editor.setShowPrintMargin(false);
+      |    wolfeHeightUpdateFunction(editor, '#editor'+id);
+      |    editor.getSession().on('change', function () {
+      |        wolfeHeightUpdateFunction(editor, '#editor'+id);
+      |    });
+      |
+      |    editor.commands.addCommand({
+      |        name: "runCode",
+      |        bindKey: {win: "Ctrl-Enter", mac: "Ctrl-Enter"},
+      |        exec: function(editor) {
+      |            document.getElementById("runCode"+id).click();
+      |        }
+      |    })
+      |    return editor;
+      |}
+    """.stripMargin format (editorMode, initialValue)
+
+  // code to construct the editor for a cell of this type
+  def removeEditorJavascript: String =
+    """
+      |function(id) {
+      |  var editor = doc.cells[id].editor
+      |  var value = editor.getValue()
+      |  editor.destroy()
+      |  var oldDiv = editor.container
+      |  var newDiv = oldDiv.cloneNode(false)
+      |  newDiv.textContent = value
+      |  oldDiv.parentNode.replaceChild(newDiv, oldDiv)
+      |}
+    """.stripMargin
+
+  // javascript that extracts the code from the editor and creates a default input
+  def editorToInput: String =
+    """
+      |function (doc, id) {
+      |  input = {}
+      |  input.code = doc.cells[id].editor.getSession().getValue();
+      |  input.outputFormat = "%s";
+      |  return input;
+      |};
+    """.stripMargin format (outputFormat)
+}
+

@@ -58,8 +58,8 @@ background-color: #3d3d3d;\
 color: #E6E1DC;\
 //padding: 20px;\
 margin: 0 0px 20px 20px;\
-line-height: 1.3em;\
-font-size: 15px;\
+line-height: 1.5em;\
+font-size: 14px;\
 }\
 .ace-wolfe .ace_cursor {\
 border-left: 2px solid #FFFFFF;\

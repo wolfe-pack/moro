@@ -65,7 +65,7 @@ trait ACEEditor {
     """
       |function(id,content) {
       |    var editor = ace.edit("editor"+id);
-      |    editor.setTheme("ace/theme/wolfe");
+      |    editor.setTheme("ace/theme/solarized_light");
       |    editor.getSession().setMode("ace/mode/%s");
       |    var contentToAdd = ""
       |    if(content=="") contentToAdd = '%s';
@@ -74,11 +74,9 @@ trait ACEEditor {
       |    editor.focus();
       |    editor.navigateFileEnd();
       |    editor.setBehavioursEnabled(false);
-      |    editor.setHighlightActiveLine(false);
-      |    editor.setShowPrintMargin(false);
-      |    wolfeHeightUpdateFunction(editor, '#editor'+id);
+      |    heightUpdateFunction(editor, '#editor'+id);
       |    editor.getSession().on('change', function () {
-      |        wolfeHeightUpdateFunction(editor, '#editor'+id);
+      |        heightUpdateFunction(editor, '#editor'+id);
       |    });
       |
       |    editor.commands.addCommand({
