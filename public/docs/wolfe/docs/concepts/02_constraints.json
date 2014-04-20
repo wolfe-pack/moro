@@ -1,0 +1,12 @@
+{
+  "name" : "Constraints",
+  "cells" : [ {
+    "id" : 0,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Usually we observe parts of the world, or know certain invariants we believe to hold.",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  } ]
+}

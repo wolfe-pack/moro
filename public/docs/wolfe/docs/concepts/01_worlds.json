@@ -1,0 +1,156 @@
+{
+  "name" : "Possible Worlds",
+  "cells" : [ {
+    "id" : 0,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Machine learning models are often represented as scalar functions \n$$s:\\mathcal{S}\\mapsto\\mathbb{R}$$ \nfrom a collection of _possible worlds_ (or a _sample space_) \\\\(\\mathcal{S}\\\\) to reals \\\\(\\mathbb{R}\\\\) that \nmeasure our confidence or belief that a possible world is the true world. Here a possible world could be (word,part-of-speech-tag) pair, or something more structured \nsuch as a sequence of observations and labels. \n\nIn Wolfe you develop such scalar functions, and the\nfirst step is to define the collection of possible worlds \\\\(\\mathcal{S}\\\\). Wolfe uses\nscala [iterables](http://www.scala-lang.org/api/2.10.4/index.html#scala.collection.Iterable) \nas collections of possible worlds (we could restricted us \nto scala sets but they are cases where order and duplicate items are useful). \n\nWhile you can in theory use any expression that yields a scala iterable \nas your collection of possible worlds, Wolfe is optimized for a limited set we \ndescribe below. \n\n\n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 7,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Atomic Worlds",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 1,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Say we want to classify words as nouns or verbs. At the core of this task is an _atomic_ collection\nof labels, in this case \"Noun\" and \"Verb.\" In Wolfe you can use simple scala iterables to define\nsuch atomic collections, such as a [List](http://www.scala-lang.org/api/2.10.3/index.html#scala.collection.immutable.List). \n\n\n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 2,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "List(\"Verb\",\"Noun\")",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 8,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Multivariate Worlds",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 3,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "In practice possible worlds have several interacting components. For example, \nin the case of part-of-speec classification a token has a word and a part-of-speech,\nand the former helps to determine the latter. In Wolfe such worlds can be \ndescribed using Scala [case classes](http://www.codecommit.com/blog/scala/case-classes-are-cool). \n\nTo compactly describe a (factorized) collection of case class worlds, Wolfe provides the `all` method.\nThis method takes as first argument a case class name (or rather, the case class constructor)\nand as second argument an iterable of tuples ordered according to the order of \ncase class fields. In the example below we use the `x` operator to create such a\ncollection of tuples as cartesian product of possible words and possible labels.\n`all` then creates all possible `Token` objects corresponding to these tuples.\n\n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 4,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "case class Token(word:String, label:String)\nval words = List(\"eat\",\"house\")\nval labels = List(\"Verb\",\"Noun\")\nall(Token) { words x labels }",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 5,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "When case classes have many fields, and evolve over time, maintaining the correct order of the \ncartesian product can become tedious. Assuming each field has \na different scala type, we can avoid this problem by declaring the arguments of the\ncartesian product using scala implicits. Below you see the above example adapted\nto use the [Symbol](http://www.scala-lang.org/api/2.10.3/index.html#scala.Symbol) \nclass as label in order to make field types unique. \n\n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 6,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "case class Token(word:String, label:Symbol)\nimplicit val words = List(\"eat\",\"house\")\nimplicit val labels = List('Verb,'Noun)\nall(Token)",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 9,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Sequences",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 10,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Many real world problems, such as tagging in NLP, or gene sequencing,\nconcern sequences of objects. In Wolfe `seqs(worlds,maxLength)` takes a collection\nof possible worlds `worlds` and generates all possible sequences over these worlds\nup to a maximum length `maxLength`.\n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 15,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "val labels = List(\"Verb\",\"Noun\")\nseqs(labels, 2).toList",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 16,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "The base collection of possible worlds can be any scala iterable. In particular, it can be\npossible worlds constructed using other operators.",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 17,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "case class Token(word:String,label:String)\nval words = List(\"eat\")\nval labels = List(\"Verb\")\nseqs(all(Token){words x labels}, 2).toList",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 11,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Maps",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 12,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Wolfe supports the Scala [Map](http://www.scala-lang.org/api/2.10.4/index.html#scala.collection.immutable.Map) class to \nrepresent mappings from a domain to a range. Such mappings can be very useful, for example \nto represent relations and graphs, as shown in the example below. To generate \nall possible maps from a domain `dom` to a range `range` use the `maps(dom,range)`\nfunction.\n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 18,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "val nodes = 0 until 2\nval bools = List(false,true)\nmaps(nodes x nodes,bools).take(2)",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 13,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Infinite Worlds",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 14,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Blah\n\n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  } ]
+}
