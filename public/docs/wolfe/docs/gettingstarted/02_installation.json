@@ -12,7 +12,7 @@
     "id" : 4,
     "compiler" : "heading3",
     "input" : {
-      "code" : "SBT",
+      "code" : "Library",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -28,7 +28,7 @@
     "id" : 2,
     "compiler" : "heading3",
     "input" : {
-      "code" : "Giter8",
+      "code" : "Standalone",
       "outputFormat" : "html",
       "extraFields" : null
     }
