@@ -60,6 +60,7 @@ color: #E6E1DC;\
 margin: 0 0px 20px 20px;\
 line-height: 1.5em;\
 font-size: 14px;\
+font-family: Menlo, Consolas, \"Courier New\", Courier, \"Liberation Mono\", monospace;\
 }\
 .ace-wolfe .ace_cursor {\
 border-left: 2px solid #FFFFFF;\

@@ -26,6 +26,8 @@
 .wolfe-result {
   margin-left: 40px;
   margin-bottom: 20px;
+  font-family: Menlo, Consolas, "Courier New", Courier, "Liberation Mono", monospace;
+  font-size: 13px;
 }
 
 .ace_content {
@@ -167,6 +169,7 @@ body {
   /*border-top: 0px solid #fc0; */
   box-shadow: inset 0 3px 30px rgba(0,0,0,.3);
   text-shadow: 0 1px 3px rgba(0,0,0,.5);
+  word-spacing:1px;
 }
 
 .clear {
@@ -563,11 +566,12 @@ aside h4 {
   padding: 0 0 10px 30px;
   margin-left: -30px;
   display: inline-block;
-  border-bottom: 1px solid #c00;
+  border-bottom: 0px solid #c00;
 }
 
 aside ul {
   padding-left: 0;
+  margin-top: 0;
 }
 
 aside ul:first-child {
@@ -584,6 +588,7 @@ aside li a {
 }
 
 aside li.current a:before {
+
   content: "";
   border-color: transparent transparent transparent #444;
   border-style: solid;
@@ -592,7 +597,9 @@ aside li.current a:before {
   height: 0;
   position: absolute;
   top: 0;
-  left: -30px;
+  left: -13px;
+  //border-bottom: 0px solid #c00;
+
 }
 
 /* Documentation */
@@ -786,12 +793,25 @@ pre, code {
 }
 
 .highlight, p > pre, p > code, p > nobr > code, li > code, h5 > code, .note > code {
-  background: #333;
-  color: #fff;
-  border-radius: 5px;
+   padding: 3px;
+   text-shadow: none;
+   //margin: 0 20px;
+   background: #3d3d3d;
+   //box-shadow: 1px 1px 1px rgba(0,0,0,.3);
+   border-radius: 5px 5px 5px 5px;
+   box-shadow: 0 1px 1px rgba(0,0,0,.3);
+   font-family: Menlo, Consolas, "Courier New", Courier, "Liberation Mono", monospace;
+   line-height: 1.3em;
+   //font-size: 15px;
+
+   //  background: #333;
+   //  color: #fff;
+   //  border-radius: 5px;
+  /*
   box-shadow: inset 0 1px 10px rgba(0,0,0,.3),
     0 1px 0 rgba(255,255,255,.1),
     0 -1px 0 rgba(0,0,0,.5);
+  */
 }
 
 .note code {

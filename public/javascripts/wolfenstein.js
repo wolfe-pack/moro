@@ -50,7 +50,7 @@ function outputResult(doc, id, result, compilers) {
       switch(result.format) {
         case "html": doc.cells[id].renderDisplay.html(result.result); break;
         case "string": doc.cells[id].renderDisplay.html("<pre>" + result.result + "</pre>"); break;
-        case "wolfe": doc.cells[id].renderDisplay.html("<div class=\"wolfe-result\"><pre>" + result.result + "</pre></div>"); break;
+        case "wolfe": doc.cells[id].renderDisplay.html("<div class=\"wolfe-result\">" + result.result + "</div>"); break;
       }
       if(compilers[doc.cells[id].mode].hideAfterCompile) $('#toggleEditor'+id).click();
       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
