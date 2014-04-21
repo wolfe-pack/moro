@@ -1,0 +1,28 @@
+{
+  "name" : "Scalar Functions",
+  "cells" : [ {
+    "id" : 0,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "As illustrated before, scalar functions are the main building blocks of Wolfe. As a functional\nprogramming language, Scala is well suited to allow defining and composing such blocks. \n\nScalar functions in Scala are simply functions of the form `def f(...):Double`, and any such function\ncan be used within Wolfe to define a model. However, generally there are functions for which\nWolfe can perform optimizations, and functions for which it can't. Moreover, \nfor mathematical operators to be efficient, the more factorized a function is, the better.\nBelow we outline certain classes of functions Wolfe can optimize and factorize.",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 1,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Atomic Functions",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 2,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Blah",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  } ]
+}
