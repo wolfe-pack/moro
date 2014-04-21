@@ -33,6 +33,22 @@
       "extraFields" : null
     }
   }, {
+    "id" : 22,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Of course scala [Range](http://www.scala-lang.org/api/2.10.3/index.html#scala.collection.immutable.Range)\nobjects can serve as collections of possible worlds as well.",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 23,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "0 until 5",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
     "id" : 4,
     "compiler" : "heading3",
     "input" : {
