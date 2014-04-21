@@ -36,7 +36,7 @@
     "id" : 4,
     "compiler" : "markdown",
     "input" : {
-      "code" : "To create a wolfe project that includes the correct dependencies and some\nexample code to start with, run\n```\n$ g8 wolfe-pack/wolfe \n```\nThis will prompt for a project name, and then generate an sbt project you can extend. \nYou can edit this project using your favourite scala editor. You can create \n[Intellij Idea](http://www.jetbrains.com/idea/) project using \n```\n$ sbt gen-idea\n```\nIf you want to work with Wolfe interactively, type\n```\n$ sbt console\n```\nand start hacking away.\n\n",
+      "code" : "To create a wolfe project that includes the correct dependencies and some\nexample code to start with, run\n```\n$ g8 wolfe-pack/wolfe \n```\nThis will prompt for a project name, and then generate an sbt project you can extend. \nYou can edit this project using your favourite scala editor. You can create a \n[Intellij Idea](http://www.jetbrains.com/idea/) project using \n```\n$ sbt gen-idea\n```\nIf you want to work with Wolfe interactively, type\n```\n$ sbt console\n```\nand start hacking away.\n\n",
       "outputFormat" : "html",
       "extraFields" : null
     }
