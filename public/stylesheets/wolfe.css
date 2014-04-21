@@ -81,6 +81,7 @@
   margin-bottom: 20px;
   font-family: Menlo, Consolas, "Courier New", Courier, "Liberation Mono", monospace;
   font-size: 13px;
+  clear:left;
 }
 
 .ace_content {
