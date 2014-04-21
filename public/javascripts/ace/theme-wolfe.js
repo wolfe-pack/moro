@@ -70,7 +70,7 @@ border-left: 0px;\
 border-bottom: 1px solid #FFFFFF;\
 }\
 .ace-wolfe .ace_marker-layer .ace_selection {\
-background: #494836;\
+background: gray;\
 }\
 .ace-wolfe .ace_marker-layer .ace_step {\
 background: rgb(198, 219, 174);\

@@ -4,7 +4,7 @@
     "id" : 0,
     "compiler" : "markdown",
     "input" : {
-      "code" : "In Machine Learning we usually observe parts of the world, or know certain \nconstraints or invariants, and then infer information about what is still hidden.\nFor example, to find the most likely, or highest scoring, possible world we\nwould solve a problem of the form\n$$\n\\DeclareMathOperator{\\argmax}{arg max}\n\\argmax_{s \\in \\mathcal{S}:c(s)} f(s)  \n$$\nwhere \\\\(c(\\cdot)\\\\) is boolean predicate or filter on possible worlds \\\\(s\\\\).\n\nIn Wolfe observations and constraints are implemented as Scala functions from\npossible worlds to booleans. You can use any function you like\nbut optimized behaviour can only be guaranteed for the ones below.\n\n\n\n",
+      "code" : "In Machine Learning we usually observe parts of the world, or know certain \nconstraints or invariants, and then infer information about what is still hidden.\nFor example, to find the most likely, or highest scoring, possible world we\nwould solve a problem of the form\n$$\n\\DeclareMathOperator{\\argmax}{arg max}\n\\argmax_{s \\in \\mathcal{S}:c(s)} f(s)  \n$$\nwhere \\\\(c(\\cdot)\\\\) is a boolean predicate or filter on possible worlds \\\\(s\\\\).\n\nIn Wolfe observations and constraints are implemented as Scala functions from\npossible worlds to booleans. You can use any function you like\nbut optimized behaviour can only be guaranteed for the ones below.\n\n\n\n",
       "outputFormat" : "html",
       "extraFields" : null
     }

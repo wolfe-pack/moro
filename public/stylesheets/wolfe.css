@@ -85,6 +85,7 @@
 
 .ace_content {
   padding:10px 0px;
+  word-spacing: normal;
 }
 
 .ace_gutter {
