@@ -1,0 +1,100 @@
+{
+  "name" : "Vectors",
+  "cells" : [ {
+    "id" : 0,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Vectors play a crucial role in Wolfe and are used to parametrize models over possible worlds. \nThat is, many models \\\\(f\\\\) have parameter \\\\(\\mathbf{w}\\\\) that controls\nthe behaviour of the function. For example, a large number of Machine Learning\nmodels are linear:\n\\\\[\nf_\\mathbf{w}(s) = \\left<\\mathbf{w}, \\boldsymbol{\\phi}(s)\\right>\n\\\\]\nOften these parameters are learned from data. \n\nWolfe `Vector` objects are particular in the sense that their indices aren't just\nintegers, they can be any Scala objects. In Wolfe such vectors are implemented \nas immutable maps from [Any](http://www.scala-lang.org/api/2.10.3/index.html#scala.Any)\nto real numbers, with a default value of `0.0` for undefined indices. \nThis means that clients do not need to explicitly define a vector domain. \n\nNote that internally Wolfe compiles such vectors to more efficient \ninteger-indexed representations. ",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 1,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "One-Hot Vectors",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 2,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "One-hot vectors are vectors with value 0 for all but one index. \n\n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 8,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "val w = oneHot('someIndex->\"canBeAnything\",2.0)\nw('someIndex->\"canBeAnything\") == 2.0 && w(\"otherIndex\") == 0.0",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 7,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Such vectors are \nvery useful when constructing feature representations of possible worlds. Here \nthe feature vector is the sum of a collection of oneHot vectors, one for\neach feature *template*.\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 3,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "case class Token(word:String,pos:String)\ndef feats(t:Token) =\n  oneHot('bias -> t.pos, 1.0) +\n  oneHot('obs -> t.pos -> t.word)\nfeats(Token(\"house\",\"noun\"))",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 4,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Conjunctions",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 5,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Blah",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 6,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "case class Token(word:String,pos:String)\ndef wordFeats(word:String) =\n  oneHot('word -> word, 1.0) +\n  oneHot('upper, if (word(0).isUpper) 1.0 else 0.0)\ndef posFeats(pos:String) = \n  oneHot('pos -> pos)\nwordFeats(\"house\") x posFeats(\"noun\")",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 9,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Operations",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 10,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Wolfe vectors support the common vector operations, most importantly summation and inner products.",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 11,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "(oneHot('A, 2.0) + oneHot('B, 2.0)) dot (oneHot('A,3.0) + oneHot('B,4.0))",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  } ]
+}
