@@ -1,4 +1,4 @@
-name := "interactiveppl"
+name := "moro"
 
 version := "1.0-SNAPSHOT"
 
