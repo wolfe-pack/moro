@@ -7,10 +7,12 @@ import play.api.data.Form
 import controllers.doc._
 import scala.collection.mutable.ArrayBuffer
 import play.api.libs.json.Json
-import controllers.util.{MiscUtils, JacksonWrapper}
+import controllers.util.{MoroConfig, MiscUtils, JacksonWrapper}
 import java.io.File
 
 object Application extends Controller {
+
+  val config = new MoroConfig(Play.current.configuration.getConfig("moro").get)
 
   def index = Action {
     Redirect(routes.Application.dir(""))
@@ -54,9 +56,11 @@ object Application extends Controller {
   }
 
   def editor(file: String) = Action {
-    import Document._
-    println("/public/docs/" + file + ".json")
-    Ok(views.html.editor(toDData(load("public/docs/" + file + ".json")), file, AllCompilers))
+    if(config.editor) {
+      import Document._
+      println("/public/docs/" + file + ".json")
+      Ok(views.html.editor(toDData(load("public/docs/" + file + ".json")), file, AllCompilers))
+    } else Forbidden("Editing not allowed.")
   }
 
   def staticDoc(file: String) = Action {
