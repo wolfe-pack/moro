@@ -68,7 +68,7 @@
     "id" : 8,
     "compiler" : "markdown",
     "input" : {
-      "code" : "Often sums have a repetitive structure and can be formulated in quantifed form\n<div>$$\nf(x) = \\sum_i f^i(x)\n$$</div>\nIn Wolfe this can achieved using the `sum` operator. ",
+      "code" : "Often sums have a repetitive structure and can be formulated in quantifed form\n<div>$$\nf(x) = \\sum\\_i f\\_i(x)\n$$</div>\nIn Wolfe this can achieved using the `sum` operator. ",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -97,7 +97,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 13,
+    "id" : 12,
     "compiler" : "wolfe",
     "input" : {
       "code" : "def feats(pred:Boolean) = oneHot('pred, I(pred))\nfeats(true) dot oneHot('pred, 3.0)",
@@ -105,7 +105,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 14,
+    "id" : 13,
     "compiler" : "markdown",
     "input" : {
       "code" : "Wolfe supports factorization of vector expressions as well. So writing the code\nbelow is equivalent to writing the sum of the dot products.",
@@ -113,7 +113,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 12,
+    "id" : 14,
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class World(smokesAnna:Boolean,smokesBob:Boolean)\ndef feats(s:World) = \n  oneHot('smokes, I(s.smokesAnna)) + \n  oneHot('smokes, I(s.smokesBob))\nval world = World(true,true)\nfeats(world) dot oneHot('smokes,1.0)",
