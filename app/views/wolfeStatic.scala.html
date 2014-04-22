@@ -10,7 +10,7 @@
 @dirNav(path:String) = {
     @directory(path).files.map { notebook =>
         <ul>
-            <li class="@if(notebook.title==document.name){current}"><a href="/doc/wolfe-static/@{notebook.href}">@{notebook.title}</a></li>
+            <li class="@if(notebook.title==document.name){current}"><a href="/doc/wolfe-static@{notebook.href}">@{notebook.title}</a></li>
             @if(notebook.title==document.name) {
             <ul>
                 @document.cells.filter(_.compiler == "heading3").map { cell =>

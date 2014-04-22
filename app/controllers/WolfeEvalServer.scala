@@ -18,7 +18,7 @@ class WolfeEvalServer extends Compiler with WolfeACEEditor {
   override def hideAfterCompile: Boolean = false
 
   val userHome = System.getProperty("user.home") + "/" //"/Users/sriedel/"
-  val initialCode = "import ml.wolfe.Wolfe._;\n"
+  val initialCode = "import ml.wolfe.Wolfe._;\nimport ml.wolfe.macros.OptimizedOperators._\n"
 
   def compile(input: Input) = {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)
