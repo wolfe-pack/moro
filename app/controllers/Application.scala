@@ -86,7 +86,7 @@ object Application extends Controller {
     println("path: " + path)
     val dir = new Directory(path)
     println(dir)
-    Ok(views.html.dir(dir))
+    Ok(views.html.dir(dir, config))
   }
 
   def dirAddFile(path: String) = Action {

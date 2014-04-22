@@ -1,50 +1,52 @@
-@(dir: Directory)
+@(dir: Directory, config: util.MoroConfig)
 
 @import helper._
 
 @main("Wolfenstein: " + dir.name) {
-    <div id="addFolderDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addFolderLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-                    <h3 class="modal-title">Add a new folder</h3>
-                </div>
-                <div class="modal-body">
-                    <div class="divDialogElements">
-                        <label for="addFolderInput">Folder name (no spaces)</label>
-                        <input id="addFolderInput" name="addFolderInput" type="text" value="test" />
+    @if(config.editor) {
+        <div id="addFolderDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addFolderLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                        <h3 class="modal-title">Add a new folder</h3>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
-                    <a href="#" class="btn btn-primary" onclick="addFolderClicked();">Add Folder</a>
+                    <div class="modal-body">
+                        <div class="divDialogElements">
+                            <label for="addFolderInput">Folder name (no spaces)</label>
+                            <input id="addFolderInput" name="addFolderInput" type="text" value="test" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                        <a href="#" class="btn btn-primary" onclick="addFolderClicked();">Add Folder</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="addNotebookDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addNotebookLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-                    <h3 class="modal-title">Add a new notebook</h3>
-                </div>
-                <div class="modal-body">
-                    <div class="divDialogElements">
-                        <label for="addNotebookTitleInput">Notebook Title</label>
-                        <input id="addNotebookTitleInput" type="text" value="Test Notebook" />
-                        <label for="addNotebookNameInput">Notebook name (no spaces or extension)</label>
-                        <input id="addNotebookNameInput" type="text" value="test" />
+        <div id="addNotebookDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addNotebookLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                        <h3 class="modal-title">Add a new notebook</h3>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
-                    <a href="#" class="btn btn-primary" onclick="addNotebookClicked();">Add Notebook</a>
+                    <div class="modal-body">
+                        <div class="divDialogElements">
+                            <label for="addNotebookTitleInput">Notebook Title</label>
+                            <input id="addNotebookTitleInput" type="text" value="Test Notebook" />
+                            <label for="addNotebookNameInput">Notebook name (no spaces or extension)</label>
+                            <input id="addNotebookNameInput" type="text" value="test" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                        <a href="#" class="btn btn-primary" onclick="addNotebookClicked();">Add Notebook</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 
 
     <div class="container">
@@ -60,16 +62,18 @@
         </div>
         <div class="row">
             <div class="col-md-8">
-                <div class="btn-group">
-                    <a data-toggle="modal" href="#addFolderDialog" class="btn btn-default">
-                        <i class="fa fa-folder-o fa-1x"></i>
-                        <i class="fa fa-plus fa-1x"></i>
-                    </a>
-                    <a data-toggle="modal" href="#addNotebookDialog" class="btn btn-default">
-                        <i class="fa fa-file-o fa-1x"></i>
-                        <i class="fa fa-plus fa-1x"></i>
-                    </a>
-                </div>
+                @if(config.editor) {
+                    <div class="btn-group">
+                        <a data-toggle="modal" href="#addFolderDialog" class="btn btn-default">
+                            <i class="fa fa-folder-o fa-1x"></i>
+                            <i class="fa fa-plus fa-1x"></i>
+                        </a>
+                        <a data-toggle="modal" href="#addNotebookDialog" class="btn btn-default">
+                            <i class="fa fa-file-o fa-1x"></i>
+                            <i class="fa fa-plus fa-1x"></i>
+                        </a>
+                    </div>
+                }
                 <button id="btnRefresh" type="button" class="btn btn-default" onClick="window.location.reload()"><i class="fa fa-refresh fa-1x"></i></button>
             </div>
             <div class="col-md-4 text-right">
@@ -101,7 +105,9 @@
                 <i class="fa fa-folder-o fa-1x fa-fw"></i>
                 <span class="badge">@{c.badgeCount}</span>
                 <a href="/dir@{c.href}">@{c.name}</a>
-                <span onclick="removeFolder('@{c.name}')"><i class="fa fa-trash-o text-muted fa-fw"></i></span>
+                @if(config.editor) {
+                  <span onclick="removeFolder('@{c.name}')"><i class="fa fa-trash-o text-muted fa-fw"></i></span>
+                }
             </li>
             }
         </ul>
@@ -111,8 +117,10 @@
                 <i class="fa fa-file-o fa-1x fa-fw"></i>
                 <a href="/doc/static@{f.href}" class="text-primary" target="_newtab">@{f.title}</a>
                 <span class="text-muted">@{f.name}</span>
-                <a href="/doc/editor@{f.href}" target="_newtab"><i class="fa fa-pencil"></i></a>
-                <span onclick="removeNotebook('@{f.name}')"><i class="fa fa-trash-o text-muted fa-fw"></i></span>
+                @if(config.editor) {
+                  <a href="/doc/editor@{f.href}" target="_newtab"><i class="fa fa-pencil"></i></a>
+                  <span onclick="removeNotebook('@{f.name}')"><i class="fa fa-trash-o text-muted fa-fw"></i></span>
+                }
                 <span class="text-muted pull-right">@{f.lastModified}</span>
             </li>
             }
