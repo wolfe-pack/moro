@@ -1,6 +1,7 @@
 package controllers
 
 import scala.collection.mutable
+import controllers.util.MoroConfig
 
 /**
  * Maintain a list of compilers, which is used for constructing an application
@@ -20,8 +21,8 @@ class Compilers extends mutable.Traversable[Compiler] {
   def foreach[U](f: (Compiler) => U): Unit = _map.valuesIterator.foreach(f(_))
 }
 
-object AllCompilers extends Compilers {
-  this += new TwitterEvalServer
+class AllCompilers(config: MoroConfig) extends Compilers {
+  this += new TwitterEvalServer(config)
   this += new ActuriusCompiler
   this += new LatexCompiler
   for (i <- 1 to 5) this += new HeadingCompiler(i)

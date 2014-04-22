@@ -3,7 +3,9 @@ package controllers
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.{IMain, ILoop}
 import java.io.File
-
+import play.api.Configuration
+import controllers.util.MoroConfig
+import scala.collection.JavaConverters._
 /**
  * @author sameer
  */
@@ -249,9 +251,14 @@ class LatexCompiler extends Compiler with ACEEditor {
 /**
  * Scala server using the Twitter Eval implementation
  */
-class TwitterEvalServer extends Compiler with ACEEditor {
+class TwitterEvalServer(c: MoroConfig) extends Compiler with ACEEditor {
 
   def name = "scala"
+
+  val config = c.config(this)
+  val classPath = config.map(c => c.getStringList("classPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
+  val classesForJarPath = config.map(c => c.getStringList("classesForJarPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
+  val imports = config.map(c => c.getStringList("imports")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
 
   override def outputFormat: OutputFormats.Value = OutputFormats.string
 
@@ -261,7 +268,7 @@ class TwitterEvalServer extends Compiler with ACEEditor {
   def compile(input: Input) = {
     assert(input.outputFormat equalsIgnoreCase outputFormat)
     val code = input.code;
-    val eval = new Evaluator(None) // List("/Users/sameer/src/research/interactiveppl/lib/scalapplcodefest_2.10-0.1.0.jar"))
+    val eval = new Evaluator(None, classPath, imports, classesForJarPath)
     println("compiling code : " + code)
     val result = try {
       eval.apply[Any](code, false)
