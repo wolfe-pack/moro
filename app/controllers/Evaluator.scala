@@ -60,7 +60,10 @@ object Evaluator {
  * - contruct an instance of that class
  * - return the result of `apply()`
  */
-class Evaluator(target: Option[File] = None, classPath: List[String] = List.empty) {
+class Evaluator(target: Option[File] = None, classPath: List[String] = List.empty,
+                imports: List[String] = List.empty,
+                classesForJarPath: List[String] = List.empty) {
+
   import Evaluator.jvmId
 
   private lazy val compilerPath = try {
@@ -76,6 +79,16 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
     case e: Throwable =>
       throw new RuntimeException("Unable to load scala base object from classpath (scala-library jar is missing?)", e)
   }
+
+  private lazy val additionalPath =
+    classesForJarPath.map(c =>
+      try {
+        jarPathOfClass(c)
+      } catch {
+        case e: Throwable =>
+          throw new RuntimeException("Unable to load custom class from classpath (relevant jar for " + c + " missing?)", e)
+      }
+    ).flatten.toList
 
   private[this] val STYLE_INDENT = 2
   private[this] lazy val compiler = new StringCompiler(STYLE_INDENT, target)
@@ -102,7 +115,9 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
   def apply[T](files: File*): T = {
     if (target.isDefined) {
       val targetDir = target.get
-      val unprocessedSource = files.map { scala.io.Source.fromFile(_).mkString }.mkString("\n")
+      val unprocessedSource = files.map {
+        scala.io.Source.fromFile(_).mkString
+      }.mkString("\n")
       val sourceChecksum = uniqueId(unprocessedSource, None)
       val checksumFile = new File(targetDir, "checksum")
       val lastChecksum = if (checksumFile.exists) {
@@ -126,7 +141,9 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
         cleanBaseName, sourceChecksum)
       applyProcessed(className, unprocessedSource, false)
     } else {
-      apply(files.map { scala.io.Source.fromFile(_).mkString }.mkString("\n"), true)
+      apply(files.map {
+        scala.io.Source.fromFile(_).mkString
+      }.mkString("\n"), true)
     }
   }
 
@@ -153,7 +170,9 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
    * same as apply[T], but does not run preprocessors.
    */
   def applyProcessed[T](className: String, code: String, resetState: Boolean): T = {
-    val cls = compiler(wrapCodeInClass(className, code), className, resetState)
+    val wrappedCode = wrapCodeInClass(className, code)
+    println("code: " + wrappedCode)
+    val cls = compiler(wrappedCode, className, resetState)
     cls.getConstructor().newInstance().asInstanceOf[() => Any].apply().asInstanceOf[T]
   }
 
@@ -203,7 +222,9 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
    * @throws CompilerException if not Eval-able.
    */
   def check(files: File*) {
-    val code = files.map { scala.io.Source.fromFile(_).mkString }.mkString("\n")
+    val code = files.map {
+      scala.io.Source.fromFile(_).mkString
+    }.mkString("\n")
     check(code)
   }
 
@@ -216,7 +237,9 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
   }
 
   def findClass(className: String): Class[_] = {
-    compiler.findClass(className).getOrElse { throw new ClassNotFoundException("no such class: " + className) }
+    compiler.findClass(className).getOrElse {
+      throw new ClassNotFoundException("no such class: " + className)
+    }
   }
 
   private def uniqueId(code: String, idOpt: Option[Int] = Some(jvmId)): String = {
@@ -242,8 +265,9 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
       case -1 => fileName
       case dot => fileName.substring(0, dot)
     }
-    baseName.regexSub(Evaluator.classCleaner) { m =>
-      "$%02x".format(m.group(0).charAt(0).toInt)
+    baseName.regexSub(Evaluator.classCleaner) {
+      m =>
+        "$%02x".format(m.group(0).charAt(0).toInt)
     }
   }
 
@@ -252,6 +276,7 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
    */
   private def wrapCodeInClass(className: String, code: String) = {
     "class " + className + " extends (() => Any) {\n" +
+      imports.map(i => "import " + i + "\n").mkString("") +
       "  def apply() = {\n" +
       code + "\n" +
       "  }\n" +
@@ -285,7 +310,9 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
       if (nestedClassPath eq null) {
         Nil
       } else {
-        nestedClassPath.split(" ").map { f => new File(relativeRoot, f).getAbsolutePath }.toList
+        nestedClassPath.split(" ").map {
+          f => new File(relativeRoot, f).getAbsolutePath
+        }.toList
       }
     } else {
       Nil
@@ -298,6 +325,7 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
 
   trait Resolver {
     def resolvable(path: String): Boolean
+
     def get(path: String): InputStream
   }
 
@@ -341,7 +369,7 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
     val settings = new Settings
     settings.nowarnings.value = true // warnings are exceptions, so disable
     settings.outputDirs.setSingleOutput(target)
-    val pathList = compilerPath ::: libPath
+    val pathList = compilerPath ::: libPath ::: additionalPath
     settings.bootclasspath.value = pathList.mkString(File.pathSeparator)
     settings.classpath.value = (pathList ::: impliedClassPath).mkString(File.pathSeparator)
     println(settings.classpath.value)
@@ -349,17 +377,17 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
     val reporter = new AbstractReporter {
 
       val settings = StringCompiler.this.settings
-      val messages = new mutable.ListBuffer[Tuple3[Position,String,Int]]
+      val messages = new mutable.ListBuffer[Tuple3[Position, String, Int]]
 
       def display(pos: Position, message: String, severity: Severity) {
         severity.count += 1
         val severityName = severity match {
-          case ERROR   => "error: "
+          case ERROR => "error: "
           case WARNING => "warning: "
           case _ => ""
         }
 
-        messages += Tuple3( pos, message, severity.id )
+        messages += Tuple3(pos, message, severity.id)
       }
 
       def displayPrompt {
@@ -386,10 +414,11 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
           target.asInstanceOf[VirtualDirectory].clear
         }
         case Some(t) => {
-          target.foreach { abstractFile =>
-            if (abstractFile.file == null || abstractFile.file.getName.endsWith(".class")) {
-              abstractFile.delete
-            }
+          target.foreach {
+            abstractFile =>
+              if (abstractFile.file == null || abstractFile.file.getName.endsWith(".class")) {
+                abstractFile.delete
+              }
           }
         }
       }
@@ -406,9 +435,10 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
         printf("Code follows (%d bytes)\n", code.length)
 
         var numLines = 0
-        code.lines foreach { line: String =>
-          numLines += 1
-          println(numLines.toString.padTo(5, ' ') + "| " + line)
+        code.lines foreach {
+          line: String =>
+            numLines += 1
+            println(numLines.toString.padTo(5, ' ') + "| " + line)
         }
       }
     }
@@ -460,6 +490,7 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
       }
     }
   }
+
 }
 
-case class CompilerException( m: List[(Position,String,Int)] ) extends Exception("Compiler exception")
+case class CompilerException(m: List[(Position, String, Int)]) extends Exception("Compiler exception")

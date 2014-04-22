@@ -20,8 +20,8 @@ class Compilers extends mutable.Traversable[Compiler] {
   def foreach[U](f: (Compiler) => U): Unit = _map.valuesIterator.foreach(f(_))
 }
 
-object AllCompilers extends Compilers {
-  this += new TwitterEvalServer
+class AllCompilers(config: MoroConfig) extends Compilers {
+  this += new TwitterEvalServer(config)
   this += new WolfeEvalServer
   this += new ActuriusCompiler
   this += new LatexCompiler

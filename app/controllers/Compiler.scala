@@ -3,7 +3,9 @@ package controllers
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.{IMain, ILoop}
 import java.io.File
-
+import play.api.Configuration
+import controllers.util.MoroConfig
+import scala.collection.JavaConverters._
 /**
  * @author sameer
  */
@@ -64,6 +66,8 @@ trait ACEEditor {
   def editorJavascript: String =
     """
       |function(id,content) {
+      |    $("#editor"+id).empty();
+      |    $("#editor"+id).height("auto");
       |    var editor = ace.edit("editor"+id);
       |    editor.setTheme("ace/theme/solarized_light");
       |    editor.getSession().setMode("ace/mode/%s");
@@ -74,6 +78,7 @@ trait ACEEditor {
       |    editor.focus();
       |    editor.navigateFileEnd();
       |    editor.setBehavioursEnabled(false);
+      |
       |    heightUpdateFunction(editor, '#editor'+id);
       |    editor.getSession().on('change', function () {
       |        heightUpdateFunction(editor, '#editor'+id);
@@ -255,25 +260,13 @@ class TwitterEvalServer extends Compiler with ACEEditor {
   // whether to hide the editor after compilation or not (essentially replacing editor with the output)
   override def hideAfterCompile: Boolean = false
 
-  val userHome = "/Users/sriedel/"
-  val initialCode = "import ml.wolfe.Wolfe._;\n"
-
   def compile(input: Input) = {
     assert(input.outputFormat equalsIgnoreCase outputFormat)
     val code = input.code;
-    val eval = new Evaluator(None, List(
-      userHome + ".ivy2/local/ml.wolfe/wolfe-core_2.10/0.1.0-SNAPSHOT/jars/wolfe-core_2.10.jar",
-      userHome + ".ivy2/cache/net.sf.trove4j/trove4j/jars/trove4j-3.0.3.jar",
-      userHome + ".ivy2/cache/com.typesafe/scalalogging-slf4j_2.10/jars/scalalogging-slf4j_2.10-1.1.0.jar",
-      userHome + ".ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.7.6.jar",
-      userHome + ".ivy2/cache/org.slf4j/slf4j-simple/jars/slf4j-simple-1.7.6.jar",
-      userHome + ".ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.10.3.jar",
-      userHome + ".ivy2/cache/cc.factorie/factorie/jars/factorie-1.0.0-M7.jar"
-    ))
+    val eval = new Evaluator(None) // List("/Users/sameer/src/research/interactiveppl/lib/scalapplcodefest_2.10-0.1.0.jar"))
     println("compiling code : " + code)
     val result = try {
-
-      eval.apply[Any](initialCode + code, false)
+      eval.apply[Any](code, false)
     } catch {
       case e: CompilerException => e.m.mkString("\n\t")
     } finally {
@@ -283,7 +276,6 @@ class TwitterEvalServer extends Compiler with ACEEditor {
     Result(result.toString, outputFormat)
   }
 }
-
 
 class GoogleDocsViewer extends Compiler with TextInputEditor {
   // name of the compiler that should be unique in a collection of compilers
