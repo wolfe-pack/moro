@@ -2,14 +2,17 @@ package controllers
 
 import play.api._
 import play.api.mvc._
+import play.api.data._
+import play.api.data.Form
 import controllers.doc._
+import scala.collection.mutable.ArrayBuffer
+import play.api.libs.json.Json
 import controllers.util.{MoroConfig, MiscUtils, JacksonWrapper}
 import java.io.File
 
 object Application extends Controller {
 
   val config = new MoroConfig(Play.current.configuration.getConfig("moro").get)
-  val allCompilers = new AllCompilers(config)
 
   def index = Action {
     Redirect(routes.Application.dir(""))
@@ -18,7 +21,7 @@ object Application extends Controller {
 
   def compileJson(name: String) = Action {
     request =>
-      allCompilers.get(name).fold(BadRequest("Illegal compiler: " + name))(
+      AllCompilers.get(name).fold(BadRequest("Expecting Json data"))(
         compiler =>
           request.body.asJson.map {
             json =>
@@ -56,14 +59,14 @@ object Application extends Controller {
     if(config.editor) {
       import Document._
       println("/public/docs/" + file + ".json")
-      Ok(views.html.editor(toDData(load("public/docs/" + file + ".json")), file, allCompilers))
+      Ok(views.html.editor(toDData(load("public/docs/" + file + ".json")), file, AllCompilers))
     } else Forbidden("Editing not allowed.")
   }
 
   def staticDoc(file: String) = Action {
     import Document._
     println("/public/docs/" + file + ".json")
-    Ok(views.html.static(load("public/docs/" + file + ".json"), allCompilers))
+    Ok(views.html.static(load("public/docs/" + file + ".json"), AllCompilers))
   }
 
   def wolfeStaticDoc(file: String) = Action {

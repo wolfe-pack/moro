@@ -1,5 +1,5 @@
 {
-  "name" : "Moro Overview",
+  "name" : "Wolfenstein Overview",
   "cells" : [ {
     "id" : 0,
     "compiler" : "heading1",
@@ -60,7 +60,7 @@
     "id" : 7,
     "compiler" : "markdown",
     "input" : {
-      "code" : "And the equations can be inlined if defining \\\\(\\theta\\_a + \\alpha\\_\\mathcal{F}\\\\) and \\\\(\\pi_2\\\\) in text.",
+      "code" : "And the equations can be inlined if definining \\\\(\\theta\\\\) and \\\\(\\pi\\\\) in text.",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -68,7 +68,7 @@
     "id" : 8,
     "compiler" : "imageurl",
     "input" : {
-      "code" : "http://media.ifccenter.com/images/films/princess-mononoke_592x299.jpg",
+      "code" : "http://game-server-hosting.net/wp-content/uploads/2008/12/Wolfenstein-logo.jpg",
       "outputFormat" : "html",
       "extraFields" : null
     }
