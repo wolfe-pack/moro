@@ -4,7 +4,23 @@
     "id" : 4,
     "compiler" : "markdown",
     "input" : {
-      "code" : "The previous sections have shown how Scala and Wolfe can be used\nto develop the building blocks of machine learning models. \nTo do inference and learning with such models we require mathematical operators\nthat interfact with the building blocks we introduced earlier. \n\nMost wolfe operators have the form\n$$\n\\DeclareMathOperator{\\operator}{operator}\n\\operator\\_{s \\in \\mathcal{S}: c(s) } f(s)\n$$\nwhere \\\\(\\mathcal{S}\\\\) is a collection of possible worlds, \\\\(c(\\cdot)\\\\)\na constraint on possible worlds, and \\\\(f\\\\) a scalar function. \nThe previous sections have shown how these components can be implemented,\nnow we can put them together. You may test this in the examples below\nby replacing `def` with `val` definitions.\n\n\n",
+      "code" : "The previous sections have shown how Scala and Wolfe can be used\nto develop the building blocks of machine learning models. \nTo do inference and learning with such models we require mathematical operators\nthat interfact with the building blocks we introduced earlier. \n\nMost wolfe operators are used as in\n$$\n\\DeclareMathOperator{\\operator}{operator}\n\\operator\\_{s \\in \\mathcal{S}: c(s) } f(s)\n$$\nwhere \\\\(\\mathcal{S}\\\\) is a collection of possible worlds, \\\\(c(\\cdot)\\\\)\na constraint on possible worlds, and \\\\(f\\\\) a scalar function. In Scala\nthe operator will be a function with two (curried) arguments, one for the domain\n(including a potential filter) and one for the function. \n\nTo make this more concrete, let's look at the (brute-force) definition of the \nargmax operator. Note that `maxBy` is Scala collections function on iterables.  \n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 11,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "def argmax[T](S:Iterable[T])(f:T=>Double) = S.maxBy(f)\nargmax((0 until 5) filter (_ < 3)) { s => s.toDouble }",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 12,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "All Wolfe operators have simple brute-force implementations like the one above. The \ncompiler (in the form of our Wolfe macros) attempts to replace these brute-force\nimplementations with optimized one, but may back off to brute-force if no optimization can be\ndone.",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -20,7 +36,7 @@
     "id" : 8,
     "compiler" : "markdown",
     "input" : {
-      "code" : "When models interact with operators the __restrictions of Wolfe__ with respect\nto possible worlds, constraints and functions will become apparent. While you can \nuse any Scala expression to define these building blocks, only for a subset \nof these Wolfe operators can be implemented efficiently. This is partly \nbecause the internal matching algorithms lack coverage, and partly because\nthey are certainly models for which there simply is not effective algorithm, even\nif they can be matched. At least for the coverage problem we hope to continuously\nimprove Wolfe. Moreover, Wolfe attempts to yield errors and warnings whenever building blocks are used\nthat cannot be optimized.  \n\nOne restriction is that collections of possible worlds, if not atomic, need to be defined\nusing `def` and not `val` (or used inline directly when the operator is called).\nIf `val` is used the collection effectively becomes atomic, and a lot of optimizations\ncannot be performed. \n\n",
+      "code" : "When models interact with operators the __restrictions of Wolfe__ with respect\nto possible worlds, constraints and functions will become apparent. While you can \nuse any Scala expression to define these building blocks, only for a subset \nof these Wolfe operators can be implemented efficiently. This is partly \nbecause the internal matching algorithms lack coverage, and partly because\nthey are certainly models for which there simply is not effective algorithm, even\nif they can be matched. At least for the coverage problem we hope to continuously\nimprove Wolfe. Moreover, Wolfe attempts to yield errors and warnings whenever building blocks are used\nthat cannot be optimized.  \n\nOne restriction is that collections of possible worlds, if not atomic, need to be defined\nusing `def` and not `val` (or used inline directly when the operator is called).\nIf `val` is used the collection effectively becomes atomic, and a lot of optimizations\ncannot be performed. You may test this in the examples below\nby replacing `def` with `val` definitions.\n\n\n",
       "outputFormat" : "html",
       "extraFields" : null
     }
