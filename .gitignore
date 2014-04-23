@@ -13,3 +13,6 @@ dist
 /.project
 /RUNNING_PID
 /.settings
+
+# application-specific config
+conf/application.conf
