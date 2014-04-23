@@ -36,7 +36,23 @@
     "id" : 5,
     "compiler" : "markdown",
     "input" : {
-      "code" : "Finding the argument that maximizes a function under some constraint is a fundamental \nproblem of machine learning and beyond.",
+      "code" : "Finding the argument that maximizes a function under some constraint is a fundamental \nproblem of machine learning and beyond. Wolfe currently performs two types of optimizations\ndepending on the type of search space.\n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 9,
+    "compiler" : "heading4",
+    "input" : {
+      "code" : "Discrete",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 10,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Discrete optimization can be used for *maximum-a-priori* (MAP) inference: finding the most likely\nor highest scoring structure given some observation and a model. \n\nIn Wolfe discrete optimization is performed whenever the search space is not a vector space.\nIn particular, even if the search space has continuous components discrete optimization is performed\nas long as the continuous components are observed. \n\nInternally Wolfe performs discrete optimization (and other operations on discrete\nspaces) by first creating a [factor graph](http://en.wikipedia.org/wiki/Factor_graph)\nrepresentation, and then running MAP inference code on this graph. In some sense\nthis process is an implementation detail that should be hidden from the user,\nin particular because it may change over time. However, without understanding\nthis process users may not understand why some models are slow and others aren't.\nWe hence aim at describing the process in more detail in the future.\n\nThe example below shows a simple application of the `argmax` operator. The operator\ntakes as first argument a search space, in this case `worlds where (_.smokesAnn)`. \nThis space is already constrained using the filter `_.smokesAnn` which is a \nScala short form of `w => w.smokesAnn`. Wolfe analyzes the syntax tree of the\n`worlds where (_.smokesAnn)` expression, translates it into a factor graph with two\nboolean variables (corresponding to `smokesAnn` and `smokesBob`), and sets the variable for\n`smokesAnn` to `true` based on the constraint `_.smokesAnn`.  \n",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -44,7 +60,7 @@
     "id" : 6,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class World(x:Boolean, y:Boolean)\ndef worlds = all(World) {bools x bools}\nargmax(worlds filter (_.x)) {w => I(w.x == w.y)}",
+      "code" : "case class World(smokesAnn:Boolean, smokesBob:Boolean)\ndef worlds = all(World) {bools x bools}\nargmax(worlds where (_.smokesAnn)) {w => I(w.smokesAnn == w.smokesBob)}",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
@@ -53,14 +69,6 @@
     "compiler" : "heading3",
     "input" : {
       "code" : "Sum",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 2,
-    "compiler" : "heading3",
-    "input" : {
-      "code" : "Restrictions",
       "outputFormat" : "html",
       "extraFields" : null
     }
