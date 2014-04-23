@@ -1,4 +1,4 @@
-name := "interactiveppl"
+name := "moro"
 
 version := "1.0-SNAPSHOT"
 
@@ -6,7 +6,10 @@ scalaVersion := "2.10.3"
 
 resolvers ++= Seq(
   "IESL Release" at "https://dev-iesl.cs.umass.edu/nexus/content/groups/public",
-  Resolver.sonatypeRepo("snapshots")
+  "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository",
+  Resolver.sonatypeRepo("snapshots") //,
+  //"Wolfe Release" at "http://homeniscient.cs.ucl.ac.uk:8081/nexus/content/repositories/releases",
+  //"Wolfe Snapshots" at "http://homeniscient.cs.ucl.ac.uk:8081/nexus/content/repositories/snapshots"
 )
 
 //libraryDependencies ++= Seq(
