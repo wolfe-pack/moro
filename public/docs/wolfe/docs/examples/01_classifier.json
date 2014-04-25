@@ -9,6 +9,30 @@
       "extraFields" : null
     }
   }, {
+    "id" : 5,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Logical Gate",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 6,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Blah",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 7,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "import cc.factorie.optimize.{Perceptron, OnlineTrainer}\nimport ml.wolfe.util.Evaluator\n\ncase class XY(in1: Boolean, in2: Boolean, out: Boolean)\ndef f(d: XY) = \n  oneHot('in1, I(d.in1 && d.out)) + \n  oneHot('in2, I(d.in2 && d.out)) + \n  oneHot('bias, I(d.out))\ndef s(w: Vector)(d: XY) = w dot f(d)\ndef q(obs: XY)(d: XY) = d.in1 == obs.in1 && d.in2 == obs.in2\ndef h(w: Vector)(obs: XY) = argmax(all(XY) where q(obs)) { s(w) }\n@OptimizeByLearning(new OnlineTrainer(_, new Perceptron, 10))\ndef l(data: Seq[XY])(w: Vector) = sum(data) { d => s(w)(h(w)(d)) - s(w)(d) }\nval andData = Seq(\n  XY(true, true, true),\n  XY(false, true, false),\n  XY(true, false, false),\n  XY(false, false, false))\nval w = argmin(vectors) { l(andData) }\nEvaluator.evaluate(andData, andData.map(h(w)))(_.out)",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
     "id" : 1,
     "compiler" : "heading3",
     "input" : {
