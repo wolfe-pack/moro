@@ -1,4 +1,44 @@
 {
   "name" : "Classifier",
-  "cells" : [ ]
+  "cells" : [ {
+    "id" : 0,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Blah",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 1,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Iris",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 2,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "case class Label(label: String)\ncase class IrisData(sepalLength: Double, \n                    sepalWidth: Double, \n                    petalLength: Double, \n                    petalWidth: Double, \n                    irisClass: Label)\nimplicit val classes = Seq(\n  Label(\"Iris-setosa\"), \n  Label(\"Iris-versicolor\"), \n  Label(\"Iris-virginica\"))",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 3,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Blah",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 4,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "import ml.wolfe.util.Iris._\nimport scala.util.Random\n\ndef worlds = all(IrisData)\ndef obs(d:IrisData) = d.copy(irisClass = hidden)\ndef feats(d:IrisData) = \n  oneHot('sl -> d.irisClass, d.sepalLength) +\n  oneHot('sw -> d.irisClass, d.sepalWidth) +\n  oneHot('pl -> d.irisClass, d.petalLength) +\n  oneHot('pw -> d.irisClass, d.petalWidth)\ndef s(w:Vector)(d:IrisData) = feats(d) dot w\ndef h(w:Vector)(i:IrisData) = \n  argmax(worlds where (obs(_) == obs(i))) { s(w) }\ndef loss(data:Seq[IrisData])(w:Vector) =\n  sum(data) {i => s(w)(h(w)(i)) - s(w)(i)}\n\nval dataset = Random.shuffle(loadIris())\ndataset.head",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  } ]
 }
