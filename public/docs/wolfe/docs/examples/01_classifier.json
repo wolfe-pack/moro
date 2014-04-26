@@ -4,12 +4,12 @@
     "id" : 0,
     "compiler" : "markdown",
     "input" : {
-      "code" : "Blah",
+      "code" : "Supervised classification is an important task in many real-world applications. In Wolfe \nclassification amounts to fixing the values of attributes possible worlds such that only\none atomic attribute remains unconstrained. ",
       "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
-    "id" : 5,
+    "id" : 1,
     "compiler" : "heading3",
     "input" : {
       "code" : "Logical Gate",
@@ -17,15 +17,15 @@
       "extraFields" : null
     }
   }, {
-    "id" : 6,
+    "id" : 2,
     "compiler" : "markdown",
     "input" : {
-      "code" : "Blah",
+      "code" : "In this example we learn a binary [AND gate](http://en.wikipedia.org/wiki/AND_gate) from data. The model is a classifier with 3 features,\none for the conjunction of input 1 and output, one for the conjunction of input 2\nand output, and a bias feature.\n\n",
       "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
-    "id" : 7,
+    "id" : 3,
     "compiler" : "wolfe",
     "input" : {
       "code" : "import cc.factorie.optimize.{Perceptron, OnlineTrainer}\nimport ml.wolfe.util.Evaluator\n\ncase class XY(in1: Boolean, in2: Boolean, out: Boolean)\ndef f(d: XY) = \n  oneHot('in1, I(d.in1 && d.out)) + \n  oneHot('in2, I(d.in2 && d.out)) + \n  oneHot('bias, I(d.out))\ndef s(w: Vector)(d: XY) = w dot f(d)\ndef q(obs: XY)(d: XY) = d.in1 == obs.in1 && d.in2 == obs.in2\ndef h(w: Vector)(obs: XY) = argmax(all(XY) where q(obs)) { s(w) }\n@OptimizeByLearning(new OnlineTrainer(_, new Perceptron, 10))\ndef l(data: Seq[XY])(w: Vector) = sum(data) { d => s(w)(h(w)(d)) - s(w)(d) }\nval andData = Seq(\n  XY(true, true, true),\n  XY(false, true, false),\n  XY(true, false, false),\n  XY(false, false, false))\nval w = argmin(vectors) { l(andData) }\nEvaluator.evaluate(andData, andData.map(h(w)))(_.out)",
@@ -33,15 +33,23 @@
       "extraFields" : null
     }
   }, {
-    "id" : 1,
+    "id" : 4,
     "compiler" : "heading3",
     "input" : {
-      "code" : "Iris",
+      "code" : "Iris Dataset",
       "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
-    "id" : 2,
+    "id" : 5,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "The [Iris data set](http://archive.ics.uci.edu/ml/datasets/Iris) \ncontains 3 classes of 50 instances each, where each class refers to a type of iris plant.\nBelow you see the definition of the data structures needed. Note that \nthe observed attributes are `Double` values and that Wolfe currently\nrequires such attributes to be observed.",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 6,
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class Label(label: String)\ncase class IrisData(sepalLength: Double, \n                    sepalWidth: Double, \n                    petalLength: Double, \n                    petalWidth: Double, \n                    irisClass: Label)\nimplicit val classes = Seq(\n  Label(\"Iris-setosa\"), \n  Label(\"Iris-versicolor\"), \n  Label(\"Iris-virginica\"))",
@@ -49,15 +57,15 @@
       "extraFields" : null
     }
   }, {
-    "id" : 3,
+    "id" : 7,
     "compiler" : "markdown",
     "input" : {
-      "code" : "Blah",
+      "code" : "In the model we have one feature per attribute of the flower. Notice how we \ncondition on everything but the class label in line 5. More details on \nthis notation can be found in the section on \n[constraints](/doc/wolfe-static/wolfe/docs/concepts/02_constraints).\n\n\n",
       "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
-    "id" : 4,
+    "id" : 8,
     "compiler" : "wolfe",
     "input" : {
       "code" : "import ml.wolfe.util.Iris._\nimport scala.util.Random\n\ndef worlds = all(IrisData)\ndef obs(d:IrisData) = d.copy(irisClass = hidden)\ndef feats(d:IrisData) = \n  oneHot('sl -> d.irisClass, d.sepalLength) +\n  oneHot('sw -> d.irisClass, d.sepalWidth) +\n  oneHot('pl -> d.irisClass, d.petalLength) +\n  oneHot('pw -> d.irisClass, d.petalWidth)\ndef s(w:Vector)(d:IrisData) = feats(d) dot w\ndef h(w:Vector)(i:IrisData) = \n  argmax(worlds where (obs(_) == obs(i))) { s(w) }\ndef loss(data:Seq[IrisData])(w:Vector) =\n  sum(data) {i => s(w)(h(w)(i)) - s(w)(i)}\n\nval dataset = Random.shuffle(loadIris())\ndataset.head",
