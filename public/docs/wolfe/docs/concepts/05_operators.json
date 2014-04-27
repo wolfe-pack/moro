@@ -81,7 +81,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 12,
+    "id" : 10,
     "compiler" : "heading3",
     "input" : {
       "code" : "Vector-Valued",
@@ -89,7 +89,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 13,
+    "id" : 11,
     "compiler" : "markdown",
     "input" : {
       "code" : "Along with objectives over discrete spaces, Wolfe can optimize over \n[vector-spaces](http://moro.wolfe.ml:9000/doc/wolfe-static/wolfe/docs/concepts/03_vectors) too,\nprovided it can calculate the gradient of the function,\nand no constraints or filters are applied to the vector space. \nTo implement this type optimization Wolfe calculates the symbolic\n(sub)gradient of the objective, and then uses this gradient \nin gradient-based optimization through the [FACTORIE](http://factorie.cs.umass.edu/) optimization\npackage. \n\nBelow you see a typical objective, stemming from a perceptron style loss (line 6)\nthat attempts to get the current most likely solution (result of the max\nexpression) close to the score `s(w)(i)` of the training instance `i`.  \n\n\n",
@@ -97,7 +97,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 14,
+    "id" : 12,
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class XY(x:Int,y:Int)\ndef worlds = all(XY) { (0 until 2) x (0 until 2) }\ndef f(xy:XY) = oneHot(xy.x -> xy.y)\ndef s(w:Vector)(xy:XY) = w dot f(xy)\ndef loss(data:Seq[XY])(w:Vector) = \n  sum(data) {i => s(w)(i) - max(worlds where (_.x == i.x)) { s(w) } }\nval training = for (i <- 0 until 2) yield XY(i,i)\nargmax(vectors) { loss(training) }  ",
@@ -105,7 +105,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 11,
+    "id" : 13,
     "compiler" : "markdown",
     "input" : {
       "code" : "Wolfe also provides an `argmin` operator returns the minimizing argument of a function. ",
@@ -113,7 +113,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 15,
+    "id" : 14,
     "compiler" : "heading3",
     "input" : {
       "code" : "Mapper",
@@ -121,7 +121,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 16,
+    "id" : 15,
     "compiler" : "markdown",
     "input" : {
       "code" : "Often compiled operators could share resources between calls. For example, \nsay you have a prediction model and trained its weight one some data before. Now you\nwant to apply this model to sequence of test instances. This would \nrequire an argmax operation for each training instance, and these operations\neach require almost the same internal vector-indices. Wolfe can \nperform sharing between such operations by using the `map` operator which\nalmost works like a normal `map` call on a collection but can share resources\nbetween instances.\n\n\n",
@@ -129,10 +129,50 @@
       "extraFields" : null
     }
   }, {
-    "id" : 17,
+    "id" : 16,
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class XY(x:Boolean,y:Boolean)\ndef space = all(XY){ bools x bools }\ndef s(w:Vector)(xy:XY) = oneHot(xy.x -> xy.y) dot w\ndef h(w:Vector)(xy:XY) = argmax(space where (_.x == xy.x)) { s(w) }\nval w = oneHot(true -> true, 2.0) + oneHot(false -> true, 2.0)\nval test = Seq(XY(true,true),XY(false,false))\nval t1 = test.map(h(w))\nval t2 = map(test){h(w)}\nt1 == t2",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 17,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Operator Hints",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 18,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "When executing an operation such as `argmax` Wolfe has a wide range of algorithms\nand parameters to choose. While Wolfe tries to automatically \ndecide what's best, often the user's background knowledge is difficult to beat. \n\nWolfe allows users to provide hints to operators that indicate which algorithm\nor configuration should be used. This can be done by using a scala annotation\non the objective the operator is applied to. For example, in the snippet\nbelow we tell Wolfe to run [Max-Product Belief Propagation](http://en.wikipedia.org/wiki/Belief_propagation) \nwith 10 iterations in order to optimize `f`. \n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 19,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "case class World(smokesAnn:Boolean, smokesBob:Boolean)\ndef worlds = all(World) {bools x bools}\n@OptimizeByInference(ml.wolfe.MaxProduct(_, 5))\ndef f(w:World) = I(w.smokesAnn == w.smokesBob) \nargmax(worlds where (_.smokesAnn)) { f }",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 20,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "The following example shows how we choose a different FACTORIE \ngradient-based optimizer to optimize the training loss. ",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 21,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "import cc.factorie.optimize.{Perceptron, OnlineTrainer}\ncase class XY(x:Int,y:Int)\ndef worlds = all(XY) { (0 until 2) x (0 until 2) }\ndef f(xy:XY) = oneHot(xy.x -> xy.y)\ndef s(w:Vector)(xy:XY) = w dot f(xy)\n@OptimizeByLearning(new OnlineTrainer(_, new Perceptron, 3))\ndef loss(data:Seq[XY])(w:Vector) = \n  sum(data) {i => s(w)(i) - max(worlds where (_.x == i.x)) { s(w) } }\nval training = for (i <- 0 until 2) yield XY(i,i)\nargmax(vectors) { loss(training) }",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
