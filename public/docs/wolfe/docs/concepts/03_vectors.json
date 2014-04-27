@@ -12,7 +12,7 @@
     "id" : 1,
     "compiler" : "heading3",
     "input" : {
-      "code" : "One-Hot Vectors",
+      "code" : "Constructing Vectors",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -20,23 +20,23 @@
     "id" : 2,
     "compiler" : "markdown",
     "input" : {
-      "code" : "One-hot vectors are vectors with value 0 for all but one index. \n\n\n",
+      "code" : "Wolfe provides two ways to construct vectors: through a direct constructor and\nas sums of one-hot vectors. \n\nThe direct constructor has the same shape as the `Map` constructor in Scala where\na sequence of key-value pairs is provided, with the constraint that \nthe value has to be an integer.\n\n\n",
       "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
-    "id" : 8,
+    "id" : 13,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "val w = oneHot('someIndex->\"canBeAnything\",2.0)\nw('someIndex->\"canBeAnything\") == 2.0 && w(\"otherIndex\") == 0.0",
+      "code" : "val v = Vector('A -> 0.3, 2 -> -2.0, 'A -> 3 -> 3.5)\nv('A) == 0.3 && v('A->3) == 3.5 && v('B) == 0.0",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
   }, {
-    "id" : 7,
+    "id" : 14,
     "compiler" : "markdown",
     "input" : {
-      "code" : "Such vectors are \nvery useful when constructing feature representations of possible worlds. Here \nthe feature vector is the sum of a collection of oneHot vectors, one for\neach feature *template*.\n",
+      "code" : "One-hot vectors are vectors with value 0 for all but one index. One could\nconstruct such a vector also using the direct constructor, but \n `oneHot` assumes `1.0` as value by default, and hence in many cases one\n can omit the value, leading to a more compact representation.",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -44,12 +44,28 @@
     "id" : 3,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class Token(word:String,pos:String)\ndef feats(t:Token) =\n  oneHot('bias -> t.pos, 1.0) +\n  oneHot('obs -> t.pos -> t.word)\nfeats(Token(\"house\",\"noun\"))",
+      "code" : "val w = oneHot('someIndex->\"canBeAnything\")\nw == Vector('someIndex->\"canBeAnything\"->1.0)",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
   }, {
     "id" : 4,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "One-hot vectors are particularly useful when constructing feature representations\nof possible worlds that factorize into feature representations\nof its constituents. \n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 5,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "case class Document(words:Seq[String],label:String)\ndef feats(d:Document) = \n  sum(0 until d.words.size) {i => oneHot('w->d.words(i))}\nfeats(Document(Seq(\"the\",\"scorer\",\"scored\"),\"sports\"))",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 6,
     "compiler" : "heading3",
     "input" : {
       "code" : "Conjunctions",
@@ -57,18 +73,34 @@
       "extraFields" : null
     }
   }, {
-    "id" : 5,
+    "id" : 7,
     "compiler" : "markdown",
     "input" : {
-      "code" : "Blah",
+      "code" : "Feature representations of possible worlds are constructed hierarchically: one \nextracts features from parts of the world, and then conjoins them to capture \ninteractions between the parts. For example, for a token labelling problem\nwe extract a representation for the token and its context, and one for the label.\nThe representation of the complete world is then uses pairs of token and label\nfeatures as new features. Wolfe provides the `outer` or `x` operator on vectors\nto enable such conjunctions. ",
       "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
-    "id" : 6,
+    "id" : 8,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class Token(word:String,pos:String)\ndef wordFeats(word:String) =\n  oneHot('word -> word, 1.0) +\n  oneHot('upper, if (word(0).isUpper) 1.0 else 0.0)\ndef posFeats(pos:String) = \n  oneHot('pos -> pos)\nwordFeats(\"house\") x posFeats(\"noun\")",
+      "code" : "case class Token(word:String,pos:String)\ndef wordFeats(word:String) =\n  oneHot('word -> word, 1.0) +\n  oneHot('upper, if (word(0).isUpper) 1.0 else 0.0)\ndef posFeats(pos:String) = \n  oneHot('pos -> pos)\nwordFeats(\"house\") outer posFeats(\"noun\")",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 15,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Note that `outer` corresponds to an outer product of two vectors. This is most obvious when\nuses integer-indexed vectors, as shown below. This also shows that Wolfe vectors can serve easily as\nmatrix and tensor representations. Of course this may not be the most efficient representation,\nbut Wolfe internally converts vectors to optimized representations anyway. ",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 16,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "val v = Vector(0 -> 1.0, 1 -> 2.0)\nv outer v",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
