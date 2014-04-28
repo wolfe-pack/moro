@@ -6,12 +6,13 @@ import java.io.File
 import play.api.Configuration
 import controllers.util.MoroConfig
 import scala.collection.JavaConverters._
+
 /**
  * @author sameer
  */
 
 object OutputFormats extends Enumeration {
-  val string, html, javascript, wolfe = Value
+  val string, html, javascript = Value
 
   implicit def outputFormatToString(f: Value): String = f.toString
 
@@ -271,9 +272,12 @@ class TwitterEvalServer(c: MoroConfig) extends Compiler with ACEEditor {
     val eval = new Evaluator(None, classPath, imports, classesForJarPath)
     println("compiling code : " + code)
     val result = try {
-      eval.apply[Any](code, false)
+      eval.apply[org.sameersingh.htmlgen.HTML](code, false).source
     } catch {
-      case e: CompilerException => e.m.mkString("\n\t")
+      case e: CompilerException => {
+        e.printStackTrace()
+        "<span class=\"label label-danger\">Error on line %d, col %d: %s</span>" format(e.m.head._1.line - 4, e.m.head._1.column - 4, e.m.head._2)
+      }
     } finally {
       "Compile Error!!"
     }

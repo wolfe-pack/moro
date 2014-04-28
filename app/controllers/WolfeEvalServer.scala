@@ -1,41 +1,48 @@
 package controllers
 
+import controllers.util.MoroConfig
+import collection.JavaConverters._
+
 /**
  * @author Sebastian Riedel
  */
 /**
  * Scala server using the Twitter Eval implementation
  */
-class WolfeEvalServer extends Compiler with WolfeACEEditor {
+class WolfeEvalServer(c: MoroConfig) extends Compiler with WolfeACEEditor {
 
   def name = "wolfe"
 
-  override def editorMode = "scala"
+  val config = c.config(this)
+  val classPath = config.map(c => c.getStringList("classPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
+  val classesForJarPath = config.map(c => c.getStringList("classesForJarPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
+  val imports = config.map(c => c.getStringList("imports")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
 
-  override def outputFormat: OutputFormats.Value = OutputFormats.wolfe
+  override def editorMode = "scala"
 
   // whether to hide the editor after compilation or not (essentially replacing editor with the output)
   override def hideAfterCompile: Boolean = false
 
   val userHome = System.getProperty("user.home") + "/" //"/Users/sriedel/"
-  val initialCode = "import ml.wolfe.Wolfe._;\nimport ml.wolfe.macros.OptimizedOperators._\n"
+  val initialCode = "import ml.wolfe.Wolfe._;\nimport ml.wolfe.macros.OptimizedOperators._\nimport org.sameersingh.htmlgen.TableConverter.Implicits._\n"
 
   def compile(input: Input) = {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)
     val code = input.code;
-    val eval = new Evaluator(None, List(
+    val eval = new Evaluator(None, classPath ++ List(
+      userHome + ".ivy2/cache/ml.wolfe/wolfe-core_2.10/jars/wolfe-core_2.10-0.1.0-SNAPSHOT.jar",
       userHome + ".ivy2/local/ml.wolfe/wolfe-core_2.10/0.1.0-SNAPSHOT/jars/wolfe-core_2.10.jar",
       userHome + ".ivy2/cache/net.sf.trove4j/trove4j/jars/trove4j-3.0.3.jar",
       userHome + ".ivy2/cache/com.typesafe/scalalogging-slf4j_2.10/jars/scalalogging-slf4j_2.10-1.1.0.jar",
       userHome + ".ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.7.6.jar",
       userHome + ".ivy2/cache/org.slf4j/slf4j-simple/jars/slf4j-simple-1.7.6.jar",
       userHome + ".ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.10.3.jar",
-      userHome + ".ivy2/cache/cc.factorie/factorie/jars/factorie-1.0.0-M7.jar"
-    ))
+      userHome + ".ivy2/cache/org.sameersingh.htmlgen/htmlgen/jars/htmlgen-0.1-SNAPSHOT.jar",
+      userHome + ".ivy2/cache/cc.factorie/factorie/jars/factorie-1.0.0-M7.jar"), imports, classesForJarPath
+    )
     println("compiling code : " + code)
     val result = try {
-
-      eval.apply[Any](initialCode + code, false)
+      eval.apply[org.sameersingh.htmlgen.HTML](initialCode + code, false).source
     } catch {
       case e: CompilerException => e.m.mkString("\n\t")
     } finally {

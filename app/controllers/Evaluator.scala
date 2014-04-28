@@ -94,64 +94,10 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
   private[this] lazy val compiler = new StringCompiler(STYLE_INDENT, target)
 
   /**
-   * write the current checksum to a file
-   */
-  def writeChecksum(checksum: String, file: File) {
-    val writer = new FileWriter(file)
-    writer.write("%s".format(checksum))
-    writer.close
-  }
-
-  /**
    * val i: Int = new Eval()("1 + 1") // => 2
    */
   def apply[T](code: String, resetState: Boolean = true): T = {
     applyProcessed(code, resetState)
-  }
-
-  /**
-   * val i: Int = new Eval()(new File("..."))
-   */
-  def apply[T](files: File*): T = {
-    if (target.isDefined) {
-      val targetDir = target.get
-      val unprocessedSource = files.map {
-        scala.io.Source.fromFile(_).mkString
-      }.mkString("\n")
-      val sourceChecksum = uniqueId(unprocessedSource, None)
-      val checksumFile = new File(targetDir, "checksum")
-      val lastChecksum = if (checksumFile.exists) {
-        Source.fromFile(checksumFile).getLines.take(1).toList.head
-      } else {
-        -1
-      }
-
-      if (lastChecksum != sourceChecksum) {
-        compiler.reset()
-        writeChecksum(sourceChecksum, checksumFile)
-      }
-
-      // why all this nonsense? Well.
-      // 1) We want to know which file the eval'd code came from
-      // 2) But sometimes files have characters that aren't valid in Java/Scala identifiers
-      // 3) And sometimes files with the same name live in different subdirectories
-      // so, clean it hash it and slap it on the end of Evaluator
-      val cleanBaseName = fileToClassName(files(0))
-      val className = "Evaluator__%s_%s".format(
-        cleanBaseName, sourceChecksum)
-      applyProcessed(className, unprocessedSource, false)
-    } else {
-      apply(files.map {
-        scala.io.Source.fromFile(_).mkString
-      }.mkString("\n"), true)
-    }
-  }
-
-  /**
-   * val i: Int = new Eval()(getClass.getResourceAsStream("..."))
-   */
-  def apply[T](stream: InputStream): T = {
-    apply(Source.fromInputStream(stream).mkString)
   }
 
   /**
@@ -163,7 +109,7 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
   def applyProcessed[T](code: String, resetState: Boolean): T = {
     // val id = uniqueId(code)
     // val className = "Evaluator__" + id
-    applyProcessed("ScalaKata", code, resetState)
+    applyProcessed("Moro", code, resetState)
   }
 
   /**
@@ -176,72 +122,6 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
     cls.getConstructor().newInstance().asInstanceOf[() => Any].apply().asInstanceOf[T]
   }
 
-  /**
-   * converts the given file to evaluable source.
-   * delegates to toSource(code: String)
-   */
-  def toSource(file: File): String = {
-    toSource(scala.io.Source.fromFile(file).mkString)
-  }
-
-  /**
-   * converts the given file to evaluable source.
-   */
-  def toSource(code: String): String = {
-    code
-  }
-
-  /**
-   * Compile an entire source file into the virtual classloader.
-   */
-  def compile(code: String) {
-    compiler(code)
-  }
-
-  /**
-   * Like `Eval()`, but doesn't reset the virtual classloader before evaluating. So if you've
-   * loaded classes with `compile`, they can be referenced/imported in code run by `inPlace`.
-   */
-  def inPlace[T](code: String) = {
-    apply[T](code, false)
-  }
-
-  /**
-   * Check if code is Eval-able.
-   * @throws CompilerException if not Eval-able.
-   */
-  def check(code: String) {
-    val id = uniqueId(code)
-    // val className = "Evaluator__" + id
-    val wrappedCode = wrapCodeInClass("ScalaKata", code)
-    compile(wrappedCode) // may throw CompilerException
-  }
-
-  /**
-   * Check if files are Eval-able.
-   * @throws CompilerException if not Eval-able.
-   */
-  def check(files: File*) {
-    val code = files.map {
-      scala.io.Source.fromFile(_).mkString
-    }.mkString("\n")
-    check(code)
-  }
-
-  /**
-   * Check if stream is Eval-able.
-   * @throws CompilerException if not Eval-able.
-   */
-  def check(stream: InputStream) {
-    check(scala.io.Source.fromInputStream(stream).mkString)
-  }
-
-  def findClass(className: String): Class[_] = {
-    compiler.findClass(className).getOrElse {
-      throw new ClassNotFoundException("no such class: " + className)
-    }
-  }
-
   private def uniqueId(code: String, idOpt: Option[Int] = Some(jvmId)): String = {
     val digest = MessageDigest.getInstance("SHA-1").digest(code.getBytes())
     val sha = new BigInteger(1, digest).toString(16)
@@ -251,33 +131,13 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
     }
   }
 
-  private def fileToClassName(f: File): String = {
-    // HOPE YOU'RE HAPPY GUYS!!!!
-    /*          __
-     *    __/|_/ /_  __  ______ ________/|_
-     *   |    / __ \/ / / / __ `/ ___/    /
-     *  /_ __/ / / / /_/ / /_/ (__  )_ __|
-     *   |/ /_/ /_/\__,_/\__, /____/ |/
-     *                  /____/
-     */
-    val fileName = f.getName
-    val baseName = fileName.lastIndexOf('.') match {
-      case -1 => fileName
-      case dot => fileName.substring(0, dot)
-    }
-    baseName.regexSub(Evaluator.classCleaner) {
-      m =>
-        "$%02x".format(m.group(0).charAt(0).toInt)
-    }
-  }
-
   /*
    * Wrap source code in a new class with an apply method.
    */
   private def wrapCodeInClass(className: String, code: String) = {
     "class " + className + " extends (() => Any) {\n" +
       imports.map(i => "import " + i + "\n").mkString("") +
-      "  def apply() = {\n" +
+      "  def apply(): org.sameersingh.htmlgen.HTML = {\n" +
       code + "\n" +
       "  }\n" +
       "}\n"
@@ -322,37 +182,6 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
   trait Preprocessor {
     def apply(code: String): String
   }
-
-  trait Resolver {
-    def resolvable(path: String): Boolean
-
-    def get(path: String): InputStream
-  }
-
-  class FilesystemResolver(root: File) extends Resolver {
-    private[this] def file(path: String): File =
-      new File(root.getAbsolutePath + File.separator + path)
-
-    def resolvable(path: String): Boolean =
-      file(path).exists
-
-    def get(path: String): InputStream =
-      new FileInputStream(file(path))
-  }
-
-  class ClassScopedResolver(clazz: Class[_]) extends Resolver {
-    private[this] def quotePath(path: String) =
-      "/" + path
-
-    def resolvable(path: String): Boolean =
-      clazz.getResourceAsStream(quotePath(path)) != null
-
-    def get(path: String): InputStream =
-      clazz.getResourceAsStream(quotePath(path))
-  }
-
-  class ResolutionFailedException(message: String) extends Exception
-
 
   /**
    * Dynamic scala compiler. Lots of (slow) state is created, so it may be advantageous to keep
