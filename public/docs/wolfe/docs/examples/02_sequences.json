@@ -1,0 +1,36 @@
+{
+  "name" : "Sequence Models",
+  "cells" : [ {
+    "id" : 0,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Many problems involve predicting a linear sequence of labels or classes. For example,\nin NLP one likes to predict syntactic information on a per-token-basis. \nIn Wolfe such problems can be addressed by choosing sequences as possible worlds. ",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 1,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Chunking",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 2,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "[Chunking](http://en.wikipedia.org/wiki/Shallow_parsing) or shallow parsing\nbreaks up a sentence into its syntactic constituents such as noun phrases and\nverb phrases, but *without* detecting their tree-structure. The most\nsuccessful approaches to chunking cast the problem into a sequence \nlabelling task where each token is tagged with a label from the\nset \\\\( \\left\\\\{ \\mathrm{B},\\mathrm{I},\\mathrm{O} \\right\\\\} \n\\times \\left\\\\{\\mathrm{Noun},\\mathrm{Verb},\\ldots \\right\\\\} \\\\). \nHere the first part of the label indicates whether the token is\n__B__eginning a constituent, __I__nside one, or __O__utside. The second\npart indicates whether the constituent is a noun phrase, or verb phrase,\nor prepositional phrase etc. \n\nIn this example we use the data from the \n[CoNLL 2000 Shared Task](http://www.cnts.ua.ac.be/conll2000/chunking/) on chunking.\nThe model is a first order simple linear chain that captures the correlations between\nchunk labels and words at each token (line 10) and between consecutive labels\n(line 11). The empirical loss is a perceptron style loss function (line 15),\nand it is minimized in line 18 to train the model. \n\n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 3,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "import ml.wolfe.util.{Evaluator, NLP}\nimport NLP._\nimport ml.wolfe.macros.Library._\n\ndef sentences = all(Sentence)(seqs(all(Token)))\ndef obs(s: Sentence) = \n  s.copy(tokens = s.tokens.map(_.copy(chunk = hidden)))\ndef features(s: Sentence) = {\n  val n = s.tokens.size    \n  sum(0 until n) {i=>oneHot('o->s.tokens(i).word->s.tokens(i).chunk)} +\n  sum(0 until n-1) {i=>oneHot('p->s.tokens(i).chunk->s.tokens(i+1).chunk)}\n}\ndef f(w: Vector)(s: Sentence) = w dot features(s)\ndef h(w: Vector)(s: Sentence) = argmax(sentences st evidence(obs)(s)){f(w)}\ndef loss(data: Iterable[Sentence])(w: Vector) = \n  sum(data) { s => f(w)(h(w)(s)) - f(w)(s) }\nval train = NLP.conll2000TrainSample()\nval w = argmin(vectors) { loss(train) }\nval predicted = map(train) {h(w)}\nEvaluator.evaluate(\n  train.flatMap(_.tokens), \n  predicted.flatMap(_.tokens))(_.chunk)",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  } ]
+}

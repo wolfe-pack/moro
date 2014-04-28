@@ -32,6 +32,7 @@ class WolfeEvalServer(c: MoroConfig) extends Compiler with WolfeACEEditor {
     val eval = new Evaluator(None, classPath ++ List(
       userHome + ".ivy2/cache/ml.wolfe/wolfe-core_2.10/jars/wolfe-core_2.10-0.1.0-SNAPSHOT.jar",
       userHome + ".ivy2/local/ml.wolfe/wolfe-core_2.10/0.1.0-SNAPSHOT/jars/wolfe-core_2.10.jar",
+      userHome + ".ivy2/local/ml.wolfe/wolfe-examples_2.10/0.1.0-SNAPSHOT/jars/wolfe-examples_2.10.jar",
       userHome + ".ivy2/cache/net.sf.trove4j/trove4j/jars/trove4j-3.0.3.jar",
       userHome + ".ivy2/cache/com.typesafe/scalalogging-slf4j_2.10/jars/scalalogging-slf4j_2.10-1.1.0.jar",
       userHome + ".ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.7.6.jar",

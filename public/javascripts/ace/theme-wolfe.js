@@ -127,7 +127,7 @@ color:#00AEEF;\
 color:#58C554;\
 }\
 .ace-wolfe .ace_comment {\
-color:#555;\
+color:#888;\
 font-style:italic;\
 padding-bottom: 0px;\
 }\
