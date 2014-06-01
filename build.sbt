@@ -32,7 +32,7 @@ libraryDependencies ++= Seq(
   "eu.henkelmann" % "actuarius_2.10.0" % "0.2.6",
   "org.scala-lang" % "scala-compiler" % "2.10.3",
   "ml.wolfe" %% "wolfe-core" % "0.1.0-SNAPSHOT",
-  "org.sameersingh.htmlgen" % "htmlgen" % "0.1-SNAPSHOT",
+  "org.sameersingh.htmlgen" % "htmlgen" % "0.0.1",
   "ml.wolfe" %% "wolfe-examples" % "0.1.0-SNAPSHOT",
   "org.scala-lang" % "scala-library" % "2.10.3"
 )
