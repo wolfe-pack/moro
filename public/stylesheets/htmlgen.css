@@ -14,3 +14,42 @@ th, td
 {
     padding:5px;
 }
+
+/* Starting div styles */
+.typeName {
+  color:pink;
+  background-color:#004444;
+}
+
+.asString {
+  color:white;
+}
+
+.asIterable {
+  color:blue;
+}
+
+.asProduct {
+  color:green;
+}
+
+.asMap {
+  color:yellow;
+}
+
+.fields {
+  background-color:#000000;
+}
+
+.field {
+  background-color:#444444;
+}
+
+.fieldName {
+  background-color:#222222;
+}
+
+.fieldValue {
+  background-color:#666666;
+}
+
