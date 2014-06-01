@@ -24,7 +24,7 @@ class WolfeEvalServer(c: MoroConfig) extends Compiler with WolfeACEEditor {
   override def hideAfterCompile: Boolean = false
 
   val userHome = System.getProperty("user.home") + "/" //"/Users/sriedel/"
-  val initialCode = "import ml.wolfe.Wolfe._;\nimport ml.wolfe.macros.OptimizedOperators._\nimport org.sameersingh.htmlgen.TableConverter.Implicits._\n"
+  val initialCode = "import ml.wolfe.Wolfe._;\nimport ml.wolfe.macros.OptimizedOperators._\n"
 
   def compile(input: Input) = {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)
@@ -38,7 +38,6 @@ class WolfeEvalServer(c: MoroConfig) extends Compiler with WolfeACEEditor {
       userHome + ".ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.7.6.jar",
       userHome + ".ivy2/cache/org.slf4j/slf4j-simple/jars/slf4j-simple-1.7.6.jar",
       userHome + ".ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.10.3.jar",
-      userHome + ".ivy2/cache/org.sameersingh.htmlgen/htmlgen/jars/htmlgen-0.1-SNAPSHOT.jar",
       userHome + ".ivy2/cache/cc.factorie/factorie/jars/factorie-1.0.0-M7.jar"), imports, classesForJarPath
     )
     println("compiling code : " + code)
