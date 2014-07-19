@@ -44,7 +44,15 @@
     "id" : 5,
     "compiler" : "markdown",
     "input" : {
-      "code" : "This notebook can support **bold**, _italics_, [Images](http://sameersingh.org/), and `Latex` too!",
+      "code" : "This notebook can support **bold**, _italics_, [Images](http://sameersingh.org/), `Latex`, PDFs, and plots as well.",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 15,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Latex",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -65,10 +73,26 @@
       "extraFields" : null
     }
   }, {
+    "id" : 16,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Images",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
     "id" : 8,
     "compiler" : "imageurl",
     "input" : {
-      "code" : "http://game-server-hosting.net/wp-content/uploads/2008/12/Wolfenstein-logo.jpg",
+      "code" : "http://1.bp.blogspot.com/-1Ub3QovBjkM/UUYRy5t-53I/AAAAAAAACr4/PUpU70GJaJ0/s1600/Princess+mononoke+photos1.jpg",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 17,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Interactive Scala!",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -81,18 +105,26 @@
       "extraFields" : null
     }
   }, {
-    "id" : 10,
-    "compiler" : "heading3",
+    "id" : 11,
+    "compiler" : "scala",
     "input" : {
-      "code" : "Another Example",
+      "code" : "def f2(x:Int) = x + x\nMap(10 -> \"ten\", 100 -> \"hundred\")",
+      "outputFormat" : "string",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 14,
+    "compiler" : "heading2",
+    "input" : {
+      "code" : "Plots too!",
       "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
-    "id" : 11,
+    "id" : 13,
     "compiler" : "scala",
     "input" : {
-      "code" : "def f2(x:Int) = x + x\nf2(10)",
+      "code" : "val x = (0.0 to 6.28 by 0.25)\nplot(x -> (math.sin(_), math.cos(_)))",
       "outputFormat" : "string",
       "extraFields" : null
     }
