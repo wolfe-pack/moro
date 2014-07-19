@@ -1,5 +1,5 @@
 {
-  "name" : "Wolfenstein Overview",
+  "name" : "Moro Overview",
   "cells" : [ {
     "id" : 0,
     "compiler" : "heading1",
@@ -41,10 +41,18 @@
       "extraFields" : null
     }
   }, {
+    "id" : 18,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Markdown!",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
     "id" : 5,
     "compiler" : "markdown",
     "input" : {
-      "code" : "This notebook can support **bold**, _italics_, [Images](http://sameersingh.org/), `Latex`, PDFs, and plots as well.",
+      "code" : "This notebook can support all markdown features, such as **bold**, _italics_, [links](http://sameersingh.org/), `code`, etc.",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -126,6 +134,30 @@
     "input" : {
       "code" : "val x = (0.0 to 6.28 by 0.25)\nplot(x -> (math.sin(_), math.cos(_)))",
       "outputFormat" : "string",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 19,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Or pretty much any file format*",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 20,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "*Those supported by [Google Drive viewer](https://support.google.com/drive/answer/2423485?hl=en&p=docs_viewer&rd=1), i.e.\n* Image files (.JPEG, .PNG, .GIF, .TIFF, .BMP)\n* Video files (WebM, .MPEG4, .3GPP, .MOV, .AVI, .MPEGPS, .WMV, .FLV, .ogg)\n* Text files (.TXT)\n* Markup/Code (.CSS, .HTML, .PHP, .C, .CPP, .H, .HPP, .JS)\n* Microsoft Word (.DOC and .DOCX)\n* Microsoft Excel (.XLS and .XLSX)\n* Microsoft PowerPoint (.PPT and .PPTX)\n* Adobe Portable Document Format (.PDF)\n* Apple Pages (.PAGES)\n* Adobe Illustrator (.AI)\n* Adobe Photoshop (.PSD)\n* Tagged Image File Format (.TIFF)\n* Autodesk AutoCad (.DXF)\n* Scalable Vector Graphics (.SVG)\n* PostScript (.EPS, .PS)\n* TrueType (.TTF)\n* XML Paper Specification (.XPS)\n* Archive file types (.ZIP, .RAR, tar, gzip)\n* Audio formats (MP3, MPEG, WAV, .ogg)\n* .MTS files\n* Raw Image formats",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 21,
+    "compiler" : "heading4",
+    "input" : {
+      "code" : "e.g. PDFs",
+      "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
