@@ -41,7 +41,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 18,
+    "id" : 5,
     "compiler" : "heading3",
     "input" : {
       "code" : "Markdown!",
@@ -49,7 +49,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 5,
+    "id" : 6,
     "compiler" : "markdown",
     "input" : {
       "code" : "This notebook can support all markdown features, such as **bold**, _italics_, [links](http://sameersingh.org/), `code`, etc.",
@@ -57,7 +57,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 15,
+    "id" : 7,
     "compiler" : "heading3",
     "input" : {
       "code" : "Latex",
@@ -65,7 +65,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 6,
+    "id" : 8,
     "compiler" : "latex",
     "input" : {
       "code" : "\\alpha+\\beta=\\sum_{i=0}^{n}\\gamma\\cfrac{1}{\\mathcal{Z}}",
@@ -73,7 +73,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 7,
+    "id" : 9,
     "compiler" : "markdown",
     "input" : {
       "code" : "And the equations can be inlined if definining \\\\(\\theta\\\\) and \\\\(\\pi\\\\) in text.",
@@ -81,7 +81,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 16,
+    "id" : 10,
     "compiler" : "heading3",
     "input" : {
       "code" : "Images",
@@ -89,7 +89,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 8,
+    "id" : 11,
     "compiler" : "imageurl",
     "input" : {
       "code" : "http://1.bp.blogspot.com/-1Ub3QovBjkM/UUYRy5t-53I/AAAAAAAACr4/PUpU70GJaJ0/s1600/Princess+mononoke+photos1.jpg",
@@ -97,7 +97,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 17,
+    "id" : 12,
     "compiler" : "heading3",
     "input" : {
       "code" : "Interactive Scala!",
@@ -105,7 +105,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 9,
+    "id" : 13,
     "compiler" : "scala",
     "input" : {
       "code" : "def f(x:Int) = x * x\nf(10)",
@@ -113,7 +113,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 11,
+    "id" : 14,
     "compiler" : "scala",
     "input" : {
       "code" : "def f2(x:Int) = x + x\nMap(10 -> \"ten\", 100 -> \"hundred\")",
@@ -121,7 +121,23 @@
       "extraFields" : null
     }
   }, {
-    "id" : 14,
+    "id" : 22,
+    "compiler" : "heading2",
+    "input" : {
+      "code" : "Matrices as Images",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 21,
+    "compiler" : "scala",
+    "input" : {
+      "code" : "// Matrices!\nval random = new util.Random()\nMatrix((0 until 10).map(i => (0 until 10).map(j => (i+j)+2*random.nextDouble())))",
+      "outputFormat" : "string",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 15,
     "compiler" : "heading2",
     "input" : {
       "code" : "Plots too!",
@@ -129,7 +145,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 13,
+    "id" : 16,
     "compiler" : "scala",
     "input" : {
       "code" : "val x = (0.0 to 6.28 by 0.25)\nplot(x -> (math.sin(_), math.cos(_)))",
@@ -137,7 +153,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 19,
+    "id" : 17,
     "compiler" : "heading3",
     "input" : {
       "code" : "Or pretty much any file format*",
@@ -145,7 +161,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 20,
+    "id" : 18,
     "compiler" : "markdown",
     "input" : {
       "code" : "*Those supported by [Google Drive viewer](https://support.google.com/drive/answer/2423485?hl=en&p=docs_viewer&rd=1), i.e.\n* Image files (.JPEG, .PNG, .GIF, .TIFF, .BMP)\n* Video files (WebM, .MPEG4, .3GPP, .MOV, .AVI, .MPEGPS, .WMV, .FLV, .ogg)\n* Text files (.TXT)\n* Markup/Code (.CSS, .HTML, .PHP, .C, .CPP, .H, .HPP, .JS)\n* Microsoft Word (.DOC and .DOCX)\n* Microsoft Excel (.XLS and .XLSX)\n* Microsoft PowerPoint (.PPT and .PPTX)\n* Adobe Portable Document Format (.PDF)\n* Apple Pages (.PAGES)\n* Adobe Illustrator (.AI)\n* Adobe Photoshop (.PSD)\n* Tagged Image File Format (.TIFF)\n* Autodesk AutoCad (.DXF)\n* Scalable Vector Graphics (.SVG)\n* PostScript (.EPS, .PS)\n* TrueType (.TTF)\n* XML Paper Specification (.XPS)\n* Archive file types (.ZIP, .RAR, tar, gzip)\n* Audio formats (MP3, MPEG, WAV, .ogg)\n* .MTS files\n* Raw Image formats",
@@ -153,7 +169,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 21,
+    "id" : 19,
     "compiler" : "heading4",
     "input" : {
       "code" : "e.g. PDFs",
@@ -161,7 +177,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 12,
+    "id" : 20,
     "compiler" : "google_viewer",
     "input" : {
       "code" : "http://www.riedelcastro.org//publications/papers/riedel13relation.pdf",
