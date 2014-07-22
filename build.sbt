@@ -64,7 +64,7 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.2.2",
   "eu.henkelmann" % "actuarius_2.10.0" % "0.2.6",
   "org.scala-lang" % "scala-compiler" % "2.10.3",
-  "org.sameersingh.htmlgen" % "htmlgen" % "0.1",
+  "org.sameersingh.htmlgen" % "htmlgen" % "0.2-SNAPSHOT",
   "org.sameersingh.scalaplot" % "scalaplot" % "0.0.3",
   "ml.wolfe" %% "wolfe-core" % "0.1.0-SNAPSHOT",
   "ml.wolfe" %% "wolfe-examples" % "0.1.0-SNAPSHOT",
