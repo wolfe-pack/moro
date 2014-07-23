@@ -50,6 +50,9 @@ trait Compiler {
   // icon that is used in the toolbar
   def toolbarIcon: String = name(0).toUpper + name.drop(1)
 
+  // aggregate all the previous cells as well?
+  def aggregatePrevious: Boolean = false
+
   def start = {}
 }
 
@@ -261,6 +264,9 @@ class TwitterEvalServer(c: MoroConfig) extends Compiler with ACEEditor {
   val classesForJarPath = config.map(c => c.getStringList("classesForJarPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
   val imports = config.map(c => c.getStringList("imports")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
 
+  // aggregate all the previous cells as well?
+  override val aggregatePrevious: Boolean = config.map(c => c.getBoolean("aggregate").getOrElse(false)).getOrElse(false)
+
   override def outputFormat: OutputFormats.Value = OutputFormats.string
 
   // whether to hide the editor after compilation or not (essentially replacing editor with the output)
@@ -282,7 +288,7 @@ class TwitterEvalServer(c: MoroConfig) extends Compiler with ACEEditor {
       "Compile Error!!"
     }
     println("result: " + result)
-    Result(result.toString, outputFormat)
+    Result("<blockquote>" + result.toString+"</blockquote>", outputFormat)
   }
 }
 

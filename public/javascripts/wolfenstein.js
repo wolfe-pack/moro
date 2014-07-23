@@ -49,7 +49,7 @@ var wolfeHeightUpdateFunction = function(editor, id) {
 function outputResult(doc, id, result, compilers) {
       switch(result.format) {
         case "html": doc.cells[id].renderDisplay.html(result.result); break;
-        case "string": doc.cells[id].renderDisplay.html("<blockquote>" + result.result + "</blockquote>"); break;
+        case "string": doc.cells[id].renderDisplay.html("<div class=\"string-result\">" + result.result + "</div>"); break;
         case "wolfe": doc.cells[id].renderDisplay.html("<div class=\"wolfe-result\">" + result.result + "</div>"); break;
       }
       if(compilers[doc.cells[id].mode].hideAfterCompile) $('#toggleEditor'+id).click();
@@ -86,7 +86,19 @@ function outputResult(doc, id, result, compilers) {
 
 
 function runCode(doc, id, compilers) {
-  var input = compilers[doc.cells[id].mode].editorToInput(doc, id);
+  var mode = doc.cells[id].mode;
+  var compiler = compilers[mode];
+  var input = compiler.editorToInput(doc, id);
+  if(compiler.aggregate) {
+    var prefixInput = "";
+    for(var mid in doc.ids) {
+      if(doc.cells[mid].mode == mode) {
+        if(id == mid) break;
+        prefixInput = prefixInput + compiler.editorToInput(doc, doc.cells[mid].id).code + "\n";
+      }
+    }
+    input.code = prefixInput + input.code;
+  }
   compileCode(input,
       function(x) {
         outputResult(doc, id, x, compilers);

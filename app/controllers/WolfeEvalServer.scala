@@ -18,6 +18,9 @@ class WolfeEvalServer(c: MoroConfig) extends Compiler with WolfeACEEditor {
   val classesForJarPath = config.map(c => c.getStringList("classesForJarPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
   val imports = config.map(c => c.getStringList("imports")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
 
+  // aggregate all the previous cells as well?
+  override val aggregatePrevious: Boolean = config.map(c => c.getBoolean("aggregate").getOrElse(false)).getOrElse(false)
+
   override def editorMode = "scala"
 
   // whether to hide the editor after compilation or not (essentially replacing editor with the output)
@@ -49,7 +52,7 @@ class WolfeEvalServer(c: MoroConfig) extends Compiler with WolfeACEEditor {
       "Compile Error!!"
     }
     println("result: " + result)
-    Result(result.toString, outputFormat)
+    Result("<blockquote>" + result.toString+"</blockquote>", outputFormat)
   }
 }
 
