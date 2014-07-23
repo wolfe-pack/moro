@@ -229,7 +229,7 @@ class ActuriusCompiler extends Compiler with ACEEditor {
   def name = "markdown"
 
   // icon that is used in the toolbar
-  override def toolbarIcon: String = "&Mu;d"
+  override def toolbarIcon: String = "<span class=\"octicon octicon-markdown\" style=\"font-size: 16px\"></span>" //"&Mu;d"
 
   val transformer = new ActuariusTransformer()
 
