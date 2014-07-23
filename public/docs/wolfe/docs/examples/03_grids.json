@@ -12,7 +12,7 @@
     "id" : 1,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "val N = 10\nval variance = 1.0\nval rand = new util.Random(0)\n\ncase class Pixel(x: Double, y: Boolean)\n\nval image = (0 until N).map(i =>\n    (0 until N).map(j => {\n        val y = ((i + j)/2) % 3 == 0\n        val x = (if(y) 1.0 else -1.0) + variance*rand.nextGaussian()\n        Pixel(x, y)\n    }))\nMatrix(image)(p => if(p.y) 1.0 else 0.0)",
+      "code" : "import ml.wolfe.macros.Library._\nval N = 2\nval variance = 1.0\nval noise = 0.5\nval rand = new util.Random(0)\n\ncase class Pixel(x: Boolean, y: Boolean)\ncase class Image(data: Seq[Seq[Pixel]]) {\n    def cells = data.flatten\n    def matrix(extr: Pixel => Double = (p: Pixel) => { if(p.y) 1.0 else 0.0 }) = \n        Matrix[Pixel](data)(extr)\n    def idxs = (0 until data.length).map(i => (0 until data(i).length).map(i -> _)).flatten\n}\n\nval data = (0 until N).map(i =>\n    (0 until N).map(j => {\n        val y = ((i + j)/2) % 3 == 0\n        val x = if(noise > rand.nextDouble) !y else y\n        //(if(y) 1.0 else -1.0) + variance*rand.nextGaussian()\n        Pixel(x, y)\n    }))\nval img = new Image(data)\nimg.matrix()",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -20,7 +20,23 @@
     "id" : 2,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "Map(\"Observed\" -> Matrix(image)(_.x),\n    //\"Truth\" -> Matrix(image)(p => if(p.y) 1.0 else 0.0),\n    \"Predicted\" -> Matrix(image)(p => if(p.x > 0.5) 1.0 else 0.0))",
+      "code" : "Map(\"Observed\" -> img.matrix(p => if(p.x) 1.0 else 0.0),\n    \"True\" -> img.matrix())",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 3,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "def obs(i: Image) = \n  i.copy(data = i.data.map(_.map(_.copy(y = hidden))))\n\ndef model(img: Image) = {\n  // unary\n  sum(img.cells) {p=> if(p.y == p.x) 0.5 else -0.5}\n}\n\ndef images = all(Image)(seqs(seqs(all(Pixel), 2), 2))\nval filtered = images st evidence(obs)(img)\n//filtered.map(_.matrix())\ndef inference(img: Image) = argmax(images st evidence(obs)(img)){model}\nargmax(filtered)(model).matrix()\n/*def f(w: Vector)(s: Sentence) = w dot features(s)\ndef h(w: Vector)(s: Sentence) = argmax(sentences st evidence(obs)(s)){f(w)}\ndef loss(data: Iterable[Sentence])(w: Vector) = \n  sum(data) { s => f(w)(h(w)(s)) - f(w)(s) }\nval train = NLP.conll2000TrainSample()\nval w = argmin(vectors) { loss(train) }\nval predicted = map(train) {h(w)}\nEvaluator.evaluate(\n  train.flatMap(_.tokens), \n  predicted.flatMap(_.tokens))(_.chunk)*/",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 4,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "def brute(img: Image) = ml.wolfe.BruteForceOperators.argmax(images st evidence(obs)(img)){model}\nbrute(img).matrix()",
       "outputFormat" : "html",
       "extraFields" : null
     }
