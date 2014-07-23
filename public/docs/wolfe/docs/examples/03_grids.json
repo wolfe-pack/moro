@@ -33,10 +33,26 @@
       "extraFields" : null
     }
   }, {
+    "id" : 5,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Unary Model",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
     "id" : 4,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "def brute(img: Image) = ml.wolfe.BruteForceOperators.argmax(images st evidence(obs)(img)){model}\nbrute(img).matrix()",
+      "code" : "def bruteUnary(img: Image) = ml.wolfe.BruteForceOperators.argmax(images st evidence(obs)(img)){unary}\nbruteUnary(img).matrix()",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 6,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "def bruteBinary(img: Image)= ml.wolfe.BruteForceOperators.argmax(images st evidence(obs)(img)){model}\nbruteBinary(img).matrix()",
       "outputFormat" : "html",
       "extraFields" : null
     }
