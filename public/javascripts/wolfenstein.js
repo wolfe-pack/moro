@@ -86,6 +86,9 @@ function outputResult(doc, id, result, compilers) {
 
 
 function runCode(doc, id, compilers) {
+  outputResult(doc, id, { format: "html", result: '<div class="text-center">' +
+                                                  '   <img src="/assets/images/ajax-loader.gif"></img>' +
+                                                  '</div>' }, compilers)
   var mode = doc.cells[id].mode;
   var compiler = compilers[mode];
   var input = compiler.editorToInput(doc, id);
@@ -103,39 +106,12 @@ function runCode(doc, id, compilers) {
       function(x) {
         outputResult(doc, id, x, compilers);
       }, doc.cells[id].mode);
-  /*
-  switch(doc.cells[id].mode) {
-    case "heading1": outputResult(doc,id,"<h1>" + code + "</h1>"); break;
-    case "heading2": outputResult(doc,id,"<h2>" + code + "</h2>"); break;
-    case "heading3": outputResult(doc,id,"<h3>" + code + "</h3>"); break;
-    case "heading4": outputResult(doc,id,"<h4>" + code + "</h4>"); break;
-    case "heading5": outputResult(doc,id,"<h5>" + code + "</h5>"); break;
-    default:
-      compileCode(code,
-        function(x) {
-          outputResult(doc, id, x.result);
-        }, doc.cells[id].mode); break;
-  }*/
 }
 
 function changeMode(id, newMode) {
    var currentCode = compilers[doc.cells[id].mode].editorToInput(doc, id).code;
    compilers[doc.cells[id].mode].removeEditor(id);
    doc.cells[id].mode = newMode;
-   /*
-   var editorMode = newMode;
-   switch(newMode) {
-     case "heading1": editorMode = "html"; break;
-     case "heading2": editorMode = "html"; break;
-     case "heading3": editorMode = "html"; break;
-     case "heading4": editorMode = "html"; break;
-     case "heading5": editorMode = "html"; break;
-     default: break;
-   }
-   doc.cells[id].editor.getSession().setMode("ace/mode/" + editorMode);
-   doc.cells[id].editor.focus();
-   doc.cells[id].editor.navigateFileEnd();
-   */
    //text = doc.cells[id].editor.getSession().getValue();
    doc.cells[id].editor = compilers[newMode].editor(id, currentCode);
    doc.cells[id].editor.focus();
