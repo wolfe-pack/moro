@@ -27,7 +27,6 @@ class WolfeEvalServer(c: MoroConfig) extends Compiler with WolfeACEEditor {
   override def hideAfterCompile: Boolean = false
 
   val userHome = System.getProperty("user.home") + "/" //"/Users/sriedel/"
-  val initialCode = "import ml.wolfe.Wolfe._;\nimport ml.wolfe.macros.OptimizedOperators._\n"
 
   def compile(input: Input) = {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)
@@ -45,7 +44,7 @@ class WolfeEvalServer(c: MoroConfig) extends Compiler with WolfeACEEditor {
     )
     println("compiling code : " + code)
     val result = try {
-      eval.apply[org.sameersingh.htmlgen.HTML](initialCode + code, false).source
+      eval.apply[org.sameersingh.htmlgen.HTML](code, false).source
     } catch {
       case e: CompilerException => e.m.mkString("\n\t")
     } finally {
