@@ -75,10 +75,6 @@
         function addStaticCellFromJson(id,doc,mode,input,compilers) {
           doc.ids.push(id);
           makeStaticCellFunctional(doc,id,mode,compilers);
-          compileCode(input,
-              function(x) {
-                outputResult(doc, id, x, compilers);
-              }, doc.cells[id].mode);
           if(!compilers[mode].hideAfterCompile) {
             $('#editCell' + id).show();
             doc.cells[id].editor = compilers[mode].editor(id);
@@ -88,6 +84,24 @@
           }
         }
 
+        function compileStaticCell(id,doc,mode,input,compilers) {
+          var compiler = compilers[mode];
+          if(compiler.aggregate) {
+            var prefixInput = "";
+            for(var mid in doc.ids) {
+              if(doc.cells[mid].mode == mode) {
+                if(id == mid) break;
+                prefixInput = prefixInput + compiler.editorToInput(doc, doc.cells[mid].id).code + "\n";
+              }
+            }
+            input.code = prefixInput + input.code;
+          }
+          compileCode(input,
+              function(x) {
+                outputResult(doc, id, x, compilers);
+              }, doc.cells[id].mode);
+        }
+
         /* COMPILERS OBJECT */
         var compilers = {};
         @for(c <- compilers) {
@@ -95,6 +109,7 @@
            compilers.@{c.name}.hideAfterCompile = @{c.hideAfterCompile};
            compilers.@{c.name}.editor = @Html(c.editorJavascript);
            compilers.@{c.name}.editorToInput = @Html(c.editorToInput);
+           compilers.@{c.name}.aggregate = @{c.aggregatePrevious};
         }
 
         /* DOCUMENT OBJECT */
@@ -105,6 +120,7 @@
            var input = @Html(cell.inputJson);
            var id = @{cell.id};
            addStaticCellFromJson(id, doc, mode, input,compilers);
+           compileStaticCell(id, doc, mode, input, compilers);
         }
     </script>
 
