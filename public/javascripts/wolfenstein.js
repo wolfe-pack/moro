@@ -119,6 +119,7 @@ function runCode(doc, id, compilers) {
 }
 
 function changeMode(id, newMode) {
+   var currentCode = compilers[doc.cells[id].mode].editorToInput(doc, id).code;
    compilers[doc.cells[id].mode].removeEditor(id);
    doc.cells[id].mode = newMode;
    /*
@@ -136,7 +137,7 @@ function changeMode(id, newMode) {
    doc.cells[id].editor.navigateFileEnd();
    */
    //text = doc.cells[id].editor.getSession().getValue();
-   doc.cells[id].editor = compilers[newMode].editor(id);
+   doc.cells[id].editor = compilers[newMode].editor(id, currentCode);
    doc.cells[id].editor.focus();
 }
 
