@@ -12,7 +12,7 @@
     "id" : 1,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "import ml.wolfe.macros.Library._\nval N = 3\nval variance = 1.0\nval noise = 0.5\nval rand = new util.Random(0)\n\ncase class Pixel(x: Boolean, y: Boolean)\ncase class Image(data: Seq[Seq[Pixel]]) {\n    def cells = data.flatten\n    def matrix(extr: Pixel => Double = (p: Pixel) => { if(p.y) 1.0 else 0.0 }) = \n        Matrix[Pixel](data)(extr)\n    def idxs = (0 until data.length).map(i => (0 until data(i).length).map(i -> _)).flatten\n}\n\nval data = (0 until N).map(i =>\n    (0 until N).map(j => {\n        val y = ((i + j)/2) % 3 == 0\n        val x = if(noise > rand.nextDouble) !y else y\n        //(if(y) 1.0 else -1.0) + variance*rand.nextGaussian()\n        Pixel(x, y)\n    }))\nval img = new Image(data)\nimg.matrix()",
+      "code" : "import ml.wolfe.macros.Library._\ntype Image = Map[(Int, Int), Boolean]\nval n = 5\ndef cols = (0 until n)\ndef rows = (0 until n)\ndef pixels = (0 until n) x (0 until n)\ndef img2HTML(img:Image) = Matrix(rows map (i => cols map(j => img(i,j))))(I)\ndef vec2HTML(vec:Vector) = Matrix(rows map (i => cols map(j => vec(i->j))))\n\nval truth = (pixels map (p => p -> ((p._1 + p._2) / 2 % 3 == 0))).toMap\nimg2HTML(truth)",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -20,7 +20,7 @@
     "id" : 2,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "Map(\"Observed\" -> img.matrix(p => if(p.x) 1.0 else 0.0),\n    \"True\" -> img.matrix())",
+      "code" : "val noise = 0.1\nval rand = new util.Random(0)\nval x = truth mapValues (v => if (rand.nextDouble < noise) !v else v)\nimg2HTML(x)",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -28,15 +28,7 @@
     "id" : 3,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "def obs(i: Image) = \n  i.copy(data = i.data.map(_.map(_.copy(y = hidden))))\n\ndef b2d(b: Boolean, f: Double = 1.0) = if(b) f else -f\ndef unary(img: Image) = sum(img.cells) {p=> b2d(p.y == p.x)}\ndef edges(img: Image) = {\n   sum(0 until N-1) { i =>\n     sum(0 until N-1) { j => {\n         1.0*b2d(img.data(i)(j).y == img.data(i+1)(j).y) +\n         1.0*b2d(img.data(i)(j).y == img.data(i)(j+1).y)\n       }}}}\ndef model(img: Image) = unary(img) + edges(img)\n\ndef images = all(Image)(seqs(seqs(all(Pixel), N), N))\n//def inference(img: Image) = argmax(images st evidence(obs)(img)){model}\nval filtered = images st evidence(obs)(img)\nfiltered.size //map(i => i.matrix() -> model(i))",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 5,
-    "compiler" : "heading3",
-    "input" : {
-      "code" : "Unary Model",
+      "code" : "val l_w = 2.0\nval g_w = 1.0\ndef local(x: Image)(y: Image) = sum(pixels) { p => l_w * I(x(p) == y(p)) }\ndef vertical(y: Image) = \n  sum(0 until n - 1) { i => sum(0 until n){ j => g_w * I(y(i, j) == y(i + 1, j)) } }\ndef horizontal(y: Image) = \n  sum(0 until n) { i => sum(0 until n - 1){ j => g_w * I(y(i, j) == y(i, j + 1)) } }\ndef grid(x: Image)(y: Image) = local(x)(y) + vertical(y) + horizontal(y)\ngrid(x)(truth)",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -44,15 +36,15 @@
     "id" : 4,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "def bruteUnary(img: Image) = ml.wolfe.BruteForceOperators.argmax(images st evidence(obs)(img)){unary}\nbruteUnary(img).matrix()",
+      "code" : "def images = maps(pixels, bools)\nval mpe = argmax(images) { grid(x) }\nimg2HTML(mpe)",
       "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
-    "id" : 6,
+    "id" : 5,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "def bruteBinary(img: Image)= ml.wolfe.BruteForceOperators.argmax(images st evidence(obs)(img)){model}\nbruteBinary(img).matrix()",
+      "code" : "def stats(y: Image) = sum(pixels) { p => oneHot(p, I(y(p))) }\nval mu = expect(images) { grid(x) } { stats }\nvec2HTML(mu)",
       "outputFormat" : "html",
       "extraFields" : null
     }
