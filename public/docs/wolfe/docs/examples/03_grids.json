@@ -20,7 +20,7 @@
     "id" : 2,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "val noise = 0.2\nval rand = new util.Random(0)\ndef gen = truth mapValues (v => if (rand.nextDouble < noise) !v else v) \nval x = Map() ++ gen\nimg2HTML(x)",
+      "code" : "val noise = 0.2\nval rand = new util.Random(0)\ndef addNoise(y:Image) = y mapValues (v => if (rand.nextDouble < noise) !v else v) \nval x = Map() ++ addNoise(truth) //need the Map() to force out the lazy view\nimg2HTML(x)",
       "outputFormat" : "html",
       "extraFields" : null
     }
