@@ -62,7 +62,7 @@ trait WolfeACEEditor {
   this: Compiler =>
   def editorMode: String = name
 
-  def outputFormat: OutputFormats.Value = OutputFormats.html
+  def outputFormat: OutputFormats.Value = OutputFormats.wolfe
 
   def initialValue: String = ""
 

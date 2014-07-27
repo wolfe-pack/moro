@@ -12,7 +12,7 @@ import scala.collection.JavaConverters._
  */
 
 object OutputFormats extends Enumeration {
-  val string, html, javascript = Value
+  val string, html, javascript, wolfe = Value
 
   implicit def outputFormatToString(f: Value): String = f.toString
 
