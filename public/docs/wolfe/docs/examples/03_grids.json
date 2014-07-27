@@ -12,8 +12,8 @@
     "id" : 1,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "import ml.wolfe.macros.Library._\ntype Image = Map[(Int, Int), Boolean]\nval n = 5\ndef cols = (0 until n)\ndef rows = (0 until n)\ndef pixels = (0 until n) x (0 until n)\n\ndef img2HTML(img:Image) = Matrix(rows map (i => cols map(j => img(i,j))))(I)\ndef vec2HTML(vec:Vector) = Matrix(rows map (i => cols map(j => vec(i->j))))\n\nval truth = (pixels map (p => p -> ((p._1 + p._2) / 2 % 3 == 0))).toMap\nimg2HTML(truth)",
-      "outputFormat" : "html",
+      "code" : "import org.sameersingh.htmlgen.DivConverter.Implicits._\ntype Image = Map[(Int, Int), Boolean]\nval n = 5\ndef cols = (0 until n)\ndef rows = (0 until n)\ndef pixels = (0 until n) x (0 until n)\n\ndef img2HTML(img:Image) = Matrix(rows map (i => cols map(j => img(i,j))))(I)\ndef vec2HTML(vec:Vector) = Matrix(rows map (i => cols map(j => vec(i->j))))\n\nval truth = (pixels map (p => p -> ((p._1 + p._2) / 2 % 3 == 0))).toMap\nimg2HTML(truth)",
+      "outputFormat" : "wolfe",
       "extraFields" : null
     }
   }, {
@@ -21,7 +21,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "val noise = 0.2\nval rand = new util.Random(0)\ndef addNoise(y:Image) = y mapValues (v => if (rand.nextDouble < noise) !v else v) \nval x = Map() ++ addNoise(truth) //need the Map() to force out the lazy view\nimg2HTML(x)",
-      "outputFormat" : "html",
+      "outputFormat" : "wolfe",
       "extraFields" : null
     }
   }, {
@@ -29,7 +29,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "val l_w = 1.0\nval g_w = 0.5\ndef local(x: Image)(y: Image) = sum(pixels) { p => l_w * I(x(p) == y(p)) }\ndef vertical(y: Image) = \n  sum(0 until n - 1) { i => sum(0 until n){ j => g_w * I(y(i, j) == y(i + 1, j)) } }\ndef horizontal(y: Image) = \n  sum(0 until n) { i => sum(0 until n - 1){ j => g_w * I(y(i, j) == y(i, j + 1)) } }\ndef grid(x: Image)(y: Image) = local(x)(y) + vertical(y) + horizontal(y)\ngrid(x)(truth)",
-      "outputFormat" : "html",
+      "outputFormat" : "wolfe",
       "extraFields" : null
     }
   }, {
@@ -37,7 +37,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def images = maps(pixels, bools)\nval mpe = argmax(images) { grid(x) }\nimg2HTML(mpe)",
-      "outputFormat" : "html",
+      "outputFormat" : "wolfe",
       "extraFields" : null
     }
   }, {
@@ -45,7 +45,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def stats(y: Image) = sum(pixels) { p => oneHot(p, I(y(p))) }\nval mu = expect(images) { grid(x) } { stats }\nvec2HTML(mu)",
-      "outputFormat" : "html",
+      "outputFormat" : "wolfe",
       "extraFields" : null
     }
   } ]
