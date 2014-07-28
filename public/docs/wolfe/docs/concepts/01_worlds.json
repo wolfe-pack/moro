@@ -84,7 +84,7 @@
     "id" : 10,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class Token(word:String, label:Symbol)\nimplicit val words = List(\"eat\",\"house\")\nimplicit val labels = List('Verb,'Noun)\nall(Token)",
+      "code" : "implicit val impWords = List(\"eat\",\"house\")\nimplicit val impLabels = List('Verb,'Noun)\nall(Token)",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
@@ -108,7 +108,7 @@
     "id" : 13,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "val labels = List(\"Verb\",\"Noun\")\nseqs(labels, 2)",
+      "code" : "val tags = List(\"Verb\",\"Noun\")\nseqs(tags, 2)",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
@@ -124,7 +124,7 @@
     "id" : 15,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class Token(word:String,label:String)\nval words = List(\"eat\")\nval labels = List(\"Verb\")\nseqs(all(Token){words x labels}, 2)",
+      "code" : "seqs(all(Token){List(\"eat\") x List(\"Verb\")}, 2)",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
@@ -196,7 +196,7 @@
     "id" : 24,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class Token(word:String, label:Symbol)\n//all(Token){infty[String] x List('Verb,'Noun)}",
+      "code" : "//todo: all(Token){infty[String] x List('Verb,'Noun)}",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
@@ -220,7 +220,7 @@
     "id" : 27,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "val bools = List(false,true)\nval doubles = infty[Double]\nval strings = infty[String]\nval vectors = infty[Vector]",
+      "code" : "//val bools = List(false,true)\nval doubles = infty[Double]\nval strings = infty[String]\nval vectors = infty[Vector]",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
