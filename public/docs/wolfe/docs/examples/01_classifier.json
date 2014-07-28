@@ -44,7 +44,7 @@
     "id" : 5,
     "compiler" : "markdown",
     "input" : {
-      "code" : "The [Iris data set](http://archive.ics.uci.edu/ml/datasets/Iris) \ncontains 3 classes of 50 instances each, where each class refers to a type of iris plant.\nBelow you see the definition of the data structures needed. Note that \nthe observed attributes are `Double` values and that Wolfe currently\nrequires such attributes to be observed.",
+      "code" : "The [Iris data set](http://archive.ics.uci.edu/ml/datasets/Iris) \ncontains 3 classes of 50 instances each, where each class refers to a type of iris plant.\nBelow you see the definition of the data structures needed. Note that \nthe observed attributes are `Double` values and that Wolfe currently\nrequires such attributes to be observed. Also note that in the snippets following\nthe one below we use predefined data structures; the ones introduced here \nonly serve illustration purposes.",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -52,7 +52,7 @@
     "id" : 6,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "/* We can't include this because it would clash with the wolfe definitions of Iris\ncase class Label(label: String)\ncase class IrisData(sepalLength: Double, \n                    sepalWidth: Double, \n                    petalLength: Double, \n                    petalWidth: Double, \n                    irisClass: Label)\nimplicit val classes = Seq(\n  Label(\"Iris-setosa\"), \n  Label(\"Iris-versicolor\"), \n  Label(\"Iris-virginica\"))\n*/",
+      "code" : "object Data {\n  case class Label(label: String)\n  case class IrisData(sepalLength: Double, \n                      sepalWidth: Double, \n                      petalLength: Double, \n                      petalWidth: Double, \n                      irisClass: Label)\n  implicit val classes = Seq(\n    Label(\"Iris-setosa\"), \n    Label(\"Iris-versicolor\"), \n    Label(\"Iris-virginica\"))\n}",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }

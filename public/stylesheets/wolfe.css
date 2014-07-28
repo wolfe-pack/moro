@@ -956,8 +956,8 @@ blockquote {
   border-left: 0px solid #777;
   //border-color: #c00;
   padding-left: 0px;
-  font-style: italic;
-  font-size: 18px;
+  //font-style: italic;
+  //font-size: 18px;
   font-weight: 500;
 }
 
