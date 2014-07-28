@@ -52,7 +52,7 @@
     "id" : 6,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class World(smokesAnna:Boolean, smokesBob:Boolean)\ndef s(w:World) = I(w.smokesAnna) + I(w.smokesBob)\ns(World(true,false))",
+      "code" : "case class PropositionalWorld(smokesAnna:Boolean, smokesBob:Boolean)\ndef s(w:PropositionalWorld) = I(w.smokesAnna) + I(w.smokesBob)\ns(PropositionalWorld(true,false))",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
@@ -100,7 +100,7 @@
     "id" : 12,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "def feats(pred:Boolean) = oneHot('pred, I(pred))\nfeats(true) dot oneHot('pred, 3.0)",
+      "code" : "def feats1(pred:Boolean) = oneHot('pred, I(pred))\nfeats1(true) dot oneHot('pred, 3.0)",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
@@ -116,7 +116,7 @@
     "id" : 14,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class World(smokesAnna:Boolean,smokesBob:Boolean)\ndef feats(s:World) = \n  oneHot('smokes, I(s.smokesAnna)) + \n  oneHot('smokes, I(s.smokesBob))\nval world = World(true,true)\nfeats(world) dot oneHot('smokes,1.0)",
+      "code" : "def feats2(s:PropositionalWorld) = \n  oneHot('smokes, I(s.smokesAnna)) + \n  oneHot('smokes, I(s.smokesBob))\nval world2 = PropositionalWorld(true,true)\nfeats2(world2) dot oneHot('smokes,1.0)",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
@@ -132,7 +132,7 @@
     "id" : 16,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class World(smokes:Pred[Symbol])\nval persons = List('Anna,'Bob,'Peter)\ndef feats(w:World) = sum(persons) { p => oneHot('smokes, I(w.smokes(p))) }\nval world = World(Map('Anna -> true, 'Bob -> true, 'Peter -> false))\nfeats(world) dot oneHot('smokes,1.0)",
+      "code" : "def feats3(w:World) = sum(persons) { p => oneHot('smokes, I(w.smokes(p))) }\nval world3 = World(Map('Anna -> true, 'Bob -> true, 'Peter -> false))\nfeats3(world3) dot oneHot('smokes,1.0)",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
