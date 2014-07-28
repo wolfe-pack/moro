@@ -100,7 +100,7 @@
     "id" : 12,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class XY(x:Int,y:Int)\ndef allXY = all(XY) { (0 until 2) x (0 until 2) }\ndef f(xy:XY) = oneHot(xy.x -> xy.y)\ndef s(w:Vector)(xy:XY) = w dot f(xy)\ndef loss(data:Seq[XY])(w:Vector) = \n  sum(data) {i => s(w)(i) - max(allXY where (_.x == i.x)) { s(w) } }\nval training = for (i <- 0 until 2) yield XY(i,i)\nargmax(vectors) { loss(training) }  ",
+      "code" : "case class XY(x:Int,y:Int)\ndef space = all(XY) { (0 until 2) x (0 until 2) }\ndef f(xy:XY) = oneHot(xy.x -> xy.y)\ndef s(w:Vector)(xy:XY) = w dot f(xy)\ndef loss(data:Seq[XY])(w:Vector) = \n  sum(data) {i => s(w)(i) - max(space where (_.x == i.x)) { s(w) } }\nval training = for (i <- 0 until 2) yield XY(i,i)\nval w = argmax(vectors) { loss(training) }  \nw",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
@@ -132,7 +132,7 @@
     "id" : 16,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class XY(x:Boolean,y:Boolean)\ndef space = all(XY){ bools x bools }\ndef s(w:Vector)(xy:XY) = oneHot(xy.x -> xy.y) dot w\ndef h(w:Vector)(xy:XY) = argmax(space where (_.x == xy.x)) { s(w) }\nval w = oneHot(true -> true, 2.0) + oneHot(false -> true, 2.0)\nval test = Seq(XY(true,true),XY(false,false))\nval t1 = test.map(h(w))\nval t2 = map(test){h(w)}\nt1 == t2",
+      "code" : "def h(w:Vector)(xy:XY) = argmax(space where (_.x == xy.x)) { s(w) }\nval test = Seq(XY(0,0),XY(1,1))\nval t1 = test.map(h(w))\nval t2 = map(test){h(w)}\nt1 == t2",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
@@ -156,7 +156,7 @@
     "id" : 19,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class World(smokesAnn:Boolean, smokesBob:Boolean)\ndef worlds = all(World) {bools x bools}\n@OptimizeByInference(ml.wolfe.MaxProduct(_, 5))\ndef f(w:World) = I(w.smokesAnn == w.smokesBob) \nargmax(worlds where (_.smokesAnn)) { f }",
+      "code" : "@OptimizeByInference(BeliefPropagation.maxProduct(5))\ndef annotated(w:World) = I(w.smokesAnn == w.smokesBob) \nargmax(worlds where (_.smokesAnn)) { annotated }",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
@@ -172,7 +172,7 @@
     "id" : 21,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "import cc.factorie.optimize.{Perceptron, OnlineTrainer}\ncase class XY(x:Int,y:Int)\ndef worlds = all(XY) { (0 until 2) x (0 until 2) }\ndef f(xy:XY) = oneHot(xy.x -> xy.y)\ndef s(w:Vector)(xy:XY) = w dot f(xy)\n@OptimizeByLearning(new OnlineTrainer(_, new Perceptron, 3))\ndef loss(data:Seq[XY])(w:Vector) = \n  sum(data) {i => s(w)(i) - max(worlds where (_.x == i.x)) { s(w) } }\nval training = for (i <- 0 until 2) yield XY(i,i)\nargmax(vectors) { loss(training) }",
+      "code" : "import cc.factorie.optimize.{Perceptron}\n@OptimizeByLearning(Learn.online(3, new Perceptron))\ndef annotatedLoss(data:Seq[XY])(w:Vector) = loss(data)(w)\nargmax(vectors) { annotatedLoss(training) }",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
