@@ -12,7 +12,7 @@
     "id" : 1,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "def argmax[T](S:Iterable[T])(f:T=>Double) = S.maxBy(f)\nargmax((0 until 5) filter (_ < 3)) { s => s.toDouble }",
+      "code" : "def bruteArgmax[T](S:Iterable[T])(f:T=>Double) = S.maxBy(f)\nbruteArgmax((0 until 5) filter (_ < 3)) { s => s.toDouble }",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
@@ -100,7 +100,7 @@
     "id" : 12,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "case class XY(x:Int,y:Int)\ndef worlds = all(XY) { (0 until 2) x (0 until 2) }\ndef f(xy:XY) = oneHot(xy.x -> xy.y)\ndef s(w:Vector)(xy:XY) = w dot f(xy)\ndef loss(data:Seq[XY])(w:Vector) = \n  sum(data) {i => s(w)(i) - max(worlds where (_.x == i.x)) { s(w) } }\nval training = for (i <- 0 until 2) yield XY(i,i)\nargmax(vectors) { loss(training) }  ",
+      "code" : "case class XY(x:Int,y:Int)\ndef allXY = all(XY) { (0 until 2) x (0 until 2) }\ndef f(xy:XY) = oneHot(xy.x -> xy.y)\ndef s(w:Vector)(xy:XY) = w dot f(xy)\ndef loss(data:Seq[XY])(w:Vector) = \n  sum(data) {i => s(w)(i) - max(allXY where (_.x == i.x)) { s(w) } }\nval training = for (i <- 0 until 2) yield XY(i,i)\nargmax(vectors) { loss(training) }  ",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
