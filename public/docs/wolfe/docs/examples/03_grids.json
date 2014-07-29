@@ -1,31 +1,31 @@
 {
   "name" : "Ising Grids",
   "cells" : [ {
-    "id" : 6,
-    "compiler" : "markdown",
-    "input" : {
-      "code" : "[Ising models](http://en.wikipedia.org/wiki/Ising_model) capture the pairwise interactions\nbetween a set of binary variables, such as the spin of neighboring atoms or the \nblack/white value of neighboring pixels in an image. \n\nIn this example we will focus on a 2D Ising grid corresponding to a binary image,\nand the task of image denoising. We are given an observed noisy image \\\\(\\mathbf{x}\\\\) \nof dimension \\\\( n \\times n \\\\) and\npredict a denoised version \\\\(\\mathbf{y}\\\\) of the same dimension. In an Ising model the probability of\n\\\\(\\mathbf{y}\\\\) conditioned on \\\\(\\mathbf{x}\\\\) is\n$$\n\\newcommand{\\x}{\\mathbf{x}}\n\\newcommand{\\y}{\\mathbf{y}}\np(\\y|\\x) \\propto \\exp(s\\_{\\text{local}}(\\x,\\y) + s\\_{\\text{vert}}(\\y) + s\\_{\\text{horz}}(\\y) )\n$$\nwhere  \n$$\n\\newcommand{\\x}{\\mathbf{x}}\n\\newcommand{\\y}{\\mathbf{y}}\ns\\_{\\text{local}}(\\x,\\y) =  \\sum\\_{i,j} w\\_{\\text{local}} I[y\\_{i,j}=x\\_{i,j}]\n$$\nencourages the denoised image to be close to the noisy image, \n$$\n\\newcommand{\\x}{\\mathbf{x}}\n\\newcommand{\\y}{\\mathbf{y}}\ns\\_{\\text{vert}}(\\y) = \\sum\\_{i < n - 1,j} w\\_{\\text{grid}}  I[y\\_{i+1,j}=y\\_{i,j}]  \n$$\nfavours vertical neighbors to have the same value and \n$$\n\\newcommand{\\x}{\\mathbf{x}}\n\\newcommand{\\y}{\\mathbf{y}}\ns\\_{\\text{horz}}(\\y) = \\sum\\_{i,j < n - 1} w\\_{\\text{grid}}  I[y\\_{i,j+1}=y\\_{i,j}]  \n$$\ndoes the same for horizontal neighbors.",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
     "id" : 0,
-    "compiler" : "heading3",
-    "input" : {
-      "code" : "Data Structures and Ground Truth",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 7,
     "compiler" : "markdown",
     "input" : {
-      "code" : "Blah",
+      "code" : "[Ising models](http://en.wikipedia.org/wiki/Ising_model) capture the pairwise interactions\nbetween a set of binary variables, such as the spin of neighboring atoms or the \nblack/white value of neighboring pixels in an image. \n\nIn this example we will focus on a 2D Ising grid corresponding to a binary image,\nand the task of image denoising. We are given an observed noisy image \\\\(\\mathbf{x}\\\\) \nof dimension \\\\( n \\times n \\\\) and\npredict a denoised version \\\\(\\mathbf{y}\\\\) of the same dimension. In an Ising model the probability of\n\\\\(\\mathbf{y}\\\\) conditioned on \\\\(\\mathbf{x}\\\\) is\n$$\n\\newcommand{\\x}{\\mathbf{x}}\n\\newcommand{\\y}{\\mathbf{y}}\np(\\y|\\x) \\propto \\exp(s\\_{\\text{local}}(\\x,\\y) + s\\_{\\text{vert}}(\\y) + s\\_{\\text{horz}}(\\y) )\n$$\nwhere  \n$$\n\\newcommand{\\x}{\\mathbf{x}}\n\\newcommand{\\y}{\\mathbf{y}}\ns\\_{\\text{local}}(\\x,\\y) =  \\sum\\_{i,j} w\\_{\\text{local}} I[y\\_{i,j}=x\\_{i,j}]\n$$\nencourages the denoised image to be close to the noisy image, \n$$\n\\newcommand{\\x}{\\mathbf{x}}\n\\newcommand{\\y}{\\mathbf{y}}\ns\\_{\\text{vert}}(\\y) = \\sum\\_{i < n - 1,j} w\\_{\\text{grid}}  I[y\\_{i+1,j}=y\\_{i,j}]  \n$$\nfavours vertical neighbors to have the same value and \n$$\n\\newcommand{\\x}{\\mathbf{x}}\n\\newcommand{\\y}{\\mathbf{y}}\ns\\_{\\text{horz}}(\\y) = \\sum\\_{i,j < n - 1} w\\_{\\text{grid}}  I[y\\_{i,j+1}=y\\_{i,j}]  \n$$\ndoes the same for horizontal neighbors.\n\nIn the following we will implement such a model in wolfe. Notice that the actual\nmodel definition will correspond to the math above almost one-to-one. All remaining\ncode will serve mostly to set up the problem and visualize. \n",
       "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
     "id" : 1,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Setup",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 2,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "We first define the basic data structures, the problem setup and a ground truth image to recover. \nWe define an `Image` to be a `Map` from integer pairs (pixes) to `Boolean`. The\nheight and width of the grid is set to be `n`. \nWe will frequently make use of the set of all `pixels` and hence define\nit as the cartesian product ` (0 until n) x (0 until n)`.\n\nThe `truth` variable defines a ground truth image with a regular structure\nyou can see in the image below.",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 3,
     "compiler" : "wolfe",
     "input" : {
       "code" : "import org.sameersingh.htmlgen.DivConverter.Implicits._\nimport scala.util.Random\ntype Image = Map[(Int, Int), Boolean]\nval n = 5\ndef cols = (0 until n)\ndef rows = (0 until n)\ndef pixels = (0 until n) x (0 until n)\n\n//methods to create html renderings of different image representations\ndef img2HTML(img:Image) = Matrix(rows map (i => cols map(j => img(i,j))))(I)\ndef vec2HTML(vec:Vector) = Matrix(rows map (i => cols map(j => vec(i->j))))\n\nval truth = (pixels map (p => p -> ((p._1 + p._2) / 2 % 3 == 0))).toMap\nimg2HTML(truth)",
@@ -33,34 +33,82 @@
       "extraFields" : null
     }
   }, {
-    "id" : 2,
-    "compiler" : "wolfe",
+    "id" : 8,
+    "compiler" : "markdown",
     "input" : {
-      "code" : "val noise = 0.2\nval rand = new Random(0)\ndef addNoise(y:Image) = y mapValues (v => if (rand.nextDouble < noise) !v else v) \nval x = Map() ++ addNoise(truth) //need the Map() to force out the lazy view\nimg2HTML(x)",
-      "outputFormat" : "wolfe",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 3,
-    "compiler" : "wolfe",
-    "input" : {
-      "code" : "val l_w = 1.0\nval g_w = 0.5\ndef local(x: Image)(y: Image) = sum(pixels) { p => l_w * I(x(p) == y(p)) }\ndef vert(y: Image) = \n  sum(0 until n - 1) { i => sum(0 until n){ j => g_w * I(y(i, j) == y(i + 1, j)) } }\ndef horz(y: Image) = \n  sum(0 until n) { i => sum(0 until n - 1){ j => g_w * I(y(i, j) == y(i, j + 1)) } }\ndef grid(x: Image)(y: Image) = local(x)(y) + vert(y) + horz(y)\ngrid(x)(truth)",
-      "outputFormat" : "wolfe",
+      "code" : "Next we generate a noisy version of this ground truth by randomly flipping \neach pixel with some probability `noise`.\n\n\n",
+      "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
     "id" : 4,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "def images = maps(pixels, bools)\nval mpe = argmax(images) { grid(x) }\nimg2HTML(mpe)",
+      "code" : "val noise = 0.2\nval rand = new Random(0)\ndef addNoise(y:Image) = y mapValues (v => if (rand.nextDouble < noise) !v else v) \nval noisy = Map() ++ addNoise(truth) //need the Map() to force out the lazy view\nimg2HTML(noisy)",
       "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 10,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Model",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 9,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "The wolfe version of the Ising grid is almost a one-to-one translation of the math above. \nThe only difference is a slightly different definition of the nested sums. For the `local`\nmodel we can leverage our definition of `pixels` to provide a single sum, for the `vert` and\n`horz` parts we need two nested explicit `sum` statements. The final line shows the score\nof the true image conditioned on the noisy image. ",
+      "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
     "id" : 5,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "def stats(y: Image) = sum(pixels) { p => oneHot(p, I(y(p))) }\nval mu = expect(images) { grid(x) } { stats }\nvec2HTML(mu)",
+      "code" : "val l_w = 1.0\nval g_w = 0.5\ndef local(x: Image)(y: Image) = sum(pixels){p => l_w * I(x(p) == y(p))}\ndef vert(y: Image) = \n  sum(0 until n-1){i => sum(0 until n){j => g_w * I(y(i, j) == y(i+1, j))}}\ndef horz(y: Image) = \n  sum(0 until n){i => sum(0 until n-1){j => g_w * I(y(i, j) == y(i, j+1))}}\ndef grid(x: Image)(y: Image) = local(x)(y) + vert(y) + horz(y)\ngrid(noisy)(truth)",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 11,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Inference",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 12,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "We first find the most likely denoised image. \n$$\n\\newcommand{\\x}{\\mathbf{x}}\n\\newcommand{\\y}{\\mathbf{y}}\n\\arg \\max\\_{\\y \\in [n] \\times [n] \\rightarrow \\mathbb{B}} p(\\y|\\x) \n$$\nNote that due to the monotonic nature of \\\\(\\exp\\\\) we can do this optimization\nwith respect to the linear scoring function. With this in mind the\nwolfe notation below follows the math. We first define the search space\nof all images (to be reused later), and then do the argmax. \n\n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 6,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "def images = maps(pixels, bools)\nval mpe = argmax(images) { grid(noisy) }\nimg2HTML(mpe)",
+      "outputFormat" : "wolfe",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 13,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "Next we like to calculate the marginal probabilities of each pixel to be active. In the wolfe\nthis can be done using the `expect` operator that calculates expectations of a \nstatistics function under a model. \n\nWe first define the statistics function. The general shape of such a function\nneeds to be `T => Vector` where `T` is the type of objects in the search/sample space. \nTo get marginals we need a vector that has one active (value is 1) component per active pixel. \nThe function `stats` achieves this by summing up a one-hot vector \nfor each pixel `p`, where the value at index `p` is `I(y(p))` \n\n\n",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 7,
+    "compiler" : "wolfe",
+    "input" : {
+      "code" : "def stats(y: Image) = sum(pixels) { p => oneHot(p, I(y(p))) }\nval mu = expect(images) { grid(noisy) } { stats }\nvec2HTML(mu)",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
