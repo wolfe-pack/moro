@@ -20,7 +20,7 @@
     "id" : 2,
     "compiler" : "markdown",
     "input" : {
-      "code" : "We first implement MLN possible worlds. As before, in wolfe possible worlds can be any\ncase classes as well as collections such as sequences and maps. In particular, we can use\n`Map[T,Boolean]` as predicates, and for convenience in wolfe this type is defined \nas `type Pred[T]=Map[T,Boolean]`. A possible world is then simply a case class with \none field per predicate, as shown in the `World` case class.",
+      "code" : "We first implement MLN possible worlds. As before, in wolfe possible worlds can be any\ncase classes as well as collections such as sequences and maps. In particular, we can use\n`Map[T,Boolean]` as predicates, and for convenience in wolfe this type is defined \nas `type Pred[T]=Map[T,Boolean]`. A possible world is then simply a case class with \none field per predicate, as shown in the `World` case class.\n\nNote that we can use any class to represent constants of the domain, not just\n`Symbol`. For example, we could define predicates over the type\n`case class Person(first:String,last:String)`. ",
       "outputFormat" : "html",
       "extraFields" : null
     }
