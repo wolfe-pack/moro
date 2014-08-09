@@ -20,7 +20,7 @@
     "id" : 2,
     "compiler" : "markdown",
     "input" : {
-      "code" : "Wolfe provides two ways to construct vectors: through a direct constructor and\nas sums of one-hot vectors. \n\nThe direct constructor has the same shape as the `Map` constructor in Scala where\na sequence of key-value pairs is provided, with the constraint that \nthe value has to be an integer.\n\n\n",
+      "code" : "Wolfe provides two ways to construct vectors: through a direct constructor and\nas sums of one-hot vectors. \n\nThe direct constructor has the same shape as the `Map` constructor in Scala where\na sequence of key-value pairs is provided, with the constraint that \nthe value has to be a double.\n\n\n",
       "outputFormat" : "html",
       "extraFields" : null
     }
