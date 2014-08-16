@@ -52,7 +52,7 @@
     "id" : 6,
     "compiler" : "markdown",
     "input" : {
-      "code" : "Next we define the predictor `h_gate` that takes as input a weight vector `w` and \nan observation `obs`. It finds the `XY` value consistent with the observation \nand with maximal score. An `XY` value `d` is consistent with an observation `obs`\nwhen their input fields match. This is captured using `q_gate`. \n\nThe weight vector `w_opt` is one optimal solution. That is, it would classify\nall instances correctly. We ",
+      "code" : "Next we define the predictor `h_gate` that takes as input a weight vector `w` and \nan observation `obs`. It finds the `XY` value consistent with the observation \nand with maximal score. An `XY` value `d` is consistent with an observation `obs`\nwhen their input fields match. This is captured using `q_gate`. \n\nThe weight vector `w_opt` is one optimal solution. That is, it would classify\nall instances correctly.  ",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -137,7 +137,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 18,
+    "id" : 17,
     "compiler" : "markdown",
     "input" : {
       "code" : "We define the model again as the dot product of feature vector \nand weight vector. Next we define `obs_iris` as the observation\ncondition. Notice how we condition on everything but the class label. More details on \nthis notation can be found in the section on \n[constraints](/doc/wolfe-static/wolfe/docs/concepts/02_constraints).\n\nThe predictor `h_iris` takes a weight vector `w` and an observation `i` to \nreturn the `IrisData` object with highest score and consistent with `i`, where\nconsistency is defined through `obs_iris`. \n\nTo learn we again define a perceptron-style objective `l_iris` and then minimize\nit to get `w_iris`. Then we evaluate this weight vector on the test data. \n\n",
@@ -145,7 +145,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 17,
+    "id" : 18,
     "compiler" : "wolfe",
     "input" : {
       "code" : "def s_iris(w:Vector)(d:IrisData) = f_iris(d) dot w\ndef obs_iris(d:IrisData) = d.copy(irisClass = hidden)\ndef worlds = all(IrisData)\ndef h_iris(w:Vector)(i:IrisData) = \n  argmax(worlds where (obs_iris(_) == obs_iris(i))) { s_iris(w) }\n\ndef l_iris(data:Seq[IrisData])(w:Vector) =\n  sum(data) {i => s_iris(w)(h_iris(w)(i)) - s_iris(w)(i)}\n\nval w_iris = argmin(vectors)(l_iris(train))\nEvaluator.evaluate(test, test map(h_iris(w_iris)))(_.irisClass)",
