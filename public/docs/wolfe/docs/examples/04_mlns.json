@@ -44,7 +44,7 @@
     "id" : 5,
     "compiler" : "markdown",
     "input" : {
-      "code" : "To define the actual model we simply define the log-linear part of the mln distribution. \nAll wolfe operators either implicitly exponentiate and normalize this representation (e.g., \nthe `expect` operator), or can equivalently be applied to the log-linear form (e.g., `argmax`). \n\nNote how we use the Scala feature of importing the members of an objects \ninto scope using `import world._`. This allows us to write `smokes(p)` instead\nof `smokes(world.smokes(p))`. \n",
+      "code" : "To define the actual model we simply define the log-linear part of the mln distribution. \nAll wolfe operators either implicitly exponentiate and normalize this representation (e.g., \nthe `expect` operator), or can equivalently be applied to the log-linear form (e.g., `argmax`). \n\nNote how we use the Scala feature of importing the members of an objects \ninto scope using `import world._`. This allows us to write `smokes(p)` instead\nof `world.smokes(p)`. \n",
       "outputFormat" : "html",
       "extraFields" : null
     }
