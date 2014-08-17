@@ -1217,16 +1217,20 @@ code.option, code.flag, code.filter, code.output {
 
 /* D3 Factor Graphs */
 
-.fgnode {
+.factorgraph .fgnode {
 	fill: #fc0;
 }
 
-.fgfactor {
+.factorgraph .fgfactor {
 	stroke: #fc0;
 	stroke-width: 3px;
 }
 
-.label {
+.factorgraph .fgfixed {
+    fill: #f70;
+}
+
+.factorgraph .label {
 	font-size: 15px;
 	font-family: 'sans-serif';
 	text-transform: none;
@@ -1234,35 +1238,35 @@ code.option, code.flag, code.filter, code.output {
 	fill: #333;
 }
 
-.tooltip {
+.factorgraph .tooltip {
 	font-family: 'sans-serif';
 }
 
 
-.tooltipinner {
+.factorgraph .tooltipinner {
 	background:#333;
 	border:1.5px solid;
 	border-radius:10px;
 	padding:5px;
 }
 
-.tooltipheader {
+.factorgraph .tooltipheader {
 	background-color:white;
- color:#333;
+    color:#333;
 	border-bottom:gray 1.5px solid;
 	padding:5px;
 	margin:-5px -5px 0 -5px;
 	font-style:italic;
 }
 
-.potentialtable {
+.factorgraph .potentialtable {
 	border-spacing: 0px;
 	text-align: center;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-.potentialtable td {
+.factorgraph .potentialtable td {
 	padding-top:3px;
 	padding-left:15px;
 }
