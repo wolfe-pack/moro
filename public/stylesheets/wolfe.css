@@ -1279,3 +1279,7 @@ code.option, code.flag, code.filter, code.output {
 .barchart .bar {
     fill:#fc0;
 }
+
+.barchart .barlabel {
+    fill: #982;
+}
