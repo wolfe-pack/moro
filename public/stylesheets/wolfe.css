@@ -1217,6 +1217,11 @@ code.option, code.flag, code.filter, code.output {
 
 /* D3 Factor Graphs */
 
+.factorgraph {
+    background-color: #2c2c2c;
+    position:relative;
+}
+
 .factorgraph .fgnode {
 	fill: #fc0;
 }
@@ -1269,4 +1274,8 @@ code.option, code.flag, code.filter, code.output {
 .factorgraph .potentialtable td {
 	padding-top:3px;
 	padding-left:15px;
+}
+
+.barchart .bar {
+    fill:#fc0;
 }
