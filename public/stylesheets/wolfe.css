@@ -1276,7 +1276,7 @@ code.option, code.flag, code.filter, code.output {
 	padding-left:15px;
 }
 
-.barchart {
+svg.barchart {
     overflow:visible;
 }
 
