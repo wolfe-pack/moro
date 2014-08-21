@@ -1218,7 +1218,7 @@ code.option, code.flag, code.filter, code.output {
 /* D3 Factor Graphs */
 
 .factorgraph {
-    background-color: #2c2c2c;
+    /* background-color: #2c2c2c; */
     position:relative;
 }
 

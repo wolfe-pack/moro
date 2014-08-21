@@ -76,7 +76,7 @@
     "id" : 9,
     "compiler" : "wolfe",
     "input" : {
-      "code" : "def evidence(world: World) = world.smokes('Anna) && world.friends('Anna, 'Bob)\ndef query(world: World) = oneHot(world.cancer('Bob))\nval mu = expect(worlds where evidence) { mln } { query }\nmu",
+      "code" : "def evidence(world: World) = world.smokes('Anna) && world.friends('Anna, 'Bob)\ndef query(world: World) = oneHot(world.cancer('Bob))\nval mu = expect(worlds where evidence) { mln } { query }\nbarChart(mu)",
       "outputFormat" : "wolfe",
       "extraFields" : null
     }
