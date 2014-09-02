@@ -1226,6 +1226,10 @@ code.option, code.flag, code.filter, code.output {
 	fill: #fc0;
 }
 
+.factorgraph .fgnode_observed {
+    fill: #652;
+}
+
 .factorgraph .fgfactor {
 	stroke: #fc0;
 	stroke-width: 3px;
