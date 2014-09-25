@@ -57,6 +57,52 @@ trait Compiler {
 }
 
 /**
+ * Compiler where there is no editor, i.e. no input
+ */
+trait NoEditor {
+  this: Compiler =>
+  def outputFormat: OutputFormats.Value = OutputFormats.html
+  def description: String
+  def editorJavascript: String =
+    """
+      |function(id,content) {
+      |    var contentToAdd = ""
+      |    if(content=="") contentToAdd = '%s';
+      |    else contentToAdd = content;
+      |    $("#editor"+id).empty();
+      |    $("#editor"+id).height("auto");
+      |    $("#editor"+id).html(
+      |      '<div class="input-group">' +
+      |      '  <input id="editorInput'+id+'" type="text" class="form-control" disabled="true" placeholder= "%s" value="'+contentToAdd+'">' +
+      |      '</div>');
+      |    $("#editorInput"+id).focus();
+      |
+      |    return $("#editorInput"+id);
+      |}
+    """.stripMargin format (description, description)
+
+  // code to construct the editor for a cell of this type
+  def removeEditorJavascript: String =
+    """
+      |function(id) {
+      |  $("#editor"+id).empty();
+      |}
+    """.stripMargin
+
+  // javascript that extracts the code from the editor and creates a default input
+  def editorToInput: String =
+    """
+      |function (doc, id) {
+      |  input = {}
+      |  input.code = '';
+      |  input.outputFormat = "%s";
+      |  return input;
+      |};
+    """.stripMargin format (outputFormat)
+
+}
+
+/**
  * Compiler where the editor is a basic ACE editor
  */
 trait ACEEditor {
@@ -202,6 +248,34 @@ class HeadingCompiler(val level: Int) extends Compiler with TextInputEditor {
   def compile(input: Input): Result = {
     assert(input.outputFormat equalsIgnoreCase outputFormat)
     Result("<h%d>%s</h%d>" format(level, input.code, level), outputFormat)
+  }
+}
+
+class SectionCompiler extends Compiler with TextInputEditor {
+  def name: String = "section"
+
+  def fieldLabel: String = "Section Name"
+
+  // icon that is used in the toolbar
+  override def toolbarIcon: String = "&lt;"
+
+  def compile(input: Input): Result = {
+    assert(input.outputFormat equalsIgnoreCase outputFormat)
+    Result("<h5 id=\"%s\"><small>#%s</small></h5>" format(input.code, input.code), outputFormat)
+  }
+}
+
+class EndSectionCompiler extends Compiler with NoEditor {
+  def name: String = "endSection"
+
+  def description: String = "End of Section"
+
+  // icon that is used in the toolbar
+  override def toolbarIcon: String = "&gt;"
+
+  def compile(input: Input): Result = {
+    assert(input.outputFormat equalsIgnoreCase outputFormat)
+    Result("<hr>", outputFormat)
   }
 }
 
