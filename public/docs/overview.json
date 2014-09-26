@@ -2,6 +2,14 @@
   "name" : "Moro Overview",
   "cells" : [ {
     "id" : 0,
+    "compiler" : "section",
+    "input" : {
+      "code" : "headings",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 1,
     "compiler" : "heading1",
     "input" : {
       "code" : "Heading",
@@ -9,16 +17,8 @@
       "extraFields" : null
     }
   }, {
-    "id" : 1,
-    "compiler" : "heading2",
-    "input" : {
-      "code" : "Heading",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
     "id" : 2,
-    "compiler" : "heading3",
+    "compiler" : "heading2",
     "input" : {
       "code" : "Heading",
       "outputFormat" : "html",
@@ -26,7 +26,7 @@
     }
   }, {
     "id" : 3,
-    "compiler" : "heading4",
+    "compiler" : "heading3",
     "input" : {
       "code" : "Heading",
       "outputFormat" : "html",
@@ -34,7 +34,7 @@
     }
   }, {
     "id" : 4,
-    "compiler" : "heading5",
+    "compiler" : "heading4",
     "input" : {
       "code" : "Heading",
       "outputFormat" : "html",
@@ -42,6 +42,30 @@
     }
   }, {
     "id" : 5,
+    "compiler" : "heading5",
+    "input" : {
+      "code" : "Heading",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 6,
+    "compiler" : "endSection",
+    "input" : {
+      "code" : "",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 7,
+    "compiler" : "section",
+    "input" : {
+      "code" : "markdown",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 8,
     "compiler" : "heading3",
     "input" : {
       "code" : "Markdown!",
@@ -49,7 +73,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 6,
+    "id" : 9,
     "compiler" : "markdown",
     "input" : {
       "code" : "This notebook can support all markdown features, such as **bold**, _italics_, [links](http://sameersingh.org/), `code`, etc.",
@@ -57,42 +81,18 @@
       "extraFields" : null
     }
   }, {
-    "id" : 7,
-    "compiler" : "heading3",
-    "input" : {
-      "code" : "Latex",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 8,
-    "compiler" : "latex",
-    "input" : {
-      "code" : "\\alpha+\\beta=\\sum_{i=0}^{n}\\gamma\\cfrac{1}{\\mathcal{Z}}",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 9,
-    "compiler" : "markdown",
-    "input" : {
-      "code" : "And the equations can be inlined if definining \\\\(\\theta\\\\) and \\\\(\\pi\\\\) in text.",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
     "id" : 10,
-    "compiler" : "heading3",
+    "compiler" : "endSection",
     "input" : {
-      "code" : "Images",
+      "code" : "",
       "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
     "id" : 11,
-    "compiler" : "imageurl",
+    "compiler" : "section",
     "input" : {
-      "code" : "http://1.bp.blogspot.com/-1Ub3QovBjkM/UUYRy5t-53I/AAAAAAAACr4/PUpU70GJaJ0/s1600/Princess+mononoke+photos1.jpg",
+      "code" : "latex",
       "outputFormat" : "html",
       "extraFields" : null
     }
@@ -100,12 +100,84 @@
     "id" : 12,
     "compiler" : "heading3",
     "input" : {
-      "code" : "Interactive Scala!",
+      "code" : "Latex",
       "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
     "id" : 13,
+    "compiler" : "latex",
+    "input" : {
+      "code" : "\\alpha+\\beta=\\sum_{i=0}^{n}\\gamma\\cfrac{1}{\\mathcal{Z}}",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 14,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "And the equations can be inlined if definining \\\\(\\theta\\\\) and \\\\(\\pi\\\\) in text.",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 15,
+    "compiler" : "endSection",
+    "input" : {
+      "code" : "",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 16,
+    "compiler" : "section",
+    "input" : {
+      "code" : "images",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 17,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Images",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 18,
+    "compiler" : "imageurl",
+    "input" : {
+      "code" : "http://1.bp.blogspot.com/-1Ub3QovBjkM/UUYRy5t-53I/AAAAAAAACr4/PUpU70GJaJ0/s1600/Princess+mononoke+photos1.jpg",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 19,
+    "compiler" : "endSection",
+    "input" : {
+      "code" : "",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 20,
+    "compiler" : "section",
+    "input" : {
+      "code" : "scala",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 21,
+    "compiler" : "heading3",
+    "input" : {
+      "code" : "Interactive Scala!",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 22,
     "compiler" : "scala",
     "input" : {
       "code" : "def f(x:Int) = x * x\nf(10)",
@@ -113,7 +185,23 @@
       "extraFields" : null
     }
   }, {
-    "id" : 14,
+    "id" : 23,
+    "compiler" : "endSection",
+    "input" : {
+      "code" : "",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 24,
+    "compiler" : "section",
+    "input" : {
+      "code" : "scala2",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 25,
     "compiler" : "scala",
     "input" : {
       "code" : "def f2(x:Int) = x + x\nMap(10 -> \"ten\", 100 -> \"hundred\")",
@@ -121,7 +209,23 @@
       "extraFields" : null
     }
   }, {
-    "id" : 22,
+    "id" : 26,
+    "compiler" : "endSection",
+    "input" : {
+      "code" : "",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 27,
+    "compiler" : "section",
+    "input" : {
+      "code" : "matrix",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 28,
     "compiler" : "heading2",
     "input" : {
       "code" : "Matrices as Images",
@@ -129,7 +233,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 21,
+    "id" : 29,
     "compiler" : "scala",
     "input" : {
       "code" : "// Matrices!\nval random = new util.Random()\nMatrix((0 until 10).map(i => (0 until 10).map(j => (i+j)+2*random.nextDouble())))",
@@ -137,7 +241,23 @@
       "extraFields" : null
     }
   }, {
-    "id" : 15,
+    "id" : 30,
+    "compiler" : "endSection",
+    "input" : {
+      "code" : "",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 31,
+    "compiler" : "section",
+    "input" : {
+      "code" : "plots",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 32,
     "compiler" : "heading2",
     "input" : {
       "code" : "Plots too!",
@@ -145,7 +265,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 16,
+    "id" : 33,
     "compiler" : "scala",
     "input" : {
       "code" : "val x = (0.0 to 6.28 by 0.25)\nplot(x -> (math.sin(_), math.cos(_)))",
@@ -153,7 +273,23 @@
       "extraFields" : null
     }
   }, {
-    "id" : 17,
+    "id" : 34,
+    "compiler" : "endSection",
+    "input" : {
+      "code" : "",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 35,
+    "compiler" : "section",
+    "input" : {
+      "code" : "others",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 36,
     "compiler" : "heading3",
     "input" : {
       "code" : "Or pretty much any file format*",
@@ -161,7 +297,7 @@
       "extraFields" : null
     }
   }, {
-    "id" : 18,
+    "id" : 37,
     "compiler" : "markdown",
     "input" : {
       "code" : "*Those supported by [Google Drive viewer](https://support.google.com/drive/answer/2423485?hl=en&p=docs_viewer&rd=1), i.e.\n* Image files (.JPEG, .PNG, .GIF, .TIFF, .BMP)\n* Video files (WebM, .MPEG4, .3GPP, .MOV, .AVI, .MPEGPS, .WMV, .FLV, .ogg)\n* Text files (.TXT)\n* Markup/Code (.CSS, .HTML, .PHP, .C, .CPP, .H, .HPP, .JS)\n* Microsoft Word (.DOC and .DOCX)\n* Microsoft Excel (.XLS and .XLSX)\n* Microsoft PowerPoint (.PPT and .PPTX)\n* Adobe Portable Document Format (.PDF)\n* Apple Pages (.PAGES)\n* Adobe Illustrator (.AI)\n* Adobe Photoshop (.PSD)\n* Tagged Image File Format (.TIFF)\n* Autodesk AutoCad (.DXF)\n* Scalable Vector Graphics (.SVG)\n* PostScript (.EPS, .PS)\n* TrueType (.TTF)\n* XML Paper Specification (.XPS)\n* Archive file types (.ZIP, .RAR, tar, gzip)\n* Audio formats (MP3, MPEG, WAV, .ogg)\n* .MTS files\n* Raw Image formats",
@@ -169,7 +305,23 @@
       "extraFields" : null
     }
   }, {
-    "id" : 19,
+    "id" : 38,
+    "compiler" : "endSection",
+    "input" : {
+      "code" : "",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 39,
+    "compiler" : "section",
+    "input" : {
+      "code" : "pdfs",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 40,
     "compiler" : "heading4",
     "input" : {
       "code" : "e.g. PDFs",
@@ -177,10 +329,42 @@
       "extraFields" : null
     }
   }, {
-    "id" : 20,
+    "id" : 41,
     "compiler" : "google_viewer",
     "input" : {
       "code" : "http://www.riedelcastro.org//publications/papers/riedel13relation.pdf",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 42,
+    "compiler" : "endSection",
+    "input" : {
+      "code" : "",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 43,
+    "compiler" : "section",
+    "input" : {
+      "code" : "thanks",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 44,
+    "compiler" : "heading1",
+    "input" : {
+      "code" : "Thanks!",
+      "outputFormat" : "html",
+      "extraFields" : null
+    }
+  }, {
+    "id" : 45,
+    "compiler" : "endSection",
+    "input" : {
+      "code" : "",
       "outputFormat" : "html",
       "extraFields" : null
     }
