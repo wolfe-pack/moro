@@ -94,7 +94,8 @@ function runCode(doc, id, compilers) {
   var input = compiler.editorToInput(doc, id);
   if(compiler.aggregate) {
     var prefixInput = "";
-    for(var mid in doc.ids) {
+    for(var midx in doc.ids) {
+      var mid = doc.ids[midx];
       if(doc.cells[mid].mode == mode) {
         if(id == mid) break;
         prefixInput = prefixInput + compiler.editorToInput(doc, doc.cells[mid].id).code + "\n";
