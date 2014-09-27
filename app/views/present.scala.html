@@ -178,8 +178,6 @@
         span.ace_fold-widget {
             display: none;
         }
-        .ace_editor {
-        }
         .ace_editor.fullScreen {
             height: auto;
             width: auto;
@@ -243,10 +241,17 @@
     <section>
         <h1>@Html(document.name)</h1>
     @document.cells.map { cell =>
-        @if(cell.compiler == "section") {
+        @cell.compiler match {
+        case "section" => {
             </section>
             <section id="@{cell.input.code}">
-        } else {
+        }
+        case "markdown" => {
+            <script type="text/template">
+                @Html(cell.input.code)
+            </script>
+        }
+        case _ => {
         <div id="cell@{cell.id}" class="cellWrapper">
             <div id="editCell@{cell.id}" class="cell" hidden="true">
                 <div class="input">
@@ -263,6 +268,7 @@
                     <!--</pre>-->
             </div>
         </div>
+        }
         }
     }
     </section>
@@ -323,36 +329,63 @@
     /* DOCUMENT OBJECT */
     var doc = newDoc("@(document.name)");
 
+    var lastSectionId = null;
     @for(cell <- document.cells) {
        var mode = '@Html(cell.compiler)';
        var input = @Html(cell.inputJson);
        var id = @{cell.id};
-       if(mode == "section") {
-         $('#cells').append('\n<section id="' + input + '">\n');
-       } else if(mode == "endSection") {
-         $('#cells').append('\n</section>\n');
-       } else addStaticCellFromJson(id, doc, mode, input,compilers);
+       @cell.compiler match {
+         case "section" => {
+           lastSectionId = "@{cell.input.code}";
+         }
+         case "markdown" => {
+           if(lastSectionId != null) {
+             console.log($('#'+lastSectionId));
+             $('#'+lastSectionId).attr("data-markdown",'');
+           }
+         }
+         case _ => {
+           addStaticCellFromJson(id, doc, mode, input,compilers);
+         }
+       }
     }
 
     @for(cell <- document.cells) {
        var mode = '@Html(cell.compiler)';
        var input = @Html(cell.inputJson);
        var id = @{cell.id};
-       if(mode != "section" && mode != "endSection") {
+       if(mode != "section" && mode != "markdown") {
          compileStaticCell(id, doc, mode, input, compilers);
        }
     }
 
-    // Full list of configuration options available here:
-    // https://github.com/hakimel/reveal.js#configuration
-    Reveal.initialize({
-        controls: true,
-        progress: true,
-        history: true,
-        center: true,
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
 
-        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+            theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+            transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+            dependencies: [
+                // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+                { src: '@routes.Assets.at("javascripts/reveal.js/lib/js/classList.js")', condition: function() { return !document.body.classList; } },
+
+                // Interpret Markdown in <section> elements
+                { src: '@routes.Assets.at("javascripts/reveal.js/plugin/markdown/marked.js")', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '@routes.Assets.at("javascripts/reveal.js/plugin/markdown/markdown.js")', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+
+                // Syntax highlight for <code> elements
+                { src: '@routes.Assets.at("javascripts/reveal.js/plugin/highlight/highlight.js")', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+
+                // MathJax
+                { src: '@routes.Assets.at("javascripts/reveal.js/plugin/math/math.js")', async: true }
+            ]
+        });
     });
 </script>
 <div id="footer">
