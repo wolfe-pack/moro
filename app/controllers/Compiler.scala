@@ -257,25 +257,11 @@ class SectionCompiler extends Compiler with TextInputEditor {
   def fieldLabel: String = "Section Name"
 
   // icon that is used in the toolbar
-  override def toolbarIcon: String = "&lt;"
+  override def toolbarIcon: String = "&lt;#&gt;"
 
   def compile(input: Input): Result = {
     assert(input.outputFormat equalsIgnoreCase outputFormat)
     Result("<h5 id=\"%s\"><small>#%s</small></h5>" format(input.code, input.code), outputFormat)
-  }
-}
-
-class EndSectionCompiler extends Compiler with NoEditor {
-  def name: String = "endSection"
-
-  def description: String = "End of Section"
-
-  // icon that is used in the toolbar
-  override def toolbarIcon: String = "&gt;"
-
-  def compile(input: Input): Result = {
-    assert(input.outputFormat equalsIgnoreCase outputFormat)
-    Result("<hr>", outputFormat)
   }
 }
 

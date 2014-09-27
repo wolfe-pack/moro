@@ -49,14 +49,6 @@
       "extraFields" : null
     }
   }, {
-    "id" : 6,
-    "compiler" : "endSection",
-    "input" : {
-      "code" : "",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
     "id" : 7,
     "compiler" : "section",
     "input" : {
@@ -82,14 +74,6 @@
     }
   }, {
     "id" : 10,
-    "compiler" : "endSection",
-    "input" : {
-      "code" : "",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 11,
     "compiler" : "section",
     "input" : {
       "code" : "latex",
@@ -121,14 +105,6 @@
       "extraFields" : null
     }
   }, {
-    "id" : 15,
-    "compiler" : "endSection",
-    "input" : {
-      "code" : "",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
     "id" : 16,
     "compiler" : "section",
     "input" : {
@@ -154,14 +130,6 @@
     }
   }, {
     "id" : 19,
-    "compiler" : "endSection",
-    "input" : {
-      "code" : "",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 20,
     "compiler" : "section",
     "input" : {
       "code" : "scala",
@@ -185,14 +153,6 @@
       "extraFields" : null
     }
   }, {
-    "id" : 23,
-    "compiler" : "endSection",
-    "input" : {
-      "code" : "",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
     "id" : 24,
     "compiler" : "section",
     "input" : {
@@ -210,14 +170,6 @@
     }
   }, {
     "id" : 26,
-    "compiler" : "endSection",
-    "input" : {
-      "code" : "",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 27,
     "compiler" : "section",
     "input" : {
       "code" : "matrix",
@@ -238,14 +190,6 @@
     "input" : {
       "code" : "// Matrices!\nval random = new util.Random()\nMatrix((0 until 10).map(i => (0 until 10).map(j => (i+j)+2*random.nextDouble())))",
       "outputFormat" : "string",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 30,
-    "compiler" : "endSection",
-    "input" : {
-      "code" : "",
-      "outputFormat" : "html",
       "extraFields" : null
     }
   }, {
@@ -274,14 +218,6 @@
     }
   }, {
     "id" : 34,
-    "compiler" : "endSection",
-    "input" : {
-      "code" : "",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 35,
     "compiler" : "section",
     "input" : {
       "code" : "others",
@@ -306,14 +242,6 @@
     }
   }, {
     "id" : 38,
-    "compiler" : "endSection",
-    "input" : {
-      "code" : "",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 39,
     "compiler" : "section",
     "input" : {
       "code" : "pdfs",
@@ -338,14 +266,6 @@
     }
   }, {
     "id" : 42,
-    "compiler" : "endSection",
-    "input" : {
-      "code" : "",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 43,
     "compiler" : "section",
     "input" : {
       "code" : "thanks",
@@ -357,14 +277,6 @@
     "compiler" : "heading1",
     "input" : {
       "code" : "Thanks!",
-      "outputFormat" : "html",
-      "extraFields" : null
-    }
-  }, {
-    "id" : 45,
-    "compiler" : "endSection",
-    "input" : {
-      "code" : "",
       "outputFormat" : "html",
       "extraFields" : null
     }

@@ -239,16 +239,13 @@
 </script>
 <!-- end of reveal.js example -->
 <div class="reveal">
-    <div class="slides">
-        <section>
-            <h1>@Html(document.name)</h1>
-        </section>
+  <div class="slides">
+    <section>
+        <h1>@Html(document.name)</h1>
     @document.cells.map { cell =>
         @if(cell.compiler == "section") {
-            <section id="@{cell.input.code}">
-        } else {
-        @if(cell.compiler == "endSection") {
             </section>
+            <section id="@{cell.input.code}">
         } else {
         <div id="cell@{cell.id}" class="cellWrapper">
             <div id="editCell@{cell.id}" class="cell" hidden="true">
@@ -267,9 +264,9 @@
             </div>
         </div>
         }
-        }
     }
-    </div>
+    </section>
+  </div>
 </div>
 <script src="@routes.Assets.at("javascripts/reveal.js/lib/js/head.min.js")"></script>
 <script src="@routes.Assets.at("javascripts/reveal.js/js/reveal.min.js")"></script>
