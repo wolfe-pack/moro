@@ -75,7 +75,7 @@ object Application extends Controller {
   def wolfeStaticDoc(file: String) = Action {
     import Document._
     println("/public/docs/" + file + ".json")
-    Ok(views.html.wolfeStatic(load("public/docs/" + file + ".json"), allCompilers))
+    Ok(views.html.wolfe(load("public/docs/" + file + ".json"), allCompilers))
   }
 
   def save(file: String) = Action {
