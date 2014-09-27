@@ -299,6 +299,26 @@ class ActuriusCompiler extends Compiler with ACEEditor {
   }
 }
 
+/**
+ * Basic markdown compiler using Pegdown
+ */
+class PegdownCompiler extends Compiler with ACEEditor {
+
+  import org.pegdown.PegDownProcessor
+
+  def name = "markdown"
+
+  // icon that is used in the toolbar
+  override def toolbarIcon: String = "<span class=\"octicon octicon-markdown\" style=\"font-size: 16px\"></span>" //"&Mu;d"
+
+  val transformer = new PegDownProcessor()
+
+  def compile(input: Input) = {
+    assert(input.outputFormat equalsIgnoreCase outputFormat)
+    Result(transformer.markdownToHtml(input.code), outputFormat)
+  }
+}
+
 class LatexCompiler extends Compiler with ACEEditor {
   def name = "latex"
 
