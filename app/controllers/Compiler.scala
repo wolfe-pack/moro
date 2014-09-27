@@ -26,7 +26,7 @@ case class Input(code: String, outputFormat: String = OutputFormats.html, extraF
 case class Result(result: String, format: String = OutputFormats.html)
 
 /**
- * A Wolfenstein Compiler
+ * A Moro Compiler
  */
 trait Compiler {
   // name of the compiler that should be unique in a collection of compilers
