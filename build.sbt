@@ -68,7 +68,8 @@ libraryDependencies ++= Seq(
   "org.sameersingh.scalaplot" % "scalaplot" % "0.0.3",
   "ml.wolfe" %% "wolfe-core" % "0.3.0-SNAPSHOT",
   "ml.wolfe" %% "wolfe-examples" % "0.3.0-SNAPSHOT",
-  "org.scala-lang" % "scala-library" % "2.10.3"
+  "org.scala-lang" % "scala-library" % "2.10.3",
+  "org.pegdown" % "pegdown" % "1.4.2"
 )
 
 play.Project.playScalaSettings
