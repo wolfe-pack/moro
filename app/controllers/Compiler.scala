@@ -12,7 +12,7 @@ import scala.collection.JavaConverters._
  */
 
 object OutputFormats extends Enumeration {
-  val string, html, javascript, wolfe = Value
+  val string, html, javascript = Value
 
   implicit def outputFormatToString(f: Value): String = f.toString
 
@@ -113,6 +113,8 @@ trait ACEEditor {
 
   def initialValue: String = ""
 
+  def aceTheme: String = "solarized_light"
+
   def editorJavascript: String =
     """
       |function(id,content) {
@@ -121,7 +123,7 @@ trait ACEEditor {
       |    editor.setOptions({
       |      maxLines: Infinity
       |    });
-      |    editor.setTheme("ace/theme/solarized_light");
+      |    editor.setTheme("ace/theme/%s");
       |    editor.getSession().setMode("ace/mode/%s");
       |    var contentToAdd = ""
       |    if(content=="") contentToAdd = '%s';
@@ -132,9 +134,11 @@ trait ACEEditor {
       |    editor.setBehavioursEnabled(true);
       |    editor.setWrapBehavioursEnabled(true);
       |    editor.setShowFoldWidgets(true);
+      |    editor.setHighlightActiveLine(false);
+      |    editor.setShowPrintMargin(false);
       |
       |    editor.on('change', function () {
-      |        // heightUpdateFunction(editor, '#editor'+id);
+      |        //heightUpdateFunction(editor, '#editor'+id);
       |    });
       |
       |    editor.commands.addCommand({
@@ -144,10 +148,10 @@ trait ACEEditor {
       |            document.getElementById("runCode"+id).click();
       |        }
       |    })
-      |    // heightUpdateFunction(editor, '#editor'+id);
+      |    //heightUpdateFunction(editor, '#editor'+id);
       |    return editor;
       |}
-    """.stripMargin format (editorMode, initialValue)
+    """.stripMargin format (aceTheme, editorMode, initialValue)
 
   // code to construct the editor for a cell of this type
   def removeEditorJavascript: String =
@@ -338,7 +342,7 @@ class LatexCompiler extends Compiler with ACEEditor {
 /**
  * Scala server using the Twitter Eval implementation
  */
-class TwitterEvalServer(c: MoroConfig) extends Compiler with ACEEditor {
+class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
 
   def name = "scala"
 
