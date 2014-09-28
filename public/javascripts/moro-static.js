@@ -55,7 +55,7 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
     var editorCellDiv = document.createElement('div');
     editorCellDiv.id = "editor" + id
     editorCellDiv.className = 'cell light-border editor';
-    // $(editorCellDiv).append($('#cell'+id+'Content').html());
+    $(editorCellDiv).html(input.code);
     $(inputDiv).append(editorCellDiv);
     $(editCellDiv).append(inputDiv);
     $(cellDiv).append(editCellDiv);
@@ -69,13 +69,11 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
   doc.cells[id].id = id;
   doc.cells[id].mode = mode;
   doc.cells[id].renderDisplay = $('#renderDisplay' + id);
+  doc.cells[id].input = input;
   if(createEditor) {
     $('.btn').button();
-  }
-  if(createEditor) {
     $('#editCell' + id).show();
-    doc.cells[id].editor = compilers[mode].editor(id);
-    doc.cells[id].editor.getSession().setValue(input.code);
+    doc.cells[id].editor = compilers[mode].editor(id, input.code);
   }
   compileStaticCell(id, doc, mode, input, compilers);
 }
