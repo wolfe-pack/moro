@@ -129,19 +129,6 @@
         var id = @{cell.id};
         createStaticCellHTML(id, divCells, doc, mode, input, compilers);
         }
-        @for(cell <- document.cells) {
-           var mode = '@Html(cell.compiler)';
-           var input = @Html(cell.inputJson);
-           var id = @{cell.id};
-           //addStaticCellFromJson(id, doc, mode, input,compilers);
-        }
-
-        @for(cell <- document.cells) {
-           var mode = '@Html(cell.compiler)';
-           var input = @Html(cell.inputJson);
-           var id = @{cell.id};
-          //compileStaticCell(id, doc, mode, input, compilers);
-        }
     </script>
 
 <!--<div id="footer">-->
