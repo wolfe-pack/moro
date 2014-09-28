@@ -311,10 +311,9 @@ class PegdownCompiler extends Compiler with ACEEditor {
   // icon that is used in the toolbar
   override def toolbarIcon: String = "<span class=\"octicon octicon-markdown\" style=\"font-size: 16px\"></span>" //"&Mu;d"
 
-  val transformer = new PegDownProcessor()
-
   def compile(input: Input) = {
     assert(input.outputFormat equalsIgnoreCase outputFormat)
+    val transformer = new PegDownProcessor()
     Result(transformer.markdownToHtml(input.code), outputFormat)
   }
 }
