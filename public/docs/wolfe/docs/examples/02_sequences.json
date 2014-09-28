@@ -29,7 +29,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "import ml.wolfe.util.{Evaluator, NLP}\nimport NLP._\nimport ml.wolfe.macros.Library._\n\ndef sentences = all(Sentence)(seqs(all(Token)))\ndef obs(s: Sentence) = \n  s.copy(tokens = s.tokens.map(_.copy(chunk = hidden)))\ndef features(s: Sentence) = {\n  val n = s.tokens.size    \n  sum(0 until n) {i=>oneHot('o->s.tokens(i).word->s.tokens(i).chunk)} +\n  sum(0 until n-1) {i=>oneHot('p->s.tokens(i).chunk->s.tokens(i+1).chunk)}\n}\ndef f(w: Vector)(s: Sentence) = w dot features(s)\ndef h(w: Vector)(s: Sentence) = argmax(sentences st evidence(obs)(s)){f(w)}\ndef loss(data: Iterable[Sentence])(w: Vector) = \n  sum(data) { s => f(w)(h(w)(s)) - f(w)(s) }\nval train = NLP.conll2000TrainSample()\nval w = argmin(vectors) { loss(train) }\nval predicted = map(train) {h(w)}\nEvaluator.evaluate(\n  train.flatMap(_.tokens), \n  predicted.flatMap(_.tokens))(_.chunk)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   } ]

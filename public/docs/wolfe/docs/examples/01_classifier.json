@@ -29,7 +29,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class XY(in1: Boolean, in2: Boolean, out: Boolean)\nval andData = Seq(\n  XY(true, true, true),\n  XY(false, true, false),\n  XY(true, false, false),\n  XY(false, false, false))\nandData.head.in1 && andData.head.in2 == andData.head.out",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -45,7 +45,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def f_gate(d: XY) = \n  oneHot('in1, I(d.in1 && d.out)) + \n  oneHot('in2, I(d.in2 && d.out)) + \n  oneHot('bias, I(d.out))\n\ndef s_gate(w: Vector)(d: XY) = w dot f_gate(d)\n\nf_gate(andData.head)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -61,7 +61,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def q_gate(obs: XY)(d: XY) = d.in1 == obs.in1 && d.in2 == obs.in2\n\ndef h_gate(w: Vector)(obs: XY) = \n  argmax(all(XY) where q_gate(obs)) { s_gate(w) }\n\nval w_opt = Vector('bias -> -3.0, 'in1 -> 2.0, 'in2 -> 1.5)  \n\nandData forall (d => h_gate(w_opt)(d).out == d.out)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -77,7 +77,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "import cc.factorie.optimize.{Perceptron, OnlineTrainer}\nimport ml.wolfe.util.Evaluator\n\n@OptimizeByLearning(Learn.online(10))\ndef l_gate(data: Seq[XY])(w: Vector) = \n  sum(data) { d => s_gate(w)(h_gate(w)(d)) - s_gate(w)(d) }\n\nval w_gate = argmin(vectors) { l_gate(andData) }\nEvaluator.evaluate(andData, andData.map(h_gate(w_gate)))(_.out)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -101,7 +101,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "object Data {\n  case class Label(label: String)\n  case class IrisData(sepalLength: Double, \n                      sepalWidth: Double, \n                      petalLength: Double, \n                      petalWidth: Double, \n                      irisClass: Label)\n  implicit val classes = Seq(\n    Label(\"Iris-setosa\"), \n    Label(\"Iris-versicolor\"), \n    Label(\"Iris-virginica\"))\n}",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -117,7 +117,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "import ml.wolfe.util.Iris._\nval random = new scala.util.Random(0)\nval dataset = random.shuffle(loadIris())\nval (train,test) = dataset.splitAt(dataset.size / 2)\ntrain.head",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -133,7 +133,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def f_iris(d:IrisData) = \n  oneHot('sl -> d.irisClass, d.sepalLength) +\n  oneHot('sw -> d.irisClass, d.sepalWidth) +\n  oneHot('pl -> d.irisClass, d.petalLength) +\n  oneHot('pw -> d.irisClass, d.petalWidth)\nf_iris(train.head)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -149,7 +149,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def s_iris(w:Vector)(d:IrisData) = f_iris(d) dot w\ndef obs_iris(d:IrisData) = d.copy(irisClass = hidden)\ndef worlds = all(IrisData)\ndef h_iris(w:Vector)(i:IrisData) = \n  argmax(worlds where (obs_iris(_) == obs_iris(i))) { s_iris(w) }\n\ndef l_iris(data:Seq[IrisData])(w:Vector) =\n  sum(data) {i => s_iris(w)(h_iris(w)(i)) - s_iris(w)(i)}\n\nval w_iris = argmin(vectors)(l_iris(train))\nEvaluator.evaluate(test, test map(h_iris(w_iris)))(_.irisClass)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   } ]

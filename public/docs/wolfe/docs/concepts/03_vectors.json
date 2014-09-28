@@ -29,7 +29,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "val v = Vector('A -> 0.3, 2 -> -2.0, 'A -> 3 -> 3.5)\nv('A) == 0.3 && v('A->3) == 3.5 && v('B) == 0.0",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -45,7 +45,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "val w = oneHot('someIndex->\"canBeAnything\")\nw == Vector('someIndex->\"canBeAnything\"->1.0)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -61,7 +61,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class Document(words:Seq[String],label:String)\ndef feats(d:Document) = \n  sum(0 until d.words.size) {i => oneHot('w->d.words(i))}\nfeats(Document(Seq(\"the\",\"scorer\",\"scored\"),\"sports\"))",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -85,7 +85,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class Token(word:String,pos:String)\ndef wordFeats(word:String) =\n  oneHot('word -> word, 1.0) +\n  oneHot('upper, if (word(0).isUpper) 1.0 else 0.0)\ndef posFeats(pos:String) = \n  oneHot('pos -> pos)\nwordFeats(\"house\") outer posFeats(\"noun\")",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -101,7 +101,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "val x = Vector(0 -> 1.0, 1 -> 2.0)\nx outer x",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -125,7 +125,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "(oneHot('A, 2.0) + oneHot('B, 2.0)) dot (oneHot('A,3.0) + oneHot('B,4.0))",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   } ]
