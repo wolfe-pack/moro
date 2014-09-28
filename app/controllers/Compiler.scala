@@ -117,21 +117,24 @@ trait ACEEditor {
     """
       |function(id,content) {
       |    $("#editor"+id).empty();
-      |    $("#editor"+id).height("auto");
       |    var editor = ace.edit("editor"+id);
+      |    editor.setOptions({
+      |      maxLines: Infinity
+      |    });
       |    editor.setTheme("ace/theme/solarized_light");
       |    editor.getSession().setMode("ace/mode/%s");
       |    var contentToAdd = ""
       |    if(content=="") contentToAdd = '%s';
       |    else contentToAdd = content;
-      |    editor.getSession().setValue(contentToAdd);
+      |    editor.getSession().setValue(contentToAdd, 1);
       |    editor.focus();
       |    editor.navigateFileEnd();
-      |    editor.setBehavioursEnabled(false);
+      |    editor.setBehavioursEnabled(true);
+      |    editor.setWrapBehavioursEnabled(true);
+      |    editor.setShowFoldWidgets(true);
       |
-      |    heightUpdateFunction(editor, '#editor'+id);
-      |    editor.getSession().on('change', function () {
-      |        heightUpdateFunction(editor, '#editor'+id);
+      |    editor.on('change', function () {
+      |        // heightUpdateFunction(editor, '#editor'+id);
       |    });
       |
       |    editor.commands.addCommand({
@@ -141,6 +144,7 @@ trait ACEEditor {
       |            document.getElementById("runCode"+id).click();
       |        }
       |    })
+      |    // heightUpdateFunction(editor, '#editor'+id);
       |    return editor;
       |}
     """.stripMargin format (editorMode, initialValue)
