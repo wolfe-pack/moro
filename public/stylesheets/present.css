@@ -1,0 +1,35 @@
+.cell blockquote {
+  border-left: 10px solid #eee;
+}
+
+/* ACE editor hacks for reveal.js */
+/* ACE editor */
+.reveal .ace_editor{
+    position: relative !important;
+    margin: auto;
+    display:block;
+    text-align: left;
+    font-family: monospace !important;
+    line-height: normal;
+    font-size: 32px;
+    border: 1px solid lightgray;
+}
+
+.reveal .ace_text-input {
+    border: 5px;
+}
+
+.reveal .ace_cursor {
+    border-left: 5px solid;
+}
+
+.reveal .fa {
+    font-family: 'FontAwesome';
+    font-style: normal;
+}
+
+.reveal .glyphicon {
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-size: 32px;
+}
