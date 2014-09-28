@@ -90,29 +90,8 @@
 </header>
     <section>
         <div class="grid">
-            <div class="unit four-fifths center-on-mobiles">
+            <div id="cells" class="unit four-fifths center-on-mobiles">
                 <h1>@Html(document.name)</h1>
-                @document.cells.map { cell =>
-                <div id="cell@{cell.id}" class="cellWrapper">
-                    <div id="editCell@{cell.id}" class="cell" hidden="true">
-                        <div class="input">
-                            <div>
-                                <div id="editor@{cell.id}" class="cell light-border wolfe-editor">
-                                </div>
-                                <a id="runCode@{cell.id}" type="button" class="wolfe-run"
-                                   onclick="runCode(doc, @{cell.id},compilers)">
-                                    <i class="fa fa-play-circle-o fa-2x"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="renderDisplay@{cell.id}" class="cell">
-                        Loading...
-                        <!--<pre>-->
-                        <!--@Html(cell.toString)-->
-                        <!--</pre>-->
-                    </div>
-                </div>
-                }
             </div>
             <div class="unit one-fifth hide-on-mobiles">
                 <div class="doc-nav">
@@ -142,18 +121,26 @@
         /* DOCUMENT OBJECT */
         var doc = newDoc("@(document.name)");
 
+        /* add cells */
+        var divCells = $('div#cells');
+        @for(cell <- document.cells) {
+        var mode = '@Html(cell.compiler)';
+        var input = @Html(cell.inputJson);
+        var id = @{cell.id};
+        createStaticCellHTML(id, divCells, doc, mode, input, compilers);
+        }
         @for(cell <- document.cells) {
            var mode = '@Html(cell.compiler)';
            var input = @Html(cell.inputJson);
            var id = @{cell.id};
-           addStaticCellFromJson(id, doc, mode, input,compilers);
+           //addStaticCellFromJson(id, doc, mode, input,compilers);
         }
 
         @for(cell <- document.cells) {
            var mode = '@Html(cell.compiler)';
            var input = @Html(cell.inputJson);
            var id = @{cell.id};
-           compileStaticCell(id, doc, mode, input, compilers);
+          //compileStaticCell(id, doc, mode, input, compilers);
         }
     </script>
 

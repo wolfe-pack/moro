@@ -67,11 +67,11 @@
   position:relative
 }
 
-.wolfe-editor {
+.editor {
   float:left;
   width: calc(100% - 80px)
 }
-.wolfe-run {
+.runButton {
   width:50px;
   float:right;
 }

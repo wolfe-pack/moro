@@ -5,53 +5,29 @@
 @main(document.name) {
 <div class="container">
     <h1>@Html(document.name)</h1>
-    @document.cells.map { cell =>
-    <div id="cell@{cell.id}" class="cellWrapper">
-        <div id="editCell@{cell.id}" class="cell" hidden="true">
-            <div class="input">
-                <button id="runCode@{cell.id}" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, @{cell.id},compilers)"><span class="glyphicon glyphicon-play"></span></button>
-                <div id="editor@{cell.id}" class="cell light-border">
-                  @Html(cell.input.code)
-                </div>
-            </div>
-        </div>
-        <div id="renderDisplay@{cell.id}" class="cell">
-            Loading...
-                <!--<pre>-->
-                  <!--@Html(cell.toString)-->
-                <!--</pre>-->
-        </div>
-    </div>
-    }
-    <script src="@routes.Assets.at("javascripts/moro-static.js")" type="text/javascript"></script>
-    <script>
-        /* COMPILERS OBJECT */
-        var compilers = {};
-        @for(c <- compilers) {
-           compilers.@{c.name} = {};
-           compilers.@{c.name}.hideAfterCompile = @{c.hideAfterCompile};
-           compilers.@{c.name}.editor = @Html(c.editorJavascript);
-           compilers.@{c.name}.editorToInput = @Html(c.editorToInput);
-           compilers.@{c.name}.aggregate = @{c.aggregatePrevious};
-        }
-
-        /* DOCUMENT OBJECT */
-        var doc = newDoc("@(document.name)");
-
-        @for(cell <- document.cells) {
-           var mode = '@Html(cell.compiler)';
-           var input = @Html(cell.inputJson);
-           var id = @{cell.id};
-           addStaticCellFromJson(id, doc, mode, input,compilers);
-        }
-
-        @for(cell <- document.cells) {
-           var mode = '@Html(cell.compiler)';
-           var input = @Html(cell.inputJson);
-           var id = @{cell.id};
-           compileStaticCell(id, doc, mode, input, compilers);
-        }
-</script>
-
 </div>
+<script src="@routes.Assets.at("javascripts/moro-static.js")" type="text/javascript"></script>
+<script>
+    /* COMPILERS OBJECT */
+    var compilers = {};
+    @for(c <- compilers) {
+    compilers.@{c.name} = {};
+    compilers.@{c.name}.hideAfterCompile = @{c.hideAfterCompile};
+    compilers.@{c.name}.editor = @Html(c.editorJavascript);
+    compilers.@{c.name}.editorToInput = @Html(c.editorToInput);
+    compilers.@{c.name}.aggregate = @{c.aggregatePrevious};
+    }
+
+    /* DOCUMENT OBJECT */
+    var doc = newDoc("@(document.name)");
+
+    /* add cells */
+    var divCells = $('div.container');
+    @for(cell <- document.cells) {
+    var mode = '@Html(cell.compiler)';
+    var input = @Html(cell.inputJson);
+    var id = @{cell.id};
+    createStaticCellHTML(id, divCells, doc, mode, input, compilers);
+    }
+</script>
 }

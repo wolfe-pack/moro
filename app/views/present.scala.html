@@ -238,43 +238,16 @@
 </script>
 <!-- end of reveal.js example -->
 <div class="reveal">
-  <div class="slides">
-    <section>
-        <h1>@Html(document.name)</h1>
-    @document.cells.map { cell =>
-        @cell.compiler match {
-        case "section" => {
-            </section>
-            <section id="@{cell.input.code}">
-        }
-        case "markdown" => {
-            <script type="text/template">
-                @Html(cell.input.code)
-            </script>
-        }
-        case _ => {
-        <div id="cell@{cell.id}" class="cellWrapper">
-            <div id="editCell@{cell.id}" class="cell" hidden="true">
-                <div class="input">
-                    <button id="runCode@{cell.id}" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, @{cell.id},compilers)"><span class="glyphicon glyphicon-play"></span></button>
-                    <div id="editor@{cell.id}" class="cell light-border">
-                      @Html(cell.input.code)
-                    </div>
-                </div>
-            </div>
-            <div id="renderDisplay@{cell.id}" class="cell">
-                Loading...
-                    <!--<pre>-->
-                      <!--@Html(cell.toString)-->
-                    <!--</pre>-->
-            </div>
-        </div>
-        }
-        }
-    }
-    </section>
+  <div id="slides" class="slides">
   </div>
 </div>
+@for(cell <- document.cells) {
+    @if(cell.compiler == "markdown") {
+    <script type="placeholder" id="cell@{cell.id}Content">
+      @Html(cell.input.code)
+    </script>
+    }
+}
 <script src="@routes.Assets.at("javascripts/reveal.js/lib/js/head.min.js")"></script>
 <script src="@routes.Assets.at("javascripts/reveal.js/js/reveal.min.js")"></script>
 <script>
@@ -291,38 +264,65 @@
     /* DOCUMENT OBJECT */
     var doc = newDoc("@(document.name)");
 
-    var lastSectionId = null;
+    /* add sections */
+    /* Figure out which sections need to be marked "markdown only" */
+    var divSlides = $('#slides');
+    var lastSectionId = 'init';
+    var lastSectionIsMdOnly = false;
     @for(cell <- document.cells) {
        var mode = '@Html(cell.compiler)';
        var input = @Html(cell.inputJson);
        var id = @{cell.id};
        @cell.compiler match {
          case "section" => {
+           if(lastSectionIsMdOnly) {
+             console.log(lastSectionId);
+             divSlides.append('<section id="' +  lastSectionId + '" data-markdown />');
+           } else {
+             divSlides.append('<section id="' +  lastSectionId + '" />');
+           }
            lastSectionId = "@{cell.input.code}";
+           lastSectionIsMdOnly = true;
          }
          case "markdown" => {
-           if(lastSectionId != null) {
-             console.log($('#'+lastSectionId));
-             $('#'+lastSectionId).attr("data-markdown",'');
-           }
          }
          case _ => {
-           addStaticCellFromJson(id, doc, mode, input,compilers);
+           lastSectionIsMdOnly = false;
          }
        }
     }
+    if(lastSectionIsMdOnly) {
+      divSlides.append('<section id="' +  lastSectionId + '" data-markdown />');
+    } else {
+      divSlides.append('<section id="' +  lastSectionId + '" />');
+    }
 
+    /* Now add cells */
+    lastSection = $('section#init');
+    lastSection.append('<h1>@Html(document.name)</h1>');
     @for(cell <- document.cells) {
        var mode = '@Html(cell.compiler)';
        var input = @Html(cell.inputJson);
        var id = @{cell.id};
-       if(mode != "section" && mode != "markdown") {
-         compileStaticCell(id, doc, mode, input, compilers);
+       @cell.compiler match {
+         case "section" => {
+           lastSection = $("section#@{cell.input.code}");
+           if(lastSection.attr('data-markdown') !== undefined) console.log("#@{cell.input.code}");
+         }
+         case "markdown" => {
+           if(lastSection != null && lastSection.attr('data-markdown') !== undefined) {
+             lastSection.append('<script type="text/template">' + $('script#cell@{cell.id}Content').html());
+           } else {
+             createStaticCellHTML(id, lastSection, doc, mode, input, compilers);
+           }
+         }
+         case _ => {
+           createStaticCellHTML(id, lastSection, doc, mode, input, compilers);
+         }
        }
     }
 
     $( document ).ready(function() {
-        console.log( "ready!" );
         // Full list of configuration options available here:
         // https://github.com/hakimel/reveal.js#configuration
         Reveal.initialize({
@@ -350,10 +350,5 @@
         });
     });
 </script>
-<div id="footer">
-    <div class="container">
-        <p class="text-muted">This is <a href="http://github.com/wolfe-pack/moro">the Moro project</a>, developed by <a href="http://sameersingh.org">Sameer Singh</a>.</p>
-    </div>
-</div>
 </body>
 </html>
