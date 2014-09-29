@@ -121,7 +121,10 @@ trait ACEEditor {
       |    $("#editor"+id).empty();
       |    var editor = ace.edit("editor"+id);
       |    editor.setOptions({
-      |      maxLines: Infinity
+      |      maxLines: Infinity,
+      |      enableBasicAutocompletion: true,
+      |      enableSnippets: true,
+      |      enableLiveAutocompletion: true
       |    });
       |    editor.setTheme("ace/theme/%s");
       |    editor.getSession().setMode("ace/mode/%s");
