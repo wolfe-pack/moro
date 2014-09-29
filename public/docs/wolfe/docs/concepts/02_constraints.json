@@ -29,7 +29,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class Token(word:String,label:String)\nval words = List(\"eat\",\"house\")\nval labels = List(\"Verb\",\"Noun\")\nval tokens = all(Token) {words x labels}\ndef constraint1(t:Token) = t.word == \"eat\"\ntokens filter constraint1",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -53,7 +53,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class Person(name:String)\ncase class World(smokes:Pred[Person])\nval persons = List(Person(\"Anna\"),Person(\"Bob\"))\nval worlds = all(World) { preds(persons) }\ndef constraint2(w:World) = w.smokes(Person(\"Anna\"))\nworlds filter constraint2",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -77,7 +77,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def constraint3(t:Token) = t.word == \"eat\" && t.label == \"Verb\"\ntokens filter constraint3",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -101,7 +101,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class Sentence(tokens:Seq[Token])\nval sentences = all(Sentence) { seqs( all(Token) {words x labels}, 3)}\nval instance = Sentence(Seq(Token(\"eat\",\"Verb\"),Token(\"house\",\"Noun\"))) \ndef observed(s:Sentence) = \n  s.copy(tokens = s.tokens.map(_.copy(label = hidden)))\ndef constraint4(s:Sentence) = observed(s) == observed(instance)\nsentences filter constraint4",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   } ]

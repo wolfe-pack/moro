@@ -13,7 +13,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class Data(x:Int, y:Int, z:Boolean)\ndef space = all(Data) {(1 to 3) x (1 to 3) x bools}\n\n@OutputFactorGraph\ndef model(d:Data) = I(d.x > 1 || d.z) + d.x + 2*d.x*d.y\nval b = argmax(space) {model}\n\nFactorGraphBuffer.get",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {

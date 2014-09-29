@@ -12,7 +12,7 @@ import scala.collection.JavaConverters._
  */
 
 object OutputFormats extends Enumeration {
-  val string, html, javascript, wolfe = Value
+  val string, html, javascript = Value
 
   implicit def outputFormatToString(f: Value): String = f.toString
 
@@ -26,7 +26,7 @@ case class Input(code: String, outputFormat: String = OutputFormats.html, extraF
 case class Result(result: String, format: String = OutputFormats.html)
 
 /**
- * A Wolfenstein Compiler
+ * A Moro Compiler
  */
 trait Compiler {
   // name of the compiler that should be unique in a collection of compilers
@@ -57,6 +57,52 @@ trait Compiler {
 }
 
 /**
+ * Compiler where there is no editor, i.e. no input
+ */
+trait NoEditor {
+  this: Compiler =>
+  def outputFormat: OutputFormats.Value = OutputFormats.html
+  def description: String
+  def editorJavascript: String =
+    """
+      |function(id,content) {
+      |    var contentToAdd = ""
+      |    if(content=="") contentToAdd = '%s';
+      |    else contentToAdd = content;
+      |    $("#editor"+id).empty();
+      |    $("#editor"+id).height("auto");
+      |    $("#editor"+id).html(
+      |      '<div class="input-group">' +
+      |      '  <input id="editorInput'+id+'" type="text" class="form-control" disabled="true" placeholder= "%s" value="'+contentToAdd+'">' +
+      |      '</div>');
+      |    $("#editorInput"+id).focus();
+      |
+      |    return $("#editorInput"+id);
+      |}
+    """.stripMargin format (description, description)
+
+  // code to construct the editor for a cell of this type
+  def removeEditorJavascript: String =
+    """
+      |function(id) {
+      |  $("#editor"+id).empty();
+      |}
+    """.stripMargin
+
+  // javascript that extracts the code from the editor and creates a default input
+  def editorToInput: String =
+    """
+      |function (doc, id) {
+      |  input = {}
+      |  input.code = '';
+      |  input.outputFormat = "%s";
+      |  return input;
+      |};
+    """.stripMargin format (outputFormat)
+
+}
+
+/**
  * Compiler where the editor is a basic ACE editor
  */
 trait ACEEditor {
@@ -67,25 +113,36 @@ trait ACEEditor {
 
   def initialValue: String = ""
 
+  def aceTheme: String = "solarized_light"
+
   def editorJavascript: String =
     """
       |function(id,content) {
       |    $("#editor"+id).empty();
-      |    $("#editor"+id).height("auto");
       |    var editor = ace.edit("editor"+id);
-      |    editor.setTheme("ace/theme/solarized_light");
+      |    editor.setOptions({
+      |      maxLines: Infinity,
+      |      enableBasicAutocompletion: true,
+      |      enableSnippets: true,
+      |      enableLiveAutocompletion: true
+      |    });
+      |    editor.setTheme("ace/theme/%s");
       |    editor.getSession().setMode("ace/mode/%s");
       |    var contentToAdd = ""
       |    if(content=="") contentToAdd = '%s';
       |    else contentToAdd = content;
-      |    editor.getSession().setValue(contentToAdd);
+      |    editor.renderer.setScrollMargin(10, 10, 10, 10)
+      |    editor.getSession().setValue(contentToAdd, 1);
       |    editor.focus();
       |    editor.navigateFileEnd();
-      |    editor.setBehavioursEnabled(false);
+      |    editor.setBehavioursEnabled(true);
+      |    editor.setWrapBehavioursEnabled(true);
+      |    editor.setShowFoldWidgets(true);
+      |    editor.setHighlightActiveLine(false);
+      |    editor.setShowPrintMargin(false);
       |
-      |    heightUpdateFunction(editor, '#editor'+id);
-      |    editor.getSession().on('change', function () {
-      |        heightUpdateFunction(editor, '#editor'+id);
+      |    editor.on('change', function () {
+      |        //heightUpdateFunction(editor, '#editor'+id);
       |    });
       |
       |    editor.commands.addCommand({
@@ -95,9 +152,10 @@ trait ACEEditor {
       |            document.getElementById("runCode"+id).click();
       |        }
       |    })
+      |    //heightUpdateFunction(editor, '#editor'+id);
       |    return editor;
       |}
-    """.stripMargin format (editorMode, initialValue)
+    """.stripMargin format (aceTheme, editorMode, initialValue)
 
   // code to construct the editor for a cell of this type
   def removeEditorJavascript: String =
@@ -205,6 +263,20 @@ class HeadingCompiler(val level: Int) extends Compiler with TextInputEditor {
   }
 }
 
+class SectionCompiler extends Compiler with TextInputEditor {
+  def name: String = "section"
+
+  def fieldLabel: String = "Section Name"
+
+  // icon that is used in the toolbar
+  override def toolbarIcon: String = "&lt;#&gt;"
+
+  def compile(input: Input): Result = {
+    assert(input.outputFormat equalsIgnoreCase outputFormat)
+    Result("<h5 id=\"%s\"><small>#%s</small></h5>" format(input.code, input.code), outputFormat)
+  }
+}
+
 class ImageURLCompiler extends Compiler with TextInputEditor {
   def name: String = "imageurl"
 
@@ -239,6 +311,25 @@ class ActuriusCompiler extends Compiler with ACEEditor {
   }
 }
 
+/**
+ * Basic markdown compiler using Pegdown
+ */
+class PegdownCompiler extends Compiler with ACEEditor {
+
+  import org.pegdown.PegDownProcessor
+
+  def name = "markdown"
+
+  // icon that is used in the toolbar
+  override def toolbarIcon: String = "<span class=\"octicon octicon-markdown\" style=\"font-size: 16px\"></span>" //"&Mu;d"
+
+  def compile(input: Input) = {
+    assert(input.outputFormat equalsIgnoreCase outputFormat)
+    val transformer = new PegDownProcessor()
+    Result(transformer.markdownToHtml(input.code), outputFormat)
+  }
+}
+
 class LatexCompiler extends Compiler with ACEEditor {
   def name = "latex"
 
@@ -255,7 +346,7 @@ class LatexCompiler extends Compiler with ACEEditor {
 /**
  * Scala server using the Twitter Eval implementation
  */
-class TwitterEvalServer(c: MoroConfig) extends Compiler with ACEEditor {
+class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
 
   def name = "scala"
 

@@ -13,7 +13,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def bruteArgmax[T](S:Iterable[T])(f:T=>Double) = S.maxBy(f)\nbruteArgmax((0 until 5) filter (_ < 3)) { s => s.toDouble }",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -77,7 +77,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class World(smokesAnn:Boolean, smokesBob:Boolean)\ndef worlds = all(World) {bools x bools}\nargmax(worlds where (_.smokesAnn)) {w => I(w.smokesAnn == w.smokesBob)}",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -101,7 +101,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class XY(x:Int,y:Int)\ndef space = all(XY) { (0 until 2) x (0 until 2) }\ndef f(xy:XY) = oneHot(xy.x -> xy.y)\ndef s(w:Vector)(xy:XY) = w dot f(xy)\ndef loss(data:Seq[XY])(w:Vector) = \n  sum(data) {i => s(w)(i) - max(space where (_.x == i.x)) { s(w) } }\nval training = for (i <- 0 until 2) yield XY(i,i)\nval w = argmax(vectors) { loss(training) }  \nw",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -133,7 +133,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def h(w:Vector)(xy:XY) = argmax(space where (_.x == xy.x)) { s(w) }\nval test = Seq(XY(0,0),XY(1,1))\nval t1 = test.map(h(w))\nval t2 = map(test){h(w)}\nt1 == t2",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -157,7 +157,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "@OptimizeByInference(BeliefPropagation.maxProduct(5))\ndef annotated(w:World) = I(w.smokesAnn == w.smokesBob) \nargmax(worlds where (_.smokesAnn)) { annotated }",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -173,7 +173,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "import cc.factorie.optimize.{Perceptron}\n@OptimizeByLearning(Learn.online(3, new Perceptron))\ndef annotatedLoss(data:Seq[XY])(w:Vector) = loss(data)(w)\nargmax(vectors) { annotatedLoss(training) }",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   } ]

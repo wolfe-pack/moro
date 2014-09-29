@@ -29,7 +29,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def I(pred:Boolean) = if (pred) 1.0 else 0.0\nI(true)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -53,7 +53,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class PropositionalWorld(smokesAnna:Boolean, smokesBob:Boolean)\ndef s(w:PropositionalWorld) = I(w.smokesAnna) + I(w.smokesBob)\ns(PropositionalWorld(true,false))",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -77,7 +77,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class World(smokes:Pred[Symbol])\nval persons = List('Anna,'Bob,'Peter)\ndef f(w:World) = sum(persons) { p => I(w.smokes(p))}\nval world = World(Map('Anna -> true, 'Bob -> true, 'Peter -> false))\nf(world)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -101,7 +101,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def feats1(pred:Boolean) = oneHot('pred, I(pred))\nfeats1(true) dot oneHot('pred, 3.0)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -117,7 +117,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def feats2(s:PropositionalWorld) = \n  oneHot('smokes, I(s.smokesAnna)) + \n  oneHot('smokes, I(s.smokesBob))\nval world2 = PropositionalWorld(true,true)\nfeats2(world2) dot oneHot('smokes,1.0)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -133,7 +133,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def feats3(w:World) = sum(persons) { p => oneHot('smokes, I(w.smokes(p))) }\nval world3 = World(Map('Anna -> true, 'Bob -> true, 'Peter -> false))\nfeats3(world3) dot oneHot('smokes,1.0)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   } ]
