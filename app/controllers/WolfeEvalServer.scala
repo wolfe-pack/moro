@@ -13,7 +13,7 @@ class WolfeEvalServer(c: MoroConfig) extends ScalaServer(c) {
 
   override def name = "wolfe"
 
-  override def aceTheme: String = "wolfe"
+  override def aceTheme: String = "ambiance"
 
   override def editorMode = "scala"
 }

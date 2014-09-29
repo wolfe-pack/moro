@@ -128,6 +128,7 @@ trait ACEEditor {
       |    var contentToAdd = ""
       |    if(content=="") contentToAdd = '%s';
       |    else contentToAdd = content;
+      |    editor.renderer.setScrollMargin(10, 10, 10, 10)
       |    editor.getSession().setValue(contentToAdd, 1);
       |    editor.focus();
       |    editor.navigateFileEnd();
