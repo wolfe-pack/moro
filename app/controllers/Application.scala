@@ -37,16 +37,46 @@ object Application extends Controller {
     } else Forbidden("Editing not allowed.")
   }
 
+  // adapted from http://thomasheuring.wordpress.com/2013/01/29/scala-playframework-2-04-get-pages-dynamically/
+  object Dynamic {
+
+    def render(keyword: String, file: String): Option[play.api.templates.Html] = {
+      renderDynamic("views.html." + keyword, file: String)
+    }
+
+    def renderDynamic(viewClazz: String, file: String): Option[play.api.templates.Html] = {
+      try {
+        val clazz: Class[_] = Play.current.classloader.loadClass(viewClazz)
+        println(clazz.getMethods())
+        val render = clazz.getDeclaredMethod("apply", classOf[Document], classOf[Compilers], classOf[String])
+        val view = render.invoke(clazz, Document.load(config.docRoot + file + ".json"), allCompilers, config.docRoot).asInstanceOf[play.api.templates.Html]
+        return Some(view)
+      } catch {
+        case ex: ClassNotFoundException => Logger.error("Html.renderDynamic() : could not find view " + viewClazz, ex)
+      }
+
+      return None
+    }
+  }
+
+  def template(name: String, file: String) = Action {
+    println("%s: %s" format(name, file))
+    Dynamic.render(name, file) match {
+      case Some(i) => Ok(i)
+      case None => NotFound("template: " + name)
+    }
+  }
+
   def staticDoc(file: String) = Action {
     import Document._
     println(config.docRoot + file + ".json")
-    Ok(views.html.static(load(config.docRoot + file + ".json"), allCompilers))
+    Ok(views.html.static(load(config.docRoot + file + ".json"), allCompilers, config.docRoot))
   }
 
   def presentDoc(file: String) = Action {
     import Document._
     println(config.docRoot + file + ".json")
-    Ok(views.html.present(load(config.docRoot + file + ".json"), allCompilers))
+    Ok(views.html.present(load(config.docRoot + file + ".json"), allCompilers, config.docRoot))
   }
 
   def wolfeStaticDoc(file: String) = Action {
