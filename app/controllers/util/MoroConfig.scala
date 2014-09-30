@@ -10,5 +10,7 @@ import controllers.Compiler
 class MoroConfig(underlying: Configuration) {
   def editor = underlying.getBoolean("editor").getOrElse(true)
 
+  def docRoot = underlying.getString("docRoot").getOrElse("public/docs/")
+
   def config(c: Compiler): Option[Configuration] = underlying.getConfig("compilers." + c.name)
 }
