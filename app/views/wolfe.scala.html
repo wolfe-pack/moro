@@ -11,7 +11,7 @@
 @dirNav(path:String) = {
     @directory(path).files.map { notebook =>
         <ul>
-            <li class="@if(notebook.title==document.name){current}"><a href="/doc/wolfe-static@{notebook.href}">@{notebook.title}</a></li>
+            <li class="@if(notebook.title==document.name){current}"><a href="/template/wolfe@{notebook.href}">@{notebook.title}</a></li>
             @if(notebook.title==document.name) {
             <ul>
                 @document.cells.filter(_.compiler == "heading3").map { cell =>
@@ -76,7 +76,7 @@
                     <a href="http://www.wolfe.ml/">Home</a>
                 </li>
                 <li class="current">
-                    <a href="/doc/wolfe-static/wolfe/docs/gettingstarted/01_welcome">Doc<span class="show-on-mobiles">s</span><span class="hide-on-mobiles">umentation</span></a>
+                    <a href="/template/wolfe/wolfe-docs/gettingstarted/01_welcome">Doc<span class="show-on-mobiles">s</span><span class="hide-on-mobiles">umentation</span></a>
                 </li>
                 <li>
                     <a href="http://www.wolfe.ml/news">News</a>
@@ -97,11 +97,11 @@
             <div class="unit one-fifth hide-on-mobiles">
                 <div class="doc-nav">
                     <h4>Getting Started</h4>
-                    @dirNav("wolfe/docs/gettingstarted")
+                    @dirNav("wolfe-docs/gettingstarted")
                     <h4>Concepts</h4>
-                    @dirNav("wolfe/docs/concepts")
+                    @dirNav("wolfe-docs/concepts")
                     <h4>Examples</h4>
-                    @dirNav("wolfe/docs/examples")
+                    @dirNav("wolfe-docs/examples")
 
                 </div>
                 <!--</aside>-->
