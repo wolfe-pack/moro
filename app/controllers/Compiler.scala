@@ -294,7 +294,7 @@ class ImageURLCompiler extends Compiler with TextInputEditor {
 /**
  * Basic markdown compiler using Actuarius
  */
-class ActuriusCompiler extends Compiler with ACEEditor {
+class ActuariusCompiler extends Compiler with ACEEditor {
 
   import eu.henkelmann.actuarius.ActuariusTransformer
 
@@ -303,9 +303,9 @@ class ActuriusCompiler extends Compiler with ACEEditor {
   // icon that is used in the toolbar
   override def toolbarIcon: String = "<span class=\"octicon octicon-markdown\" style=\"font-size: 16px\"></span>" //"&Mu;d"
 
-  val transformer = new ActuariusTransformer()
-
   def compile(input: Input) = {
+    val transformer = new ActuariusTransformer()
+
     assert(input.outputFormat equalsIgnoreCase outputFormat)
     Result(transformer(input.code), outputFormat)
   }
