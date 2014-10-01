@@ -66,8 +66,8 @@ libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-compiler" % "2.10.3",
   "org.sameersingh.htmlgen" % "htmlgen" % "0.2-SNAPSHOT",
   "org.sameersingh.scalaplot" % "scalaplot" % "0.0.3",
-  "ml.wolfe" %% "wolfe-core" % "0.3.0-SNAPSHOT",
-  "ml.wolfe" %% "wolfe-examples" % "0.3.0-SNAPSHOT",
+  "ml.wolfe" %% "wolfe-core" % "0.4.0-SNAPSHOT",
+  "ml.wolfe" %% "wolfe-examples" % "0.4.0-SNAPSHOT",
   "org.scala-lang" % "scala-library" % "2.10.3",
   "org.pegdown" % "pegdown" % "1.4.2"
 )
