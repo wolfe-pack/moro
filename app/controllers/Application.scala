@@ -36,14 +36,14 @@ object Application extends Controller with securesocial.core.SecureSocial {
       Action {
         import Document._
         println(config.docRoot + file + ".json")
-        Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers))
+        Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers, config))
       }
     } else SecuredAction {
       implicit request =>
         import Document._
         println(request.user)
         println(config.docRoot + file + ".json")
-        Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers))
+        Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers, config))
     }
 
   // adapted from http://thomasheuring.wordpress.com/2013/01/29/scala-playframework-2-04-get-pages-dynamically/
@@ -56,7 +56,6 @@ object Application extends Controller with securesocial.core.SecureSocial {
     def renderDynamic(viewClazz: String, file: String): Option[play.api.templates.Html] = {
       try {
         val clazz: Class[_] = Play.current.classloader.loadClass(viewClazz)
-        println(clazz.getMethods())
         val render = clazz.getDeclaredMethod("apply", classOf[Document], classOf[Compilers], classOf[String])
         val view = render.invoke(clazz, Document.load(config.docRoot + file + ".json"), allCompilers, config.docRoot).asInstanceOf[play.api.templates.Html]
         return Some(view)

@@ -16,5 +16,5 @@ class MoroConfig(underlying: Configuration) {
 
   def editorConfig = viewConfig("editor")
   def editorEnabled = editorConfig.map(c => c.getBoolean("enabled").getOrElse(true)).getOrElse(true)
-  def editorPassHash = editorConfig.map(c => c.getString("passWordHash").getOrElse("")).getOrElse("")
+  def editorStaticTemplate = editorConfig.map(c => c.getString("staticView").getOrElse("static")).getOrElse("static")
 }
