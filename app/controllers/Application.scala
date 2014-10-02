@@ -5,8 +5,9 @@ import play.api.mvc._
 import controllers.doc._
 import controllers.util.{MoroConfig, MiscUtils, JacksonWrapper}
 import java.io.File
+import securesocial.core.{Identity, Authorization}
 
-object Application extends Controller {
+object Application extends Controller with securesocial.core.SecureSocial {
 
   val config = new MoroConfig(Play.current.configuration.getConfig("moro").get)
   val allCompilers = new AllCompilers(config)
@@ -29,13 +30,19 @@ object Application extends Controller {
           })
   }
 
-  def editor(file: String) = Action {
+  def editor(file: String) =
     if(config.editorEnabled) {
+      Action {
+        import Document._
+        println(config.docRoot + file + ".json")
+        Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers))
+      }
+    } else SecuredAction { implicit request =>
       import Document._
+      println(request.user)
       println(config.docRoot + file + ".json")
       Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers))
-    } else Forbidden("Editing not allowed. Please contact the administrator.")
-  }
+    }
 
   // adapted from http://thomasheuring.wordpress.com/2013/01/29/scala-playframework-2-04-get-pages-dynamically/
   object Dynamic {
