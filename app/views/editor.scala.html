@@ -46,10 +46,11 @@
         <!--div class="col-md-2"-->
             <div class="input-group text-right">
                         <span class="input-group-btn text-right">
-                            <a data-toggle="modal" href="#docNameDialog" class="btn btn-default"><i class="fa fa-pencil fa-lg"></i></a>
-                            <button class="btn btn-default"><i class="fa fa-forward fa-lg" onclick="runAll(doc,compilers)"></i></button>
-                            <button class="btn btn-default" type="button" onclick="saveDoc(doc,compilers)"><i class="fa fa-save fa-lg"></i></button>
-                            <a data-toggle="modal" href="#saveAsDialog" class="btn btn-default"><i class="fa fa-save fa-lg"></i><i class="fa fa-plus fa-sm"></i></a>
+                            <a data-toggle="modal" href="#docNameDialog" class="btn btn-default" title="Change title"><i class="fa fa-pencil fa-lg"></i></a>
+                            <a href="/doc/static/@file" class="btn btn-default" role="button" title="Static View"><i class="fa fa-file-o fa-lg" onclick="runAll(doc,compilers)"></i></a>
+                            <button class="btn btn-default"><i class="fa fa-forward fa-lg" onclick="runAll(doc,compilers)" title="Run all"></i></button>
+                            <button class="btn btn-default" type="button" onclick="saveDoc(doc,compilers)" title="Save"><i class="fa fa-save fa-lg"></i></button>
+                            <a data-toggle="modal" href="#saveAsDialog" class="btn btn-default" title="Save As"><i class="fa fa-save fa-lg"></i><i class="fa fa-plus fa-sm"></i></a>
                         </span>
                 <!--input id="filePath" type="text" class="form-control" value="@file"-->
             </div>
