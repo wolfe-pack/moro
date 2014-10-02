@@ -63,34 +63,34 @@
  */
 }
 
-.wolfe-editor-cell {
-  position:relative
-}
-
-.wolfe-editor {
+.editor {
   float:left;
   width: calc(100% - 80px)
 }
-.wolfe-run {
+.runButton {
   width:50px;
   float:right;
 }
+.input {
+  text-shadow: none;
+}
 
-.wolfe-result {
+.string-result {
   margin-left: 40px;
   margin-bottom: 20px;
   font-family: Menlo, Consolas, "Courier New", Courier, "Liberation Mono", monospace;
   font-size: 13px;
   clear:left;
+  text-shadow: none;
 }
 
 .ace_content {
-  padding:10px 0px;
+  padding:0px 0px;
   word-spacing: normal;
 }
 
 .ace_gutter {
-  padding:10px 0px;
+  padding:0px 0px;
 }
 
 a .com {
@@ -857,6 +857,7 @@ pre code {
    text-shadow: none;
    //margin: 0 20px;
    background: #3d3d3d;
+   color: #ddd;
    //box-shadow: 1px 1px 1px rgba(0,0,0,.3);
    border-radius: 5px 5px 5px 5px;
    box-shadow: 0 1px 1px rgba(0,0,0,.3);
@@ -891,6 +892,13 @@ pre code {
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
+  font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #ddd;
+  font-weight: bold;
+  line-height: 1.4;
+  /*border-top: 0px solid #fc0; */
+  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+  word-spacing:1px;
 }
 
 a {
@@ -904,6 +912,7 @@ a {
 
 a:hover {
   color: #f90;
+  text-decoration: none;
 }
 
 strong {
@@ -912,6 +921,7 @@ strong {
 
 p {
   line-height: 1.5em;
+  margin: 18px 0 18px 0px;
 }
 
 .left { float: left; }
@@ -961,7 +971,16 @@ blockquote {
   font-weight: 500;
 }
 
+blockquote .label {
+  text-transform: none;
+  float: none;
+  font-size: 100%;
+}
 
+blockquote .label-danger {
+  color: #d9534f;
+  background-color: transparent;
+}
 /* Tables */
 
 table {
@@ -1290,4 +1309,21 @@ svg.barchart {
 
 .barchart .barlabel {
     fill: #982;
+}
+
+.playbtn{
+  float: left;
+  background: #f70;
+  color: #000;
+  font-family: sans-serif;
+  padding: 5px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 1px 5px rgba(0,0,0,.5);
+  text-shadow: 0 1px 0 rgba(255,255,255,.3);
+  border-radius: 5px;
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  cursor: pointer;
 }

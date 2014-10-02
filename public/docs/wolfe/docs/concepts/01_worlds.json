@@ -29,7 +29,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "List(\"Verb\",\"Noun\")",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -45,7 +45,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "0 until 5",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -69,7 +69,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class Token(word:String, label:String)\nval words = List(\"eat\",\"house\")\nval labels = List(\"Verb\",\"Noun\")\nall(Token) { words x labels }",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -85,7 +85,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "implicit val impWords = List(\"eat\",\"house\")\nimplicit val impLabels = List('Verb,'Noun)\nall(Token)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -109,7 +109,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "val tags = List(\"Verb\",\"Noun\")\nseqs(tags, 2)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -125,7 +125,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "seqs(all(Token){List(\"eat\") x List(\"Verb\")}, 2)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -149,7 +149,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "val nodes = 0 until 2\nval bools = List(false,true)\nmaps(nodes x nodes,bools).take(2)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -173,7 +173,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class Person(name:String)\ncase class World(smokes:Pred[Person])\nval persons = List(Person(\"Anna\"),Person(\"Bob\"))\npreds(persons).take(2)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -197,7 +197,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "//todo: all(Token){infty[String] x List('Verb,'Noun)}",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -221,7 +221,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "//val bools = List(false,true)\nval doubles = infty[Double]\nval strings = infty[String]\nval vectors = infty[Vector]",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   } ]

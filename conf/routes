@@ -9,13 +9,16 @@ GET     /                           controllers.Application.index
 POST /compiler/:name                      controllers.Application.compileJson(name: String)
 
 # Static document rendering
-GET /doc/static                                 controllers.Application.staticDoc(file = "test")
+GET /doc/static                                 controllers.Application.staticDoc(file = "overview")
 GET /doc/static/*file                           controllers.Application.staticDoc(file)
 GET /doc/wolfe-static/*file                     controllers.Application.wolfeStaticDoc(file)
 
 # Presentation rendering
-GET /doc/present                                 controllers.Application.presentDoc(file = "test")
+GET /doc/present                                 controllers.Application.presentDoc(file = "overview")
 GET /doc/present/*file                           controllers.Application.presentDoc(file)
+
+# Template selection
+GET /template/:name/*file                       controllers.Application.template(name, file)
 
 # Document editing
 GET /doc/editor                                 controllers.Application.editor(file = "test")

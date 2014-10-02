@@ -12,7 +12,7 @@ import scala.collection.JavaConverters._
  */
 
 object OutputFormats extends Enumeration {
-  val string, html, javascript, wolfe = Value
+  val string, html, javascript = Value
 
   implicit def outputFormatToString(f: Value): String = f.toString
 
@@ -113,25 +113,36 @@ trait ACEEditor {
 
   def initialValue: String = ""
 
+  def aceTheme: String = "chrome"
+
   def editorJavascript: String =
     """
       |function(id,content) {
       |    $("#editor"+id).empty();
-      |    $("#editor"+id).height("auto");
       |    var editor = ace.edit("editor"+id);
-      |    editor.setTheme("ace/theme/solarized_light");
+      |    editor.setOptions({
+      |      maxLines: Infinity,
+      |      enableBasicAutocompletion: true,
+      |      enableSnippets: true,
+      |      enableLiveAutocompletion: true
+      |    });
+      |    editor.setTheme("ace/theme/%s");
       |    editor.getSession().setMode("ace/mode/%s");
       |    var contentToAdd = ""
       |    if(content=="") contentToAdd = '%s';
       |    else contentToAdd = content;
-      |    editor.getSession().setValue(contentToAdd);
+      |    editor.renderer.setScrollMargin(10, 10, 10, 10)
+      |    editor.getSession().setValue(contentToAdd, 1);
       |    editor.focus();
       |    editor.navigateFileEnd();
-      |    editor.setBehavioursEnabled(false);
+      |    editor.setBehavioursEnabled(true);
+      |    editor.setWrapBehavioursEnabled(true);
+      |    editor.setShowFoldWidgets(true);
+      |    editor.setHighlightActiveLine(false);
+      |    editor.setShowPrintMargin(false);
       |
-      |    heightUpdateFunction(editor, '#editor'+id);
-      |    editor.getSession().on('change', function () {
-      |        heightUpdateFunction(editor, '#editor'+id);
+      |    editor.on('change', function () {
+      |        //heightUpdateFunction(editor, '#editor'+id);
       |    });
       |
       |    editor.commands.addCommand({
@@ -141,9 +152,10 @@ trait ACEEditor {
       |            document.getElementById("runCode"+id).click();
       |        }
       |    })
+      |    //heightUpdateFunction(editor, '#editor'+id);
       |    return editor;
       |}
-    """.stripMargin format (editorMode, initialValue)
+    """.stripMargin format (aceTheme, editorMode, initialValue)
 
   // code to construct the editor for a cell of this type
   def removeEditorJavascript: String =
@@ -282,7 +294,7 @@ class ImageURLCompiler extends Compiler with TextInputEditor {
 /**
  * Basic markdown compiler using Actuarius
  */
-class ActuriusCompiler extends Compiler with ACEEditor {
+class ActuariusCompiler extends Compiler with ACEEditor {
 
   import eu.henkelmann.actuarius.ActuariusTransformer
 
@@ -291,9 +303,9 @@ class ActuriusCompiler extends Compiler with ACEEditor {
   // icon that is used in the toolbar
   override def toolbarIcon: String = "<span class=\"octicon octicon-markdown\" style=\"font-size: 16px\"></span>" //"&Mu;d"
 
-  val transformer = new ActuariusTransformer()
-
   def compile(input: Input) = {
+    val transformer = new ActuariusTransformer()
+
     assert(input.outputFormat equalsIgnoreCase outputFormat)
     Result(transformer(input.code), outputFormat)
   }
@@ -311,10 +323,9 @@ class PegdownCompiler extends Compiler with ACEEditor {
   // icon that is used in the toolbar
   override def toolbarIcon: String = "<span class=\"octicon octicon-markdown\" style=\"font-size: 16px\"></span>" //"&Mu;d"
 
-  val transformer = new PegDownProcessor()
-
   def compile(input: Input) = {
     assert(input.outputFormat equalsIgnoreCase outputFormat)
+    val transformer = new PegDownProcessor()
     Result(transformer.markdownToHtml(input.code), outputFormat)
   }
 }
@@ -335,7 +346,7 @@ class LatexCompiler extends Compiler with ACEEditor {
 /**
  * Scala server using the Twitter Eval implementation
  */
-class TwitterEvalServer(c: MoroConfig) extends Compiler with ACEEditor {
+class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
 
   def name = "scala"
 

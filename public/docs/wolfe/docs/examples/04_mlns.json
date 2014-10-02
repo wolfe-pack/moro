@@ -29,7 +29,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "case class World(smokes: Pred[Symbol], cancer: Pred[Symbol], \n                 friends: Pred[(Symbol, Symbol)])\nimplicit def persons = List('Anna, 'Bob)\ndef worlds = all(World)\nworlds.head",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -53,7 +53,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def mln(world: World) = {\n  import world._\n  sum(persons) { p => \n    1.5 * I(smokes(p) --> cancer(p)) } +\n  sum(persons) { p1 => sum(persons) { p2 => \n    1.1 * I(friends(p1, p2) --> (smokes(p1) == smokes(p2))) } }\n}\nmln(worlds.head)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   }, {
@@ -77,7 +77,7 @@
     "compiler" : "wolfe",
     "input" : {
       "code" : "def evidence(world: World) = world.smokes('Anna) && world.friends('Anna, 'Bob)\ndef query(world: World) = oneHot(world.cancer('Bob))\nval mu = expect(worlds where evidence) { mln } { query }\nbarChart(mu)",
-      "outputFormat" : "wolfe",
+      "outputFormat" : "string",
       "extraFields" : null
     }
   } ]

@@ -29,53 +29,60 @@ object Application extends Controller {
           })
   }
 
-  object Notebook {
-    /*
-    def doc = {
-      val d = new Document("Wolfe tutorial", ArrayBuffer(
-        Cell(0, "heading1", Input("Heading")),
-        Cell(1, "heading2", Input("Heading")),
-        Cell(2, "heading3", Input("Heading")),
-        Cell(3, "heading4", Input("Heading")),
-        Cell(4, "heading5", Input("Heading")),
-        Cell(4, "markdown", Input("This notebook can support **bold**, _italics_, [Images](http://sameersingh.org/), and `Latex` too!")),
-        Cell(5, "latex", Input("\\alpha+\\beta=\\sum_{i=0}^{n}\\gamma\\cfrac{1}{\\mathcal{Z}}")),
-        Cell(6, "markdown", Input("And the equations can be inlined if definining \\\\(\\theta\\\\) and \\\\(\\pi\\\\) in text.")),
-        Cell(7, "imageurl", Input("http://www0.cs.ucl.ac.uk/people/photos/S.Riedel.jpg")),
-        Cell(8, "scala", Input("def f(x:Int) = x * x\nf(10)")),
-        Cell(9, "heading3", Input("Another Example")),
-        Cell(10, "scala", Input("def f2(x:Int) = x + x\nf2(10)"))
-      ))
-      //Document.save(d, "public/docs/test.json")
-      Document.load(Application.getClass.getResourceAsStream("/public/docs/test.json"))
-    }
-     */
-  }
-
   def editor(file: String) = Action {
     if(config.editorEnabled) {
       import Document._
-      println("/public/docs/" + file + ".json")
-      Ok(views.html.editor(toDData(load("public/docs/" + file + ".json")), file, allCompilers))
+      println(config.docRoot + file + ".json")
+      Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers))
     } else Forbidden("Editing not allowed. Please contact the administrator.")
+  }
+
+  // adapted from http://thomasheuring.wordpress.com/2013/01/29/scala-playframework-2-04-get-pages-dynamically/
+  object Dynamic {
+
+    def render(keyword: String, file: String): Option[play.api.templates.Html] = {
+      renderDynamic("views.html." + keyword, file: String)
+    }
+
+    def renderDynamic(viewClazz: String, file: String): Option[play.api.templates.Html] = {
+      try {
+        val clazz: Class[_] = Play.current.classloader.loadClass(viewClazz)
+        println(clazz.getMethods())
+        val render = clazz.getDeclaredMethod("apply", classOf[Document], classOf[Compilers], classOf[String])
+        val view = render.invoke(clazz, Document.load(config.docRoot + file + ".json"), allCompilers, config.docRoot).asInstanceOf[play.api.templates.Html]
+        return Some(view)
+      } catch {
+        case ex: ClassNotFoundException => Logger.error("Html.renderDynamic() : could not find view " + viewClazz, ex)
+      }
+
+      return None
+    }
+  }
+
+  def template(name: String, file: String) = Action {
+    println("%s: %s" format(name, file))
+    Dynamic.render(name, file) match {
+      case Some(i) => Ok(i)
+      case None => NotFound("template: " + name)
+    }
   }
 
   def staticDoc(file: String) = Action {
     import Document._
-    println("/public/docs/" + file + ".json")
-    Ok(views.html.static(load("public/docs/" + file + ".json"), allCompilers))
+    println(config.docRoot + file + ".json")
+    Ok(views.html.static(load(config.docRoot + file + ".json"), allCompilers, config.docRoot))
   }
 
   def presentDoc(file: String) = Action {
     import Document._
-    println("/public/docs/" + file + ".json")
-    Ok(views.html.present(load("public/docs/" + file + ".json"), allCompilers))
+    println(config.docRoot + file + ".json")
+    Ok(views.html.present(load(config.docRoot + file + ".json"), allCompilers, config.docRoot))
   }
 
   def wolfeStaticDoc(file: String) = Action {
     import Document._
-    println("/public/docs/" + file + ".json")
-    Ok(views.html.wolfeStatic(load("public/docs/" + file + ".json"), allCompilers))
+    println("wolfe: %s (%s%s.json)" format(file, config.docRoot, file))
+    Ok(views.html.wolfe(load(config.docRoot + file + ".json"), allCompilers, config.docRoot))
   }
 
   def save(file: String) = Action {
@@ -83,8 +90,8 @@ object Application extends Controller {
       request.body.asJson.map {
         json => val d = Document.loadJson(json.toString())
           println(d + " --> " + file)
-          println(routes.Assets.at("public/docs/" + file + ".json"))
-          Document.save(d, "public/docs/" + file + ".json")
+          println(routes.Assets.at(config.docRoot + file + ".json"))
+          Document.save(d, config.docRoot + file + ".json")
           Ok("Save successful: " + d)
       }.getOrElse {
         BadRequest("Expecting Json data")
@@ -93,7 +100,7 @@ object Application extends Controller {
 
   def dir(path: String) = Action {
     println("path: " + path)
-    val dir = new Directory(path)
+    val dir = new Directory(path, config.docRoot)
     println(dir)
     Ok(views.html.dir(dir, config))
   }
@@ -105,7 +112,7 @@ object Application extends Controller {
           try {
             val title = (json \ "title").as[String]
             val name = (json \ "name").as[String]
-            val fname = if (path == "") "public/docs/" + name + ".json" else "public/docs/" + path + "/" + name + ".json"
+            val fname = if (path == "") config.docRoot + name + ".json" else config.docRoot + path + "/" + name + ".json"
             val d = new Document(title)
             Document.save(d, fname)
             println("fname: %s, title: %s, name: %s, doc: %s" format(fname, title, name, d))
@@ -125,7 +132,7 @@ object Application extends Controller {
         json => {
           try {
             val name = (json \ "name").as[String]
-            val fname = if (path == "") "public/docs/" + name + ".json" else "public/docs/" + path + "/" + name + ".json"
+            val fname = if (path == "") config.docRoot + name + ".json" else config.docRoot + path + "/" + name + ".json"
             val f = new File(fname)
             println("fname: %s, name: %s" format(fname, name))
             f.delete()
@@ -145,7 +152,7 @@ object Application extends Controller {
         json => {
           try {
             val name = (json \ "name").as[String]
-            val fname = if (path == "") "public/docs/" + name else "public/docs/" + path + "/" + name
+            val fname = if (path == "") config.docRoot + name else config.docRoot + path + "/" + name
             val f = new File(fname)
             println("fname: %s, name: %s" format(fname, name))
             f.mkdir()
@@ -165,7 +172,7 @@ object Application extends Controller {
         json => {
           try {
             val name = (json \ "name").as[String]
-            val fname = if (path == "") "public/docs/" + name else "public/docs/" + path + "/" + name
+            val fname = if (path == "") config.docRoot + name else config.docRoot + path + "/" + name
             val f = new File(fname)
             println("fname: %s, name: %s" format(fname, name))
             MiscUtils.delete(f)

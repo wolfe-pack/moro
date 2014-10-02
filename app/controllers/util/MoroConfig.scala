@@ -8,6 +8,8 @@ import controllers.Compiler
  * @since 4/22/14.
  */
 class MoroConfig(underlying: Configuration) {
+  def docRoot = underlying.getString("docRoot").getOrElse("public/docs/")
+
   def config(c: Compiler): Option[Configuration] = underlying.getConfig("compilers." + c.name)
 
   def viewConfig(name: String): Option[Configuration] = underlying.getConfig("views." + name)

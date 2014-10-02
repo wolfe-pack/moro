@@ -1,4 +1,4 @@
-@(document: controllers.doc.Document, compilers: Compilers)
+@(document: controllers.doc.Document, compilers: Compilers, docRoot: String)
 
 @import helper._
 
@@ -11,216 +11,20 @@
     <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/document.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/moro.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/moro-static.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/ace/ace.js")" type="text/javascript" charset="utf-8"></script>
+    <script src="@routes.Assets.at("javascripts/ace/ext-language_tools.js")" type="text/javascript" charset="utf-8"></script>
     <link href="@routes.Assets.at("javascripts/bootstrap/css/bootstrap.min.css")" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="@routes.Assets.at("javascripts/reveal.js/css/reveal.min.css")">
     <link rel="stylesheet" href="@routes.Assets.at("javascripts/reveal.js/css/theme/simple.css")" id="theme">
-    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/moro.css")">
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/htmlgen.css")">
     <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
     <script src="@routes.Assets.at("javascripts/bootstrap/js/bootstrap.js")" type="text/javascript"></script>
     <link href="@routes.Assets.at("stylesheets/font-awesome/css/font-awesome.min.css")" rel="stylesheet">
     <link href="@routes.Assets.at("stylesheets/octicons/octicons.css")" rel="stylesheet">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/present.css")">
     <style type="text/css" media="screen">
-        .pull-left {
-          float: left !important;
-        }
-        .pull-right {
-          float: right !important;
-        }
-        .container {
-            width: 800px;
-        }
-        .topbar {
-            margin-right: auto;
-            margin-left: auto;
-            /*width: 800px;*/
-            /*background-color: #f5f5f5;*/
-            position: relative;
-        }
-        .alertDiv {
-            /*display: inline-block;*/
-            margin: 0 auto;
-            z-index: 10;
-            position: absolute;
-            margin-left: auto;
-            margin-right: auto;
-            left: 0;
-            right: 0;
-            text-align: center;
-        }
-        .alert {
-            margin-bottom: auto;
-            margin-left: auto;
-            padding-top: 3px;
-            padding-bottom: 3px;
-            z-index: 100;
-            display: inline-block;
-            /*display: none;*/
-        }
-        .cell {
-            position: relative !important;
-            width: 100%;
-            overflow: hidden;
-            padding: 1px;
-        }
-        .light-border {
-            border: 1px solid #F0F0F0;
-        }
-        .cellWrapper {
-            position: relative !important;
-            width: 100%;
-            overflow: hidden;
-        }
-        .sidebarCell {
-            position: absolute;
-            width: 20%;
-            left: 620px;
-            float: right;
-            overflow: hidden;
-            padding-right: 5px;
-            z-index:100;
-        }
-        textarea {
-            font-size: 12pt;
-            font-family: Lucida Console;
-        }
-        img.displayed {
-            display: block;
-            margin-left: auto;
-            margin-right: auto
-        }
-        .editorBody {
-            padding: 80px 15px;
-            text-align: center;
-        }
-        .edit-btn {
-          /* background-color: transparent; */
-          /* color: #000000; */
-        }
-        .divDialogElements input {
-            font-size: 18px;
-            padding: 3px;
-            height: 32px;
-            width: 500px;
-        }
-        .dirCell {
-            border: 1px solid lightgray;
-            padding: 25px;
-        }
-        /* Sticky footer styles
-        -------------------------------------------------- */
-
-        html,
-        body {
-          height: 100%;
-          /* The html and body elements cannot have any padding or margin. */
-        }
-
-        /* Wrapper for page content to push down footer */
-        #wrap {
-          min-height: 100%;
-          height: auto;
-          /* Negative indent footer by its height */
-          margin: 0 auto -40px;
-          /* Pad bottom by footer height */
-          padding: 0 0 40px;
-        }
-
-        /* Set the fixed height of the footer here */
-        #footer {
-          height: 40px;
-          background-color: #f5f5f5;
-        }
-
-        /* ACE editor hacks for reveal.js */
-        /* ACE editor */
-        .reveal .ace_editor{
-            position: relative !important;
-            margin: auto;
-            width: 100%;
-            height: 400px;
-            display:block;
-            text-align: left;
-            /*
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace; !important;
-            line-height: normal;
-            */
-            font-size: 32px;
-            border: 1px solid lightgray;
-        }
-        .reveal .xs{
-            height:300px;
-        }
-        .reveal .s{
-            height:325px;
-        }
-        .reveal .m{
-            height:350px;
-        }
-        .reveal .l{
-            height:375px;
-        }
-        .reveal .xl{
-            height:450px;
-        }
-        div.ace_gutter{
-            width: 60px;
-        }
-        div.ace_gutter-cell {
-            padding-left: 19px;
-            padding-right: 6px;
-            background-repeat: no-repeat;
-        }
-        div.ace_gutter-layer{
-            width: auto;
-        }
-        span.ace_fold-widget {
-            display: none;
-        }
-        .ace_editor.fullScreen {
-            height: auto;
-            width: auto;
-            border: 0;
-            margin: 0;
-            position: fixed !important;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 10;
-            background: white;
-        }
-        .fullScreen {
-            overflow: hidden
-        }
-        .scrollmargin {
-            height: 500px;
-            text-align: center;
-        }
-        .large-button {
-            color: lightblue;
-            cursor: pointer;
-            font: 30px arial;
-            padding: 20px;
-            text-align: center;
-            border: medium solid transparent;
-            display: inline-block;
-        }
-        .large-button:hover {
-            border: medium solid lightgray;
-            border-radius: 10px 10px 10px 10px;
-            box-shadow: 0 0 12px 0 lightblue;
-        }
-        .reveal .fa {
-            font-family: 'FontAwesome';
-            font-style: normal;
-        }
-        .reveal .glyphicon {
-            font-family: 'Glyphicons Halflings';
-            font-style: normal;
-            font-size: 32px;
-        }
     </style>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
@@ -237,85 +41,19 @@
 </script>
 <!-- end of reveal.js example -->
 <div class="reveal">
-  <div class="slides">
-    <section>
-        <h1>@Html(document.name)</h1>
-    @document.cells.map { cell =>
-        @cell.compiler match {
-        case "section" => {
-            </section>
-            <section id="@{cell.input.code}">
-        }
-        case "markdown" => {
-            <script type="text/template">
-                @Html(cell.input.code)
-            </script>
-        }
-        case _ => {
-        <div id="cell@{cell.id}" class="cellWrapper">
-            <div id="editCell@{cell.id}" class="cell" hidden="true">
-                <div class="input">
-                    <button id="runCode@{cell.id}" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, @{cell.id},compilers)"><span class="glyphicon glyphicon-play"></span></button>
-                    <div id="editor@{cell.id}" class="cell light-border">
-                      @Html(cell.input.code)
-                    </div>
-                </div>
-            </div>
-            <div id="renderDisplay@{cell.id}" class="cell">
-                Loading...
-                    <!--<pre>-->
-                      <!--@Html(cell.toString)-->
-                    <!--</pre>-->
-            </div>
-        </div>
-        }
-        }
-    }
-    </section>
+  <div id="slides" class="slides">
   </div>
 </div>
+@for(cell <- document.cells) {
+    @if(cell.compiler == "markdown") {
+    <script type="placeholder" id="cell@{cell.id}Content">
+      @Html(cell.input.code)
+    </script>
+    }
+}
 <script src="@routes.Assets.at("javascripts/reveal.js/lib/js/head.min.js")"></script>
 <script src="@routes.Assets.at("javascripts/reveal.js/js/reveal.min.js")"></script>
 <script>
-    function makeStaticCellFunctional(doc,id,compiler,compilers) {
-        doc.cells[id] = new Object();
-        doc.cells[id].id = id;
-        doc.cells[id].mode = compiler;
-        doc.cells[id].renderDisplay = $('#renderDisplay' + id);
-        $('.btn').button();
-    }
-
-    function addStaticCellFromJson(id,doc,mode,input,compilers) {
-      doc.ids.push(id);
-      makeStaticCellFunctional(doc,id,mode,compilers);
-      if(!compilers[mode].hideAfterCompile) {
-        $('#editCell' + id).show();
-        doc.cells[id].editor = compilers[mode].editor(id, input.code);
-        doc.cells[id].editor.getSession().setValue(input.code);
-      } else {
-        toggleEditor(doc,id);
-      }
-    }
-
-    function compileStaticCell(id,doc,mode,input,compilers) {
-      var compiler = compilers[mode];
-      if(compiler.aggregate) {
-        var prefixInput = "";
-        for(var midx in doc.ids) {
-          var mid = doc.ids[midx];
-          if(doc.cells[mid].mode == mode) {
-            if(id == mid) break;
-            prefixInput = prefixInput + compiler.editorToInput(doc, doc.cells[mid].id).code + "\n";
-          }
-        }
-        input.code = prefixInput + input.code;
-      }
-      compileCode(input,
-          function(x) {
-            outputResult(doc, id, x, compilers);
-          }, doc.cells[id].mode);
-    }
-
     /* COMPILERS OBJECT */
     var compilers = {};
     @for(c <- compilers) {
@@ -329,38 +67,63 @@
     /* DOCUMENT OBJECT */
     var doc = newDoc("@(document.name)");
 
-    var lastSectionId = null;
+    /* add sections */
+    /* Figure out which sections need to be marked "markdown only" */
+    var divSlides = $('#slides');
+    var lastSectionId = 'init';
+    var lastSectionIsMdOnly = false;
     @for(cell <- document.cells) {
        var mode = '@Html(cell.compiler)';
        var input = @Html(cell.inputJson);
        var id = @{cell.id};
        @cell.compiler match {
          case "section" => {
+           if(lastSectionIsMdOnly) {
+             divSlides.append('<section id="' +  lastSectionId + '" data-markdown />');
+           } else {
+             divSlides.append('<section id="' +  lastSectionId + '" />');
+           }
            lastSectionId = "@{cell.input.code}";
+           lastSectionIsMdOnly = true;
          }
          case "markdown" => {
-           if(lastSectionId != null) {
-             console.log($('#'+lastSectionId));
-             $('#'+lastSectionId).attr("data-markdown",'');
-           }
          }
          case _ => {
-           addStaticCellFromJson(id, doc, mode, input,compilers);
+           lastSectionIsMdOnly = false;
          }
        }
     }
+    if(lastSectionIsMdOnly) {
+      divSlides.append('<section id="' +  lastSectionId + '" data-markdown />');
+    } else {
+      divSlides.append('<section id="' +  lastSectionId + '" />');
+    }
 
+    /* Now add cells */
+    lastSection = $('section#init');
+    lastSection.append('<h1>@Html(document.name)</h1>');
     @for(cell <- document.cells) {
        var mode = '@Html(cell.compiler)';
        var input = @Html(cell.inputJson);
        var id = @{cell.id};
-       if(mode != "section" && mode != "markdown") {
-         compileStaticCell(id, doc, mode, input, compilers);
+       @cell.compiler match {
+         case "section" => {
+           lastSection = $("section#@{cell.input.code}");
+         }
+         case "markdown" => {
+           if(lastSection != null && lastSection.attr('data-markdown') !== undefined) {
+             lastSection.append('<script type="text/template">' + $('script#cell@{cell.id}Content').html());
+           } else {
+             createStaticCellHTML(id, lastSection, doc, mode, input, compilers);
+           }
+         }
+         case _ => {
+           createStaticCellHTML(id, lastSection, doc, mode, input, compilers);
+         }
        }
     }
 
     $( document ).ready(function() {
-        console.log( "ready!" );
         // Full list of configuration options available here:
         // https://github.com/hakimel/reveal.js#configuration
         Reveal.initialize({
@@ -369,7 +132,7 @@
             center: true,
 
             theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-            transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+            transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
 
             dependencies: [
                 // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
@@ -380,7 +143,7 @@
                 { src: '@routes.Assets.at("javascripts/reveal.js/plugin/markdown/markdown.js")', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 
                 // Syntax highlight for <code> elements
-                { src: '@routes.Assets.at("javascripts/reveal.js/plugin/highlight/highlight.js")', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/highlight/highlight.js")', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
 
                 // MathJax
                 { src: '@routes.Assets.at("javascripts/reveal.js/plugin/math/math.js")', async: true }
@@ -388,10 +151,5 @@
         });
     });
 </script>
-<div id="footer">
-    <div class="container">
-        <p class="text-muted">This is <a href="http://github.com/wolfe-pack/moro">the Moro project</a>, developed by <a href="http://sameersingh.org">Sameer Singh</a>.</p>
-    </div>
-</div>
 </body>
 </html>
