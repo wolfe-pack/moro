@@ -1,0 +1,7 @@
+@(user: Option[User])
+
+        @if(user.isDefined) {
+<span class="pull-right">Hi, @user.get.firstName! <a href="/logout" role="button" class="btn btn-default btn-xs">Logout</a></span>
+        } else {
+<a role="button" class="btn btn-primary btn-xs pull-right" href="/login">Login</a>
+        }

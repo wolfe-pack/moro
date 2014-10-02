@@ -1,9 +1,9 @@
-@(dir: Directory, config: util.MoroConfig)
+@(dir: Directory, config: util.MoroConfig, user: Option[User])
 
 @import helper._
 
 @main("Moro: " + dir.name) {
-    @if(config.editorEnabled) {
+    @if(config.editorEnabled || user.isDefined) {
         <div id="addFolderDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addFolderLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -55,6 +55,7 @@
             <li><a href="/dir@{p.href}">@{p.name}</a></li>
         }
             <li class="text-muted">@{dir.name}</li>
+            @userNavBtn(user)
         </ol>
         <div id="alertDiv" class="alertDiv"></div>
         <div class="page-header">
@@ -62,7 +63,7 @@
         </div>
         <div class="row">
             <div class="col-md-8">
-                @if(config.editorEnabled) {
+                @if(config.editorEnabled || user.isDefined) {
                     <div class="btn-group">
                         <a data-toggle="modal" href="#addFolderDialog" class="btn btn-default">
                             <i class="fa fa-folder-o fa-1x"></i>
@@ -105,7 +106,7 @@
                 <i class="fa fa-folder-o fa-1x fa-fw"></i>
                 <span class="badge">@{c.badgeCount}</span>
                 <a href="/dir@{c.href}">@{c.name}</a>
-                @if(config.editorEnabled) {
+                @if(config.editorEnabled || user.isDefined) {
                   <span onclick="removeFolder('@{c.name}')"><i class="fa fa-trash-o text-muted fa-fw"></i></span>
                 }
             </li>
@@ -117,7 +118,7 @@
                 <i class="fa fa-file-o fa-1x fa-fw"></i>
                 <a href="/doc/static@{f.href}" class="text-primary" target="_newtab">@{f.title}</a>
                 <span class="text-muted">@{f.name}</span>
-                @if(config.editorEnabled) {
+                @if(config.editorEnabled || user.isDefined) {
                   <a href="/doc/editor@{f.href}" target="_newtab"><i class="fa fa-pencil"></i></a>
                   <span onclick="removeNotebook('@{f.name}')"><i class="fa fa-trash-o text-muted fa-fw"></i></span>
                 }

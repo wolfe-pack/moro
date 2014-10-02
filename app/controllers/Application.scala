@@ -12,8 +12,9 @@ object Application extends Controller with securesocial.core.SecureSocial {
   val config = new MoroConfig(Play.current.configuration.getConfig("moro").get)
   val allCompilers = new AllCompilers(config)
 
-  def index = Action {
-    Redirect(routes.Application.dir(""))
+  def index = UserAwareAction {
+    implicit request =>
+      Redirect(routes.Application.dir(""))
     //Ok(views.html.index())
   }
 
@@ -31,17 +32,18 @@ object Application extends Controller with securesocial.core.SecureSocial {
   }
 
   def editor(file: String) =
-    if(config.editorEnabled) {
+    if (config.editorEnabled) {
       Action {
         import Document._
         println(config.docRoot + file + ".json")
         Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers))
       }
-    } else SecuredAction { implicit request =>
-      import Document._
-      println(request.user)
-      println(config.docRoot + file + ".json")
-      Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers))
+    } else SecuredAction {
+      implicit request =>
+        import Document._
+        println(request.user)
+        println(config.docRoot + file + ".json")
+        Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers))
     }
 
   // adapted from http://thomasheuring.wordpress.com/2013/01/29/scala-playframework-2-04-get-pages-dynamically/
@@ -105,11 +107,12 @@ object Application extends Controller with securesocial.core.SecureSocial {
       }
   }
 
-  def dir(path: String) = Action {
-    println("path: " + path)
-    val dir = new Directory(path, config.docRoot)
-    println(dir)
-    Ok(views.html.dir(dir, config))
+  def dir(path: String) = UserAwareAction {
+    implicit request =>
+      println("path: " + path)
+      val dir = new Directory(path, config.docRoot)
+      println(dir)
+      Ok(views.html.dir(dir, config, request.user.map(_.asInstanceOf[MoroUser])))
   }
 
   def dirAddFile(path: String) = Action {
