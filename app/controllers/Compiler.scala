@@ -273,7 +273,7 @@ class SectionCompiler extends Compiler with TextInputEditor {
 
   def compile(input: Input): Result = {
     assert(input.outputFormat equalsIgnoreCase outputFormat)
-    Result("<h5 id=\"%s\"><small>#%s</small></h5>" format(input.code, input.code), outputFormat)
+    Result("<h5 id=\"%s\" class=\"section\"><a href=\"#%s\" class=\"muted\"><small>#%s</small></a></h5>\n<hr/>" format(input.code, input.code, input.code), outputFormat)
   }
 }
 

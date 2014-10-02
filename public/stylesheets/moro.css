@@ -99,7 +99,17 @@ img.displayed {
   font-size: 13px;
   clear:left;
 }
-
+hr {
+  /* border-top: 1px dotted #ddd;
+  color: #fff;
+  background-color: #fff;*/
+  height: 1px;
+  width:100%;
+  margin: 2px;
+}
+h5.section {
+  margin-bottom: 2px;
+}
 /* Sticky footer styles
 -------------------------------------------------- */
 
