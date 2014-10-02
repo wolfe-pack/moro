@@ -152,6 +152,20 @@ trait ACEEditor {
       |            document.getElementById("runCode"+id).click();
       |        }
       |    })
+      |    editor.commands.addCommand({
+      |        name: "addCellBelow",
+      |        bindKey: {win: "Shift-Enter", mac: "Shift-Enter"},
+      |        exec: function(editor) {
+      |            document.getElementById('addBelow' + id).click();
+      |        }
+      |    })
+      |    editor.commands.addCommand({
+      |        name: "deleteCell",
+      |        bindKey: {win: "Shift-Del", mac: "Shift-Del"},
+      |        exec: function(editor) {
+      |            document.getElementById('remove' + id).click();
+      |        }
+      |    })
       |    //heightUpdateFunction(editor, '#editor'+id);
       |    return editor;
       |}
