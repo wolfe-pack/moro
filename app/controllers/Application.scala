@@ -53,11 +53,11 @@ object Application extends Controller {
   }
 
   def editor(file: String) = Action {
-    if(config.editor) {
+    if(config.editorEnabled) {
       import Document._
       println("/public/docs/" + file + ".json")
       Ok(views.html.editor(toDData(load("public/docs/" + file + ".json")), file, allCompilers))
-    } else Forbidden("Editing not allowed.")
+    } else Forbidden("Editing not allowed. Please contact the administrator.")
   }
 
   def staticDoc(file: String) = Action {
