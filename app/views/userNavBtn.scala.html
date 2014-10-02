@@ -1,4 +1,4 @@
-@(user: Option[User])
+@(user: Option[MoroUser])
 
         @if(user.isDefined) {
 <span class="pull-right">Hi, @user.get.firstName! <a href="/logout" role="button" class="btn btn-default btn-xs">Logout</a></span>
