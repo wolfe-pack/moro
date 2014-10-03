@@ -1,0 +1,22 @@
+        .background0 {
+          fill: none;
+        }
+        svg {
+          border: 0px solid #7fa2ff;
+          fill: #ddd;
+        }
+
+        .highlight {
+          fill: #fc0;
+        }
+        path {
+          /*fill: #ddd;*/
+          /*stroke-width: 5px;*/
+        }
+
+        tspan {
+        }
+
+        svg * {
+          text-shadow: none;
+        }
