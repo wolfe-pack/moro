@@ -387,7 +387,9 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
     } catch {
       case e: CompilerException => {
         e.printStackTrace()
-        "<span class=\"label label-danger\">Error on line %d, col %d: %s</span>" format(e.m.head._1.line - 4, e.m.head._1.column - 4, e.m.head._2)
+        //"<span class=\"label label-danger\">Error on line %d, col %d: %s</span>" format(e.m.head._1.line - 4, e.m.head._1.column - 4, e.m.head._2)
+        "<span class=\"label label-danger\">Error on line %d, col %d: %s</span>" format(0, 0, e.m.head._2)
+
       }
     } finally {
       "Compile Error!!"
