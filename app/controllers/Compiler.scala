@@ -339,7 +339,7 @@ class PegdownCompiler extends Compiler with ACEEditor {
 
   def compile(input: Input) = {
     assert(input.outputFormat equalsIgnoreCase outputFormat)
-    val transformer = new PegDownProcessor()
+    val transformer = new PegDownProcessor(org.pegdown.Extensions.FENCED_CODE_BLOCKS)
     Result(transformer.markdownToHtml(input.code), outputFormat)
   }
 }

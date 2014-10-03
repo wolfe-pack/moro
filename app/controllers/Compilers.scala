@@ -24,7 +24,7 @@ class Compilers extends mutable.Traversable[Compiler] {
 class AllCompilers(config: MoroConfig) extends Compilers {
   this += new ScalaServer(config)
   this += new WolfeEvalServer(config)
-  this += new ActuariusCompiler //PegdownCompiler
+  this += new PegdownCompiler
   this += new SectionCompiler
   this += new LatexCompiler
   for (i <- 1 to 5) this += new HeadingCompiler(i)
