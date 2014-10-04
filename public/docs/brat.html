@@ -71,7 +71,11 @@
                         ['T2', 'Person', [[20, 23]]],
                         ['T3', 'Person', [[37, 40]]],
                         ['T4', 'Person', [[50, 61]]],
-                    ]};
+                    ],
+                    sentence_offsets :  [[0, 10], [12, 62]]
+
+                    };
+
 
                 Util.embed(
                     // id of the div element where brat should embed the visualisations
@@ -83,9 +87,9 @@
                     // Array containing locations of the visualisation fonts
 
 [
-    '/assets/javascripts/brat' + '/static/fonts/Astloch-Bold.ttf',
-    '/assets/javascripts/brat' + '/static/fonts/PT_Sans-Caption-Web-Regular.ttf',
-    '/assets/javascripts/brat' + '/static/fonts/Liberation_Sans-Regular.ttf'
+    //'http://localhost:9000/assets/javascripts/brat/static/fonts/Astloch-Bold.ttf',
+    'http://localhost:9000/assets/javascripts/brat/static/fonts/PT_Sans-Caption-Web-Regular.ttf',
+    'http://localhost:9000/assets/javascripts/brat/static/fonts/Liberation_Sans-Regular.ttf'
 ]
 
                     );
