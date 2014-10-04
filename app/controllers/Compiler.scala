@@ -113,7 +113,7 @@ trait ACEEditor {
 
   def initialValue: String = ""
 
-  def aceTheme: String = "chrome"
+  def aceTheme: String = "tomorrow"
 
   def editorJavascript: String =
     """

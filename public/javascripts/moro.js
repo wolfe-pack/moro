@@ -32,6 +32,9 @@ function outputResult(doc, id, result, compilers) {
       }
       if(compilers[doc.cells[id].mode].hideAfterCompile) $('#toggleEditor'+id).click();
       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
+      $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
       /*
       // post compiling work
       switch(doc.cells[id].mode) {

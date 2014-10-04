@@ -110,6 +110,10 @@ hr {
 h5.section {
   margin-bottom: 2px;
 }
+
+.cell pre {
+  padding: 0px;
+}
 /* Sticky footer styles
 -------------------------------------------------- */
 
