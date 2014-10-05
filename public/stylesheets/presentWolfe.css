@@ -47,6 +47,12 @@
   font-style: normal;
 }
 
+.reveal code {
+  color: white;
+  width: 100%;
+  margin-bottom: -5px;
+}
+
 .reveal .string-result {
   margin-left: 40px;
   margin-bottom: 20px;
