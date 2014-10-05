@@ -6,12 +6,14 @@
 /* ACE editor */
 .reveal .ace_editor{
     position: relative !important;
-    margin: auto;
+    /*margin: auto; */
     display:block;
     text-align: left;
     font-family: monospace !important;
     line-height: normal;
-    font-size: 30px;
+    font-size: 22px;
+    margin: 0 0px 5px 20px;
+
     /*border: 1px solid lightgray;*/
 }
 
@@ -54,3 +56,8 @@
   text-shadow: none;
   text-align: left;
 }
+
+.reveal .ace_gutter-layer {
+  width: 42px !important;
+}
+
