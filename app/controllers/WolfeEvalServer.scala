@@ -21,5 +21,12 @@ class WolfeEvalServer(c: MoroConfig) extends ScalaServer(c) {
 class WolfeNoEvalServer(c: MoroConfig) extends WolfeEvalServer(c) {
   override def name: String = "wolfeNoEval"
 
-  override def compile(input: Input): Result = Result("<blockquote>" + "" +"</blockquote>", outputFormat)
+  var activated = false
+
+  override def compile(input: Input): Result =
+    if (activated) super.compile(input)
+    else {
+      activated = true
+      Result("<blockquote>" + "" +"</blockquote>", outputFormat)
+    }
 }
