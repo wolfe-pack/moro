@@ -63,6 +63,9 @@
       @Html(cell.input.code)
     </script>
     }
+    @if(cell.compiler == "raw") {
+      @Html(cell.input.code)
+    }
 }
 <script src="@routes.Assets.at("javascripts/reveal.js/lib/js/head.min.js")"></script>
 <script src="@routes.Assets.at("javascripts/reveal.js/js/reveal.min.js")"></script>

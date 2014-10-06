@@ -415,3 +415,11 @@ class GoogleDocsViewer extends Compiler with TextInputEditor {
       outputFormat)
   }
 }
+
+class RawCompiler extends Compiler with TextInputEditor {
+  override def name: String = "raw"
+
+  override def compile(input: Input): Result = Result(input.code)
+
+  override def fieldLabel: String = "Injected Code"
+}
