@@ -17,3 +17,9 @@ class WolfeEvalServer(c: MoroConfig) extends ScalaServer(c) {
 
   override def editorMode = "scala"
 }
+
+class WolfeNoEvalServer(c: MoroConfig) extends WolfeEvalServer(c) {
+  override def name: String = "wolfeNoEval"
+
+  override def compile(input: Input): Result = Result("<blockquote>" + "" +"</blockquote>", outputFormat)
+}
