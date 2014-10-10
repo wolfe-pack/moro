@@ -162,7 +162,13 @@
                     //{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/highlight/highlight.js")', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
 
                     // MathJax
-                    { src: '@routes.Assets.at("javascripts/reveal.js/plugin/math/math.js")', async: true }
+                    { src: '@routes.Assets.at("javascripts/reveal.js/plugin/math/math.js")', async: true },
+
+                    //{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					//{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+
+					//Notes
+					{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/notes/notes.js")', async: true, condition: function() { return !!document.body.classList; } }
                 ]
             }); }
             , 50);
