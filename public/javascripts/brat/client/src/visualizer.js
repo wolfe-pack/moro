@@ -2651,6 +2651,8 @@ Util.profileStart('finish');
 
         $svg.width(canvasWidth);
         $svg.height(y);
+        $svg.attr("viewBox", "0 0 " + canvasWidth + " " + y);
+        $svg.attr("class","bratsvg")
         $svgDiv.height(y);
 
 Util.profileEnd('finish');
