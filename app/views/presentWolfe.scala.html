@@ -142,6 +142,9 @@
              createStaticCellHTML(id, lastSection, doc, mode, input, compilers);
            }
          }
+         case "raw" => {
+            document.write(cell.input.code)
+         }
          case _ => {
            createStaticCellHTML(id, lastSection, doc, mode, input, compilers);
          }
