@@ -170,17 +170,15 @@
                     { src: '@routes.Assets.at("javascripts/reveal.js/plugin/markdown/markdown.js")', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 
                     // Syntax highlight for <code> elements
-                    //{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/highlight/highlight.js")', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: '@routes.Assets.at("javascripts/reveal.js/plugin/highlight/highlight.js")', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
 
                     // MathJax
                     { src: '@routes.Assets.at("javascripts/reveal.js/plugin/math/math.js")', async: true },
 
-                    // Syntax Highlighting
-                    { src: '@routes.Assets.at("javascripts/reveal.js/plugin/highlight/highlight.js")', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    // Zoom
+					{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/zoom-js/zoom.js")', async: true, condition: function() { return !!document.body.classList; } },
 
-					//{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-
-					//Notes
+					// Notes
 					{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/notes/notes.js")', async: true, condition: function() { return !!document.body.classList; } },
                 ]
             }); }
