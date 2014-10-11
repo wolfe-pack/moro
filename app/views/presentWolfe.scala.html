@@ -131,6 +131,9 @@
        var mode = '@Html(cell.compiler)';
        var input = @Html(cell.inputJson);
        var id = @{cell.id};
+
+
+
        @cell.compiler match {
          case "section" => {
            lastSection = $("section#@{cell.input.code}");
@@ -142,8 +145,13 @@
              createStaticCellHTML(id, lastSection, doc, mode, input, compilers);
            }
          }
+         case "rawOutside" => {
+            var content = input.code.split("\n").join("").split("\t").join("").split("\\\\").join("\\");
+            eval('divSlides.append(\'' + content + '\');');
+         }
          case "raw" => {
-            document.write(cell.input.code)
+            var content = input.code.split("\n").join("").split("\t").join("").split("\\\\").join("\\");
+            eval('lastSection.append(\'' + content + '\');');
          }
          case _ => {
            createStaticCellHTML(id, lastSection, doc, mode, input, compilers);

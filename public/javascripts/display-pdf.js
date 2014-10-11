@@ -36,4 +36,3 @@ PDFJS.getDocument(pathToPDF).then(function(pdf) {
   });
 });
 };
-

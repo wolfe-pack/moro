@@ -32,6 +32,5 @@ class AllCompilers(config: MoroConfig) extends Compilers {
   this += new HTMLCompiler
   this += new ImageURLCompiler
   this += new GoogleDocsViewer
-  this += new RawCompiler
   this.foreach(_.start)
 }
