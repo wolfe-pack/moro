@@ -47,7 +47,10 @@
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/normalize.css")">
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/wolfe.css")">
 
+    <link rel="stylesheet" href="@routes.Assets.at("javascripts/reveal.js/lib/css/zenburn.css")">
 
+
+    <script src="@routes.Assets.at("pdfjs/build/pdf.js")" type="text/javascript"></script>
 </head>
 <body>
 <!-- from reveal.js example -->
@@ -172,11 +175,13 @@
                     // MathJax
                     { src: '@routes.Assets.at("javascripts/reveal.js/plugin/math/math.js")', async: true },
 
-                    //{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    // Syntax Highlighting
+                    { src: '@routes.Assets.at("javascripts/reveal.js/plugin/highlight/highlight.js")', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+
 					//{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
 
 					//Notes
-					{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/notes/notes.js")', async: true, condition: function() { return !!document.body.classList; } }
+					{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/notes/notes.js")', async: true, condition: function() { return !!document.body.classList; } },
                 ]
             }); }
             , 50);
