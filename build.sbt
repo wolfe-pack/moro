@@ -65,7 +65,7 @@ libraryDependencies ++= Seq(
   "eu.henkelmann" % "actuarius_2.10.0" % "0.2.6",
   "org.scala-lang" % "scala-compiler" % "2.10.3",
   "org.sameersingh.htmlgen" % "htmlgen" % "0.2-SNAPSHOT",
-  "org.sameersingh.scalaplot" % "scalaplot" % "0.0.3",
+  "org.sameersingh.scalaplot" % "scalaplot" % "0.1-SNAPSHOT",
   "ml.wolfe" %% "wolfe-core" % "0.4.0-SNAPSHOT",
   "ml.wolfe" %% "wolfe-examples" % "0.4.0-SNAPSHOT",
   "ml.wolfe" %% "wolfe-nlp" % "0.4.0-SNAPSHOT",
