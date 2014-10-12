@@ -125,8 +125,15 @@
                addCellFromJson(doc, format, content, compilers, config);
             }
 
-            $(document).ready(function() {
+            function autoSave() {
+              if(!doc.config.hasOwnProperty('autosave') || doc.config.autosave === 'true') {
+                saveDoc(doc,compilers);
+              }
+              setTimeout(autoSave, 30000)
+            }
 
+            $(document).ready(function() {
+              setTimeout(autoSave, 30000)
 			});
 
             $('#docNameDialog').bind('show', function () {

@@ -22,7 +22,7 @@ case class Document(val name: String, cells: Seq[Cell] = Seq.empty, config: Map[
     "Doc(%s)\n%s" format(name, cells.mkString("\t", "\n\t", "\n"))
   }
 
-  def configJson: String = if(config == null) "{}" else Json.stringify(Json.toJson(config))
+  def configJson: String = if (config == null) "{}" else Json.stringify(Json.toJson(config))
 }
 
 object Document {
@@ -57,8 +57,7 @@ object Document {
   }
 
   def configEntries: Seq[ConfigEntry] = Seq(
-    ConfigEntry("ace_theme", "Ace Theme", "Color theme to use by default in code cells.", "text", "tomorrow"),
-    ConfigEntry("default_viewer", "Default viewer", "Static\tPresent\tWolfe\tWolfePresent", "select", "Static")
+    ConfigEntry("autosave", "Autosave?", "This document will automatically save periodically.", "checkbox", "true")
   )
 
   implicit val ceWrites = Json.writes[ConfigEntry]
