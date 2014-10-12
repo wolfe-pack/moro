@@ -30,6 +30,15 @@ case class Input(code: String, outputFormat: String = OutputFormats.html, extraF
 
 case class Result(result: String, format: String = OutputFormats.html)
 
+/**
+ * A Description of a configuration element
+ * @param key a short string that uniquely defines this element (no spaces etc., should follow HTML id rules)
+ * @param label a short name of the configuration that the user sees
+ * @param description a longer (sentence long) description of the configuration, including value domains, etc.
+ *                    NOTE: for "select" type, this is a tab-separated list of values
+ * @param inputType an HTML input type, such as checkbox, text, password, email, file, ... or "select"
+ * @param defaultValue default value that the configuration should have
+ */
 case class ConfigEntry(key: String, label: String, description: String, inputType: String, defaultValue: String)
 
 /**
@@ -62,7 +71,9 @@ trait Compiler {
   // aggregate all the previous cells as well?
   def aggregatePrevious: Boolean = false
 
-  def configEntries: Seq[ConfigEntry] = Seq(ConfigEntry("fragment", "Fragment", "Animate in reveal or not.", "text", "true"))
+  def configEntries: Seq[ConfigEntry] = Seq(
+    ConfigEntry("fragment", "Fragment", "Animate in reveal or not.", "checkbox", "false")
+  )
 
   implicit val ceWrites = Json.writes[ConfigEntry]
 

@@ -1,3 +1,61 @@
+/***
+ * Utility functions for craeting input groups and getting values from them
+ ***/
+function drawFormGroup(ce, currentValue, inputId) {
+    console.log(inputId);
+    console.log(ce);
+    console.log(currentValue);
+
+    var bodyDiv = '<div class="form-group">';
+    switch(ce.inputType) {
+      case "checkbox":
+            bodyDiv = bodyDiv + '    <label for="'+inputId+'" class="col-sm-3 control-label">' + ce.label + '</label>';
+            bodyDiv = bodyDiv + '    <div class="col-sm-9"><div class="checkbox"><label>';
+            bodyDiv = bodyDiv + '    <input id="'+inputId+'" type="'+ce.inputType+'"';
+            switch(currentValue) {
+              case "true":
+                bodyDiv = bodyDiv + " checked"
+              case "false":
+                // no nothing here
+            }
+            bodyDiv = bodyDiv + '>' + ce.description;
+            bodyDiv = bodyDiv + '    </label></div></div>';
+            break;
+      case "select":
+            var values = ce.description.split("\t");
+            console.log(values);
+            bodyDiv = bodyDiv + '    <label for="'+inputId+'" class="col-sm-3 control-label">' + ce.label + '</label>';
+            bodyDiv = bodyDiv + '    <div class="col-sm-9"><select class="form-control" id="'+inputId+'" value="'+currentValue+'">';
+            for(var idx in values) {
+              var value = values[idx];
+              bodyDiv = bodyDiv + '    <option value="'+value+'"';
+              if(value == currentValue)
+                bodyDiv = bodyDiv + ' selected';
+              bodyDiv = bodyDiv + '>'+ value +'</option>';
+            }
+            bodyDiv = bodyDiv + '    </div>';
+            break;
+      default:
+            bodyDiv = bodyDiv + '    <label for="'+inputId+'" class="col-sm-3 control-label">' + ce.label + '</label>';
+            bodyDiv = bodyDiv + '    <div class="col-sm-9"><input id="'+inputId+'" type="'+ce.inputType+'" value="'+currentValue+'">';
+            bodyDiv = bodyDiv + '    <span class="help-block">' + ce.description + '</span></div>';
+    }
+    bodyDiv = bodyDiv + '</div>';
+    return bodyDiv;
+}
+
+function getValueFromInput(id, inputType) {
+  switch(inputType) {
+    case "checkbox":
+      return $(id)[0].checked.toString();
+    default:
+      return $(id)[0].value;
+  }
+}
+
+/***
+ * Cell configuration
+ ***/
 function cellConfigClicked(id, doc, compilers) {
   fillCellConfigDialog(id, doc, compilers)
   $('#cellConfigDialog').modal('show')
@@ -23,11 +81,7 @@ function fillCellConfigDialog(id, doc, compilers) {
     if(Object.prototype.hasOwnProperty.call(doc.cells[id].config, ce.key))
       currentValue = doc.cells[id].config[ce.key];
     var inputId = 'cellConfigInput_'+id+'_'+ce.key;
-    bodyDiv = bodyDiv + '<div class="form-group">';
-    bodyDiv = bodyDiv + '    <label for="'+inputId+'" class="col-sm-2 control-label">' + ce.label + '</label>';
-    bodyDiv = bodyDiv + '    <div class="col-sm-10"><input id="'+inputId+'" type="'+ce.inputType+'" class="form-control" value="'+currentValue+'">';
-    bodyDiv = bodyDiv + '    <span class="help-block">' + ce.description + '</span></div>';
-    bodyDiv = bodyDiv + '</div>';
+    bodyDiv = bodyDiv + drawFormGroup(ce, currentValue, inputId);
   }
   bodyDiv = bodyDiv + '  </form>' + '</div>';
   div.append(bodyDiv);
@@ -44,8 +98,8 @@ function cellConfigOkClicked(id, doc) {
   var compiler = compilers[doc.cells[id].mode];
   for(var cidx in compiler.config) {
       var ce = compiler.config[cidx];
-      var inputId = 'cellConfigInput_'+id+'_'+ce.key;
-      var configValue = $('#'+inputId)[0].value;
+      var inputId = '#cellConfigInput_'+id+'_'+ce.key;
+      var configValue = getValueFromInput(inputId, ce.inputType);
       if(configValue != ce.defaultValue)
         doc.cells[id].config[ce.key] = configValue;
   }
@@ -78,11 +132,8 @@ function fillDocConfigDialog(doc) {
     if(Object.prototype.hasOwnProperty.call(doc.config, ce.key))
       currentValue = doc.config[ce.key];
     var inputId = 'docConfigInput_'+ce.key;
-    bodyDiv = bodyDiv + '<div class="form-group">';
-    bodyDiv = bodyDiv + '    <label for="'+inputId+'" class="col-sm-2 control-label">' + ce.label + '</label>';
-    bodyDiv = bodyDiv + '    <div class="col-sm-10"><input id="'+inputId+'" type="'+ce.inputType+'" class="form-control" value="'+currentValue+'">';
-    bodyDiv = bodyDiv + '    <span class="help-block">' + ce.description + '</span></div>';
-    bodyDiv = bodyDiv + '</div>';
+    var formControl = drawFormGroup(ce, currentValue, inputId);
+    bodyDiv = bodyDiv + formControl;
   }
   bodyDiv = bodyDiv + '  </form>' + '</div>';
   div.append(bodyDiv);
@@ -98,8 +149,8 @@ function docConfigOkClicked(doc) {
   doc.config = {}
   for(var cidx in doc.configEntries) {
       var ce = doc.configEntries[cidx];
-      var inputId = 'docConfigInput_'+ce.key;
-      var configValue = $('#'+inputId)[0].value;
+      var inputId = '#docConfigInput_'+ce.key;
+      var configValue = getValueFromInput(inputId, ce.inputType);
       if(configValue != ce.defaultValue)
         doc.config[ce.key] = configValue;
   }
