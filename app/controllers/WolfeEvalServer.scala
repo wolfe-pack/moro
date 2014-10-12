@@ -22,6 +22,6 @@ class WolfeNoEvalServer(c: MoroConfig) extends WolfeEvalServer(c) {
   override def name: String = "wolfeNoEval"
 
   override def compile(input: Input): Result =
-    Result("<blockquote>" + "" +"</blockquote>", outputFormat)
+    Result("<blockquote>" + "" +"</blockquote>")
 
 }

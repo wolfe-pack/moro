@@ -84,6 +84,8 @@ function runCode(doc, id, compilers) {
     }
     input.code = prefixInput + input.code;
   }
+  // convert config as well
+  input.extraFields = doc.cells[id].config;
   compileCode(input,
       function(x) {
         outputResult(doc, id, x, compilers);
@@ -106,6 +108,7 @@ function newCellDiv(id) {
    '    <div class="btn-group btn-group-xs">' +
    '      <!--button id="moveAbove' + id + '" type="button" class="btn btn-default" onclick="moveCellAbove(doc,' + id + ',compilers)"><i class="fa fa-chevron-up"></i></button-->' +
    '      <button id="addAbove' + id + '" type="button" class="btn btn-default" onclick="addCellAbove(doc,' + id + ',compilers)"><i class="fa fa-sort-up"></i><i class="fa fa-plus"></i></button>' +
+   '      <button id="toggleCellConfig' + id + '" type="button" class="btn btn-default edit-btn" onclick="cellConfigClicked(' + id + ', doc, compilers)"><i class="fa fa-cog fa-fw"></i></button>' +
    '      <button id="toggleEditor' + id + '" type="button" class="btn btn-default edit-btn" onclick="toggleEditor(doc,' + id + ')"><i class="fa fa-pencil fa-fw"></i></button>' +
    '      <button id="remove' + id + '" type="button" class="btn btn-default" onclick="removeCell(doc,' + id + ')"><span class="fa fa-trash-o"></span></button>' +
    '      <button id="addBelow' + id + '" type="button" class="btn btn-default" onclick="addCellBelow(doc,' + id + ',compilers)"><i class="fa fa-plus"></i><i class="fa fa-sort-down"></i></button>' +
@@ -129,6 +132,7 @@ function makeCellFunctional(doc,id,compiler,compilers,initialContent) {
     doc.cells[id].id = id;
     doc.cells[id].mode = compiler;
     doc.cells[id].renderDisplay = $('#renderDisplay' + id);
+    doc.cells[id].config = {};
 
     doc.cells[id].editor = compilers[compiler].editor(id,initialContent);
     doc.cells[id].showEditor = true;
@@ -234,7 +238,8 @@ function saveDoc(doc, compilers) {
 }
 
 function runAll(doc, compilers) {
-  for (var id in doc.ids){
+  for (var idx in doc.ids){
+    var id = doc.ids[idx];
     if (doc.cells.hasOwnProperty(id)) {
       runCode(doc, id, compilers);
     }

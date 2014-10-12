@@ -41,6 +41,13 @@
             </div>
         </div>
     </div>
+    <div id="cellConfigDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cellConfigLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" id="cellConfigDialogContent">
+                <!-- To be filled during runtime -->
+            </div>
+        </div>
+    </div>
     <div class="row container topbar">
             <div id="alertDiv" class="alertDiv"></div>
         <!--div class="col-md-2"-->
@@ -93,6 +100,7 @@
                compilers.@{c.name}.editorToInput = @Html(c.editorToInput);
                compilers.@{c.name}.removeEditor = @Html(c.removeEditorJavascript);
                compilers.@{c.name}.aggregate = @{c.aggregatePrevious};
+               compilers.@{c.name}.config = @Html(c.configEntriesJson);
             }
 
             /* DOCUMENT OBJECT */

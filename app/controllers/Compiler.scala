@@ -1,5 +1,7 @@
 package controllers
 
+import play.api.libs.json.Json
+
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.{IMain, ILoop}
 import java.io.File
@@ -24,6 +26,8 @@ import OutputFormats._
 case class Input(code: String, outputFormat: String = OutputFormats.html, extraFields: Map[String, String] = Map.empty)
 
 case class Result(result: String, format: String = OutputFormats.html)
+
+case class ConfigEntry(key: String, label: String, description: String, inputType: String, defaultValue: String)
 
 /**
  * A Moro Compiler
@@ -53,6 +57,11 @@ trait Compiler {
   // aggregate all the previous cells as well?
   def aggregatePrevious: Boolean = false
 
+  def configEntries: Seq[ConfigEntry] = Seq(ConfigEntry("fragment", "Fragment", "Animate in reveal or not.", "text", "true"))
+
+  implicit val ceWrites = Json.writes[ConfigEntry]
+  def configEntriesJson: String = Json.stringify(Json.toJson(configEntries))
+
   def start = {}
 }
 
@@ -61,7 +70,7 @@ trait Compiler {
  */
 trait NoEditor {
   this: Compiler =>
-  def outputFormat: OutputFormats.Value = OutputFormats.html
+  //def outputFormat: OutputFormats.Value = OutputFormats.html
   def description: String
   def editorJavascript: String =
     """
@@ -95,10 +104,10 @@ trait NoEditor {
       |function (doc, id) {
       |  input = {}
       |  input.code = '';
-      |  input.outputFormat = "%s";
+      |  input.outputFormat = "html";
       |  return input;
       |};
-    """.stripMargin format (outputFormat)
+    """.stripMargin
 
 }
 
@@ -109,7 +118,7 @@ trait ACEEditor {
   this: Compiler =>
   def editorMode: String = name
 
-  def outputFormat: OutputFormats.Value = OutputFormats.html
+  // def outputFormat: OutputFormats.Value = OutputFormats.html
 
   def initialValue: String = ""
 
@@ -191,10 +200,10 @@ trait ACEEditor {
       |function (doc, id) {
       |  input = {}
       |  input.code = doc.cells[id].editor.getSession().getValue();
-      |  input.outputFormat = "%s";
+      |  input.outputFormat = "html";
       |  return input;
       |};
-    """.stripMargin format (outputFormat)
+    """.stripMargin
 }
 
 /**
@@ -202,7 +211,7 @@ trait ACEEditor {
  */
 trait TextInputEditor {
   this: Compiler =>
-  def outputFormat: OutputFormats.Value = OutputFormats.html
+  // def outputFormat: OutputFormats.Value = OutputFormats.html
 
   def fieldLabel: String
 
@@ -241,10 +250,10 @@ trait TextInputEditor {
       |function (doc, id) {
       |  input = {}
       |  input.code = doc.cells[id].editor.val();
-      |  input.outputFormat = "%s";
+      |  input.outputFormat = "html";
       |  return input;
       |};
-    """.stripMargin format (outputFormat)
+    """.stripMargin
 }
 
 /* --------------------------------------------------
@@ -258,8 +267,8 @@ class HTMLCompiler extends Compiler with ACEEditor {
   override def toolbarIcon: String = "&lt;html&gt;"
 
   def compile(input: Input): Result = {
-    assert(input.outputFormat equalsIgnoreCase outputFormat)
-    Result(input.code, outputFormat)
+    //assert(input.outputFormat equalsIgnoreCase outputFormat)
+    Result(input.code)
   }
 }
 
@@ -272,8 +281,8 @@ class HeadingCompiler(val level: Int) extends Compiler with TextInputEditor {
   override def toolbarIcon: String = "<span class=\"glyphicon glyphicon-header\">%d</span>" format (level)
 
   def compile(input: Input): Result = {
-    assert(input.outputFormat equalsIgnoreCase outputFormat)
-    Result("<h%d>%s</h%d>" format(level, input.code, level), outputFormat)
+    //assert(input.outputFormat equalsIgnoreCase outputFormat)
+    Result("<h%d>%s</h%d>" format(level, input.code, level))
   }
 }
 
@@ -286,8 +295,8 @@ class SectionCompiler extends Compiler with TextInputEditor {
   override def toolbarIcon: String = "&lt;#&gt;"
 
   def compile(input: Input): Result = {
-    assert(input.outputFormat equalsIgnoreCase outputFormat)
-    Result("<h5 id=\"%s\" class=\"section\"><a href=\"#%s\" class=\"muted\"><small>#%s</small></a></h5>\n<hr/>" format(input.code, input.code, input.code), outputFormat)
+    //assert(input.outputFormat equalsIgnoreCase outputFormat)
+    Result("<h5 id=\"%s\" class=\"section\"><a href=\"#%s\" class=\"muted\"><small>#%s</small></a></h5>\n<hr/>" format(input.code, input.code, input.code))
   }
 }
 
@@ -300,8 +309,8 @@ class ImageURLCompiler extends Compiler with TextInputEditor {
   override def toolbarIcon: String = "<i class=\"fa fa-picture-o\"></i>"
 
   def compile(input: Input): Result = {
-    assert(input.outputFormat equalsIgnoreCase outputFormat)
-    Result("<img src=\"%s\" class=\"img-thumbnail displayed\" />" format (input.code), outputFormat)
+    //assert(input.outputFormat equalsIgnoreCase outputFormat)
+    Result("<img src=\"%s\" class=\"img-thumbnail displayed\" />" format (input.code))
   }
 }
 
@@ -320,8 +329,8 @@ class ActuariusCompiler extends Compiler with ACEEditor {
   def compile(input: Input) = {
     val transformer = new ActuariusTransformer()
 
-    assert(input.outputFormat equalsIgnoreCase outputFormat)
-    Result(transformer(input.code), outputFormat)
+    //assert(input.outputFormat equalsIgnoreCase outputFormat)
+    Result(transformer(input.code))
   }
 }
 
@@ -338,9 +347,9 @@ class PegdownCompiler extends Compiler with ACEEditor {
   override def toolbarIcon: String = "<span class=\"octicon octicon-markdown\" style=\"font-size: 16px\"></span>" //"&Mu;d"
 
   def compile(input: Input) = {
-    assert(input.outputFormat equalsIgnoreCase outputFormat)
+    //assert(input.outputFormat equalsIgnoreCase outputFormat)
     val transformer = new PegDownProcessor(org.pegdown.Extensions.FENCED_CODE_BLOCKS)
-    Result(transformer.markdownToHtml(input.code), outputFormat)
+    Result(transformer.markdownToHtml(input.code))
   }
 }
 
@@ -351,8 +360,8 @@ class LatexCompiler extends Compiler with ACEEditor {
   override def toolbarIcon: String = "<i class=\"fa fa-superscript\"></i>"
 
   def compile(input: Input) = {
-    assert(input.outputFormat equalsIgnoreCase outputFormat)
-    Result("$$" + input.code + "$$", outputFormat)
+    //assert(input.outputFormat equalsIgnoreCase outputFormat)
+    Result("$$" + input.code + "$$")
   }
 
 }
@@ -372,13 +381,13 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
   // aggregate all the previous cells as well?
   override val aggregatePrevious: Boolean = config.map(c => c.getBoolean("aggregate").getOrElse(false)).getOrElse(false)
 
-  override def outputFormat: OutputFormats.Value = OutputFormats.string
+  //override def outputFormat: OutputFormats.Value = OutputFormats.string
 
   // whether to hide the editor after compilation or not (essentially replacing editor with the output)
   override def hideAfterCompile: Boolean = false
 
   def compile(input: Input) = {
-    assert(input.outputFormat equalsIgnoreCase outputFormat)
+    //assert(input.outputFormat equalsIgnoreCase outputFormat)
     val code = input.code;
     val eval = new Evaluator(None, classPath, imports, classesForJarPath)
     println("compiling code : " + code)
@@ -395,7 +404,7 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
       "Compile Error!!"
     }
     println("result: " + result)
-    Result("<blockquote>" + result.toString+"</blockquote>", outputFormat)
+    Result("<blockquote>" + result.toString+"</blockquote>")
   }
 }
 
@@ -409,10 +418,9 @@ class GoogleDocsViewer extends Compiler with TextInputEditor {
   override def toolbarIcon: String = "<i class=\"fa fa-eye\"></i>"
 
   def compile(input: Input) = {
-    assert(input.outputFormat equalsIgnoreCase outputFormat)
+    //assert(input.outputFormat equalsIgnoreCase outputFormat)
     Result(
-      "<iframe src=\"http://docs.google.com/viewer?url=" + input.code + "&embedded=true\" style=\"width:800px; height:600px;\" frameborder=\"0\"></iframe>",
-      outputFormat)
+      "<iframe src=\"http://docs.google.com/viewer?url=" + input.code + "&embedded=true\" style=\"width:800px; height:600px;\" frameborder=\"0\"></iframe>")
   }
 }
 
