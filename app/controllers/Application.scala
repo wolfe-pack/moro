@@ -25,7 +25,7 @@ object Application extends Controller with securesocial.core.SecureSocial {
           request.body.asJson.map {
             json =>
               val input = JacksonWrapper.deserialize[Input](json.toString())
-              Ok(JacksonWrapper.serialize(compiler.compile(input)))
+              Ok(JacksonWrapper.serialize(compiler.process(input)))
           }.getOrElse {
             BadRequest("Expecting Json data")
           })

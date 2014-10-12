@@ -2,6 +2,7 @@ package controllers
 
 import play.api.libs.json.Json
 
+import scala.collection.mutable
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.{IMain, ILoop}
 import java.io.File
@@ -48,6 +49,8 @@ trait Compiler {
   // code that compiles an input to output, in Scala
   def compile(input: Input): Result
 
+  def process(input: Input): Result = compile(input)
+
   // javascript that extracts the code from the editor and creates a default input
   def editorToInput: String
 
@@ -60,6 +63,7 @@ trait Compiler {
   def configEntries: Seq[ConfigEntry] = Seq(ConfigEntry("fragment", "Fragment", "Animate in reveal or not.", "text", "true"))
 
   implicit val ceWrites = Json.writes[ConfigEntry]
+
   def configEntriesJson: String = Json.stringify(Json.toJson(configEntries))
 
   def start = {}
@@ -72,6 +76,7 @@ trait NoEditor {
   this: Compiler =>
   //def outputFormat: OutputFormats.Value = OutputFormats.html
   def description: String
+
   def editorJavascript: String =
     """
       |function(id,content) {
@@ -88,7 +93,7 @@ trait NoEditor {
       |
       |    return $("#editorInput"+id);
       |}
-    """.stripMargin format (description, description)
+    """.stripMargin format(description, description)
 
   // code to construct the editor for a cell of this type
   def removeEditorJavascript: String =
@@ -178,7 +183,7 @@ trait ACEEditor {
       |    //heightUpdateFunction(editor, '#editor'+id);
       |    return editor;
       |}
-    """.stripMargin format (aceTheme, editorMode, initialValue)
+    """.stripMargin format(aceTheme, editorMode, initialValue)
 
   // code to construct the editor for a cell of this type
   def removeEditorJavascript: String =
@@ -234,7 +239,7 @@ trait TextInputEditor {
       |
       |    return $("#editorInput"+id);
       |}
-    """.stripMargin format (initialValue, fieldLabel, initialValue)
+    """.stripMargin format(initialValue, fieldLabel, initialValue)
 
   // code to construct the editor for a cell of this type
   def removeEditorJavascript: String =
@@ -404,7 +409,37 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
       "Compile Error!!"
     }
     println("result: " + result)
-    Result("<blockquote>" + result.toString+"</blockquote>")
+    Result("<blockquote>" + result.toString + "</blockquote>")
+  }
+}
+
+trait Caching extends Compiler {
+  def maxCacheSize = 10
+
+  type CacheEntry = Input
+
+  val _cache = new mutable.HashMap[CacheEntry, Result]
+  val _queue = new mutable.Queue[CacheEntry]()
+
+  override def process(input: Input): Result = {
+    println("testing: " + input)
+    if (_cache.contains(input)) {
+      println("found: " + _cache(input))
+      _cache(input)
+    } else {
+      println("not found..")
+      val result = super.process(input)
+      _cache(input) = result
+      _queue += input
+      println("cache size after adding.. " + _cache.size)
+      if (_cache.size > maxCacheSize) {
+        // get rid of the oldest input
+        val deleted = _queue.dequeue()
+        _cache.remove(deleted)
+        println("too big, removing.. " + deleted)
+      }
+      result
+    }
   }
 }
 
