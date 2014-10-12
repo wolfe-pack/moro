@@ -73,6 +73,7 @@ function runCode(doc, id, compilers) {
   var mode = doc.cells[id].mode;
   var compiler = compilers[mode];
   var input = compiler.editorToInput(doc, id);
+  input.extraFields = doc.cells[id].config;
   if(compiler.aggregate) {
     var prefixInput = "";
     for(var midx in doc.ids) {
@@ -127,12 +128,12 @@ function newCellDiv(id) {
    '</div>'
 }
 
-function makeCellFunctional(doc,id,compiler,compilers,initialContent) {
+function makeCellFunctional(doc,id,compiler,compilers,initialContent,config) {
     doc.cells[id] = new Object();
     doc.cells[id].id = id;
     doc.cells[id].mode = compiler;
     doc.cells[id].renderDisplay = $('#renderDisplay' + id);
-    doc.cells[id].config = {};
+    doc.cells[id].config = config;
 
     doc.cells[id].editor = compilers[compiler].editor(id,initialContent);
     doc.cells[id].showEditor = true;
@@ -151,10 +152,10 @@ function makeCellFunctional(doc,id,compiler,compilers,initialContent) {
     }
 }
 
-function addCellFromJson(doc,format,content,compilers) {
+function addCellFromJson(doc,format,content,compilers,config) {
   $( "#cells" ).append(newCellDiv(doc.numCells));
   doc.ids.push(doc.numCells);
-  makeCellFunctional(doc,doc.numCells,format,compilers,content);
+  makeCellFunctional(doc,doc.numCells,format,compilers,content, config);
   //doc.cells[doc.numCells].editor.getSession().setValue(content);
   $('#modeForm'+ doc.numCells +' label input[value='+ format +']').parent().click()
   //runCode(doc, doc.numCells, compilers);
@@ -164,7 +165,7 @@ function addCellFromJson(doc,format,content,compilers) {
 function addCell(doc,compilers) {
   $( "#cells" ).append(newCellDiv(doc.numCells));
   doc.ids.push(doc.numCells);
-  makeCellFunctional(doc,doc.numCells, "scala",compilers,"");
+  makeCellFunctional(doc,doc.numCells, "scala",compilers,"",{});
   doc.numCells += 1;
 }
 
@@ -172,7 +173,7 @@ function addCellAbove(doc,id,compilers) {
   console.log("TODO: adding above " + id);
   $( "#cell"+id ).before(newCellDiv(doc.numCells));
   doc.ids.splice(doc.ids.indexOf(id),0,doc.numCells);
-  makeCellFunctional(doc,doc.numCells, "scala",compilers,"");
+  makeCellFunctional(doc,doc.numCells, "scala",compilers,"",{});
   doc.numCells += 1;
 }
 
@@ -180,7 +181,7 @@ function addCellBelow(doc,id,compilers) {
   console.log("TODO: adding below " + id);
   $( "#cell"+id ).after(newCellDiv(doc.numCells));
   doc.ids.splice(doc.ids.indexOf(id)+1,0,doc.numCells);
-  makeCellFunctional(doc,doc.numCells, "scala",compilers,"");
+  makeCellFunctional(doc,doc.numCells, "scala",compilers,"",{});
   doc.numCells += 1;
 }
 
@@ -188,7 +189,7 @@ function moveCellAbove(doc,id,compilers) {
   console.log("TODO: move cell up " + id);
   //$( "#cell"+id ).before(newCellDiv(doc.numCells));
   //doc.ids.splice(doc.ids.indexOf(id),0,doc.numCells);
-  //makeCellFunctional(doc,doc.numCells, "scala",compilers);
+  //makeCellFunctional(doc,doc.numCells, "scala",compilers,{});
   //doc.numCells += 1;
 }
 
@@ -196,7 +197,7 @@ function moveCellBelow(doc,id,compilers) {
   console.log("TODO: move cell down " + id);
   //$( "#cell"+id ).after(newCellDiv(doc.numCells));
   //doc.ids.splice(doc.ids.indexOf(id)+1,0,doc.numCells);
-  //makeCellFunctional(doc,doc.numCells, "scala",compilers);
+  //makeCellFunctional(doc,doc.numCells, "scala",compilers,{});
   //doc.numCells += 1;
 }
 

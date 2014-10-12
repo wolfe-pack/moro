@@ -3,6 +3,7 @@ function cellToJson(cell, compilers) {
   json.id = cell.id;
   json.compiler = cell.mode;
   json.input = compilers[cell.mode].editorToInput(doc, cell.id);
+  json.input.extraFields = cell.config;
   /*
   json.extra = new Object();
   switch(cell.mode) {
@@ -30,6 +31,7 @@ function docToJson(doc, compilers) {
       returnDoc.cells.push(cellToJson(doc.cells[id], compilers));
     }
   }
+  returnDoc.config = doc.config;
   return returnDoc;
 }
 
@@ -39,5 +41,6 @@ function newDoc(name) {
     doc.name = name;
     doc.cells = new Object();
     doc.ids = new Array();
+    doc.config = {};
     return doc;
 }

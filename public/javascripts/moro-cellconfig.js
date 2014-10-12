@@ -25,7 +25,7 @@ function fillCellConfigDialog(id, doc, compilers) {
     var inputId = 'cellConfigInput_'+id+'_'+ce.key;
     bodyDiv = bodyDiv + '<div class="form-group">';
     bodyDiv = bodyDiv + '    <label for="'+inputId+'" class="col-sm-2 control-label">' + ce.label + '</label>';
-    bodyDiv = bodyDiv + '    <div class="col-sm-10"><input id="'+inputId+'" type="'+ce.inputType+'" class="form-control"/ value="'+currentValue+'">';
+    bodyDiv = bodyDiv + '    <div class="col-sm-10"><input id="'+inputId+'" type="'+ce.inputType+'" class="form-control" value="'+currentValue+'">';
     bodyDiv = bodyDiv + '    <span class="help-block">' + ce.description + '</span></div>';
     bodyDiv = bodyDiv + '</div>';
   }
@@ -48,7 +48,60 @@ function cellConfigOkClicked(id, doc) {
       var configValue = $('#'+inputId)[0].value;
       if(configValue != ce.defaultValue)
         doc.cells[id].config[ce.key] = configValue;
-      else doc.cells[id].config[ce.key];
   }
   $('#cellConfigDialog').modal('hide');
+}
+/***
+ * Document configuration
+ ***/
+function docConfigClicked(doc) {
+  fillDocConfigDialog(doc)
+  $('#docConfigDialog').modal('show')
+}
+
+function fillDocConfigDialog(doc) {
+  var docConfigId = "#docConfigDialogContent"
+  var div = $(docConfigId)
+  $(docConfigId).empty()
+  var headerDiv =
+  '<div class="modal-header">' +
+  '    <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>' +
+  '    <h3 class="modal-title">Document Configuration</h3>' +
+  '</div>';
+  div.append(headerDiv);
+  var bodyDiv =
+    '<div class="modal-body">' +
+    '  <form class="form-horizontal" role="form">';
+  for(var cidx in doc.configEntries) {
+    var ce = doc.configEntries[cidx];
+    var currentValue = ce.defaultValue;
+    if(Object.prototype.hasOwnProperty.call(doc.config, ce.key))
+      currentValue = doc.config[ce.key];
+    var inputId = 'docConfigInput_'+ce.key;
+    bodyDiv = bodyDiv + '<div class="form-group">';
+    bodyDiv = bodyDiv + '    <label for="'+inputId+'" class="col-sm-2 control-label">' + ce.label + '</label>';
+    bodyDiv = bodyDiv + '    <div class="col-sm-10"><input id="'+inputId+'" type="'+ce.inputType+'" class="form-control" value="'+currentValue+'">';
+    bodyDiv = bodyDiv + '    <span class="help-block">' + ce.description + '</span></div>';
+    bodyDiv = bodyDiv + '</div>';
+  }
+  bodyDiv = bodyDiv + '  </form>' + '</div>';
+  div.append(bodyDiv);
+  var footerDiv =
+    '<div class="modal-footer">' +
+    '    <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>' +
+    '    <a href="#" class="btn btn-primary" onclick="docConfigOkClicked(doc);">OK</a>' +
+    '</div>';
+  div.append(footerDiv);
+}
+
+function docConfigOkClicked(doc) {
+  doc.config = {}
+  for(var cidx in doc.configEntries) {
+      var ce = doc.configEntries[cidx];
+      var inputId = 'docConfigInput_'+ce.key;
+      var configValue = $('#'+inputId)[0].value;
+      if(configValue != ce.defaultValue)
+        doc.config[ce.key] = configValue;
+  }
+  $('#docConfigDialog').modal('hide');
 }

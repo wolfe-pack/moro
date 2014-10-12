@@ -24,7 +24,9 @@ object OutputFormats extends Enumeration {
 
 import OutputFormats._
 
-case class Input(code: String, outputFormat: String = OutputFormats.html, extraFields: Map[String, String] = Map.empty)
+case class Input(code: String, outputFormat: String = OutputFormats.html, extraFields: Map[String, String] = Map.empty) {
+  def configJson = if(extraFields == null) "{}" else Json.stringify(Json.toJson(extraFields))
+}
 
 case class Result(result: String, format: String = OutputFormats.html)
 
