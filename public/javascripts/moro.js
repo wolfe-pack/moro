@@ -75,10 +75,10 @@ function runCode(doc, id, compilers) {
   var input = compiler.editorToInput(doc, id);
   input.extraFields = doc.cells[id].config;
   var aggregateCell = true;
-  if(input.extraFields.hasOwnProperty('aggregate'))
+  if(input.extraFields != null && input.extraFields.hasOwnProperty('aggregate'))
     aggregateCell = input.extraFields.aggregate === 'true';
   var aggregateScope = "_default";
-  if(input.extraFields.hasOwnProperty('scope'))
+  if(input.extraFields != null && input.extraFields.hasOwnProperty('scope'))
     aggregateScope = input.extraFields.scope;
   if(compiler.aggregate && aggregateCell) {
     var prefixConfig = {};
@@ -92,7 +92,6 @@ function runCode(doc, id, compilers) {
         if(id == mid) break;
         // config
         for(var ck in doc.cells[mid].config) {
-          console.log(mid + " : " + ck);
           if(prefixConfig.hasOwnProperty(ck) && prefixConfig[ck] != doc.cells[mid].config[ck]) {
             console.log("Replacing config " + ck + " = " + prefixConfig[ck] + " with " + doc.cells[mid].config[ck])
           }
@@ -103,7 +102,6 @@ function runCode(doc, id, compilers) {
       }
     }
     for(var ck in prefixConfig) {
-      console.log("prefix : " + ck);
       if(input.extraFields.hasOwnProperty(ck) && prefixConfig[ck] != input.extraFields[ck]) {
         console.log("Replacing config " + ck + " = " + input.extraFields[ck] + " with " + prefixConfig[ck])
       }
