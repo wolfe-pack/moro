@@ -74,19 +74,43 @@ function runCode(doc, id, compilers) {
   var compiler = compilers[mode];
   var input = compiler.editorToInput(doc, id);
   input.extraFields = doc.cells[id].config;
-  if(compiler.aggregate) {
+  var aggregateCell = true;
+  if(input.extraFields.hasOwnProperty('aggregate'))
+    aggregateCell = input.extraFields.aggregate === 'true';
+  var aggregateScope = "_default";
+  if(input.extraFields.hasOwnProperty('scope'))
+    aggregateScope = input.extraFields.scope;
+  if(compiler.aggregate && aggregateCell) {
+    var prefixConfig = {};
     var prefixInput = "";
     for(var midx in doc.ids) {
       var mid = doc.ids[midx];
-      if(doc.cells[mid].mode == mode) {
+      var scope = "_default"
+      if(doc.cells[mid].config.hasOwnProperty('scope'))
+        scope = doc.cells[mid].config.scope;
+      if(doc.cells[mid].mode === mode && aggregateScope === scope) {
         if(id == mid) break;
+        // config
+        for(var ck in doc.cells[mid].config) {
+          console.log(mid + " : " + ck);
+          if(prefixConfig.hasOwnProperty(ck) && prefixConfig[ck] != doc.cells[mid].config[ck]) {
+            console.log("Replacing config " + ck + " = " + prefixConfig[ck] + " with " + doc.cells[mid].config[ck])
+          }
+          prefixConfig[ck] = doc.cells[mid].config[ck];
+        }
+        // code
         prefixInput = prefixInput + compiler.editorToInput(doc, doc.cells[mid].id).code + "\n";
       }
     }
+    for(var ck in prefixConfig) {
+      console.log("prefix : " + ck);
+      if(input.extraFields.hasOwnProperty(ck) && prefixConfig[ck] != input.extraFields[ck]) {
+        console.log("Replacing config " + ck + " = " + input.extraFields[ck] + " with " + prefixConfig[ck])
+      }
+      input.extraFields[ck] = prefixConfig[ck];
+    }
     input.code = prefixInput + input.code;
   }
-  // convert config as well
-  input.extraFields = doc.cells[id].config;
   compileCode(input,
       function(x) {
         outputResult(doc, id, x, compilers);

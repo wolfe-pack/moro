@@ -25,7 +25,8 @@ object OutputFormats extends Enumeration {
 import OutputFormats._
 
 case class Input(code: String, outputFormat: String = OutputFormats.html, extraFields: Map[String, String] = Map.empty) {
-  def configJson = if(extraFields == null) "{}" else Json.stringify(Json.toJson(extraFields))
+  def config: Map[String, String] = if (extraFields == null) Map.empty else extraFields
+  def configJson = Json.stringify(Json.toJson(config))
 }
 
 case class Result(result: String, format: String = OutputFormats.html)
@@ -40,6 +41,12 @@ case class Result(result: String, format: String = OutputFormats.html)
  * @param defaultValue default value that the configuration should have
  */
 case class ConfigEntry(key: String, label: String, description: String, inputType: String, defaultValue: String)
+
+object CompilerConfigKeys {
+  val CacheResults = "cache"
+  val Aggregate = "aggregate"
+  val Scope = "scope"
+}
 
 /**
  * A Moro Compiler
@@ -71,8 +78,12 @@ trait Compiler {
   // aggregate all the previous cells as well?
   def aggregatePrevious: Boolean = false
 
+  import CompilerConfigKeys._
+
   def configEntries: Seq[ConfigEntry] = Seq(
-    ConfigEntry("fragment", "Fragment", "Animate in reveal or not.", "checkbox", "false")
+    ConfigEntry(CacheResults, "Cached", "Use cached results, uncheck if running again should produce different results.", "checkbox", "true"),
+    ConfigEntry(Aggregate, "Aggregate", "If compiler allows, aggregate inputs across cells of the same type (and scope).", "checkbox", "true"),
+    ConfigEntry(Scope, "Scope", "Scope use when aggregating cells (not used otherwise).", "text", "_default")
   )
 
   implicit val ceWrites = Json.writes[ConfigEntry]
@@ -435,21 +446,20 @@ trait Caching extends Compiler {
   val _queue = new mutable.Queue[CacheEntry]()
 
   override def process(input: Input): Result = {
-    println("testing: " + input)
+    import CompilerConfigKeys._
+    val useCache = input.config.getOrElse(CacheResults, "true").toBoolean
+    if (useCache) return super.process(input)
     if (_cache.contains(input)) {
-      println("found: " + _cache(input))
       _cache(input)
     } else {
-      println("not found..")
       val result = super.process(input)
       _cache(input) = result
       _queue += input
-      println("cache size after adding.. " + _cache.size)
       if (_cache.size > maxCacheSize) {
         // get rid of the oldest input
         val deleted = _queue.dequeue()
         _cache.remove(deleted)
-        println("too big, removing.. " + deleted)
+        println("Too big, removing.. " + deleted)
       }
       result
     }
