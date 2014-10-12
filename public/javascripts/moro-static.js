@@ -1,7 +1,9 @@
+/*
 function makeStaticCellFunctional(doc,id,mode,compilers) {
     doc.cells[id] = new Object();
     doc.cells[id].id = id;
     doc.cells[id].mode = mode;
+    doc.cells[id].config = {}
     doc.cells[id].renderDisplay = $('#renderDisplay' + id);
     $('.btn').button();
 }
@@ -9,6 +11,7 @@ function makeStaticCellFunctional(doc,id,mode,compilers) {
 function addStaticCellFromJson(id,doc,mode,input,compilers) {
   doc.ids.push(id);
   makeStaticCellFunctional(doc,id,mode,compilers);
+  doc.cells[id].config = input.extraFields;
   if(!compilers[mode].hideAfterCompile) {
     $('#editCell' + id).show();
     doc.cells[id].editor = compilers[mode].editor(id);
@@ -17,6 +20,7 @@ function addStaticCellFromJson(id,doc,mode,input,compilers) {
     toggleEditor(doc,id);
   }
 }
+*/
 
 function compileStaticCell(id,doc,mode,input,compilers) {
   var compiler = compilers[mode];
@@ -43,6 +47,8 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
   var cellDiv = document.createElement('div');
   cellDiv.id = 'cell'+id;
   cellDiv.class = 'cellWrapper';
+  if(input.extraFields != null && input.extraFields.hasOwnProperty('hide'))
+    cellDiv.setAttribute('hidden', input.extraFields.hide)
   if(createEditor) {
     // edit cell
     var editCellDiv = document.createElement('div');
@@ -70,6 +76,7 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
   doc.cells[id].mode = mode;
   doc.cells[id].renderDisplay = $('#renderDisplay' + id);
   doc.cells[id].input = input;
+  doc.cells[id].config = input.extraFields;
   if(createEditor) {
     $('.btn').button();
     $('#editCell' + id).show();

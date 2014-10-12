@@ -43,6 +43,7 @@ case class Result(result: String, format: String = OutputFormats.html)
 case class ConfigEntry(key: String, label: String, description: String, inputType: String, defaultValue: String)
 
 object CompilerConfigKeys {
+  val Hide = "hide"
   val CacheResults = "cache"
   val Aggregate = "aggregate"
   val Scope = "scope"
@@ -81,6 +82,7 @@ trait Compiler {
   import CompilerConfigKeys._
 
   def configEntries: Seq[ConfigEntry] = Seq(
+    ConfigEntry(Hide, "Hide Cell?", "Hide this cell in static/presentation views.", "checkbox", "false"),
     ConfigEntry(CacheResults, "Cached", "Use cached results, uncheck if running again should produce different results.", "checkbox", "true"),
     ConfigEntry(Aggregate, "Aggregate", "If compiler allows, aggregate inputs across cells of the same type (and scope).", "checkbox", "true"),
     ConfigEntry(Scope, "Scope", "Scope use when aggregating cells (not used otherwise).", "text", "_default")
