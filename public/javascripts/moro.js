@@ -26,43 +26,15 @@ var heightUpdateFunction = function(editor, id) {
 };
 
 function outputResult(doc, id, result, compilers) {
-      switch(result.format) {
-        case "html": doc.cells[id].renderDisplay.html(result.result); break;
-        case "string": doc.cells[id].renderDisplay.html("<div class=\"string-result\">" + result.result + "</div>"); break;
-      }
-      if(compilers[doc.cells[id].mode].hideAfterCompile) $('#toggleEditor'+id).click();
-      MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
-      $('pre code').each(function(i, block) {
-        hljs.highlightBlock(block);
-      });
-      /*
-      // post compiling work
-      switch(doc.cells[id].mode) {
-        case "scala": break;
-        case "markdown":
-            $('#toggleEditor'+id).click();
-            MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
-            break;
-        case "latex":
-            $('#toggleEditor'+id).click();
-            MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
-            break;
-        case "heading1":
-            $('#toggleEditor'+id).click();
-            break;
-        case "heading2":
-            $('#toggleEditor'+id).click();
-            break;
-        case "heading3":
-            $('#toggleEditor'+id).click();
-            break;
-        case "heading4":
-            $('#toggleEditor'+id).click();
-            break;
-        case "heading5":
-            $('#toggleEditor'+id).click();
-            break;
-      }*/
+  //if(compilers[doc.cells[id].mode].hideAfterCompile) toggleEditor(doc, id);
+  switch(result.format) {
+    case "html": doc.cells[id].renderDisplay.html(result.result); break;
+    //case "string": doc.cells[id].renderDisplay.html("<div class=\"string-result\">" + result.result + "</div>"); break;
+  }
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
+  $('pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
 }
 
 
@@ -112,6 +84,7 @@ function runCode(doc, id, compilers) {
   compileCode(input,
       function(x) {
         outputResult(doc, id, x, compilers);
+        if(compilers[doc.cells[id].mode].hideAfterCompile) toggleEditor(doc, id);
       }, doc.cells[id].mode);
 }
 
@@ -243,7 +216,7 @@ function removeCell(doc,id) {
 function saveDoc(doc, compilers) {
   console.log("saving doc to " + $('#saveAsInput')[0].value);
   var d = docToJson(doc,compilers);
-  console.log(d);
+  // console.log(d);
   $.ajax({
        type: "POST",
        contentType: "application/json",
@@ -251,7 +224,7 @@ function saveDoc(doc, compilers) {
        data: JSON.stringify(d),
        success: function(d) {
          bootstrap_alert("success", "Success", "Saved to " + $('#saveAsInput')[0].value, 2000);
-         console.log(d);
+         // console.log(d);
        },
        error: function(j,t,e) {
          bootstrap_alert("danger", "Failed", JSON.stringify(e), 5000);

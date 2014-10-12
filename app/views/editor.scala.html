@@ -104,7 +104,7 @@
             var compilers = {};
             @for(c <- compilers) {
                compilers.@{c.name} = {};
-               compilers.@{c.name}.hideAfterCompile = @{c.hideAfterCompile};
+               compilers.@{c.name}.hideAfterCompile = @{config.editorHideAfterCompile && c.hideAfterCompile};
                compilers.@{c.name}.editor = @Html(c.editorJavascript);
                compilers.@{c.name}.editorToInput = @Html(c.editorToInput);
                compilers.@{c.name}.removeEditor = @Html(c.removeEditorJavascript);

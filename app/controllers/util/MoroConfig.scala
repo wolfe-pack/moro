@@ -17,4 +17,5 @@ class MoroConfig(underlying: Configuration) {
   def editorConfig = viewConfig("editor")
   def editorEnabled = editorConfig.map(c => c.getBoolean("enabled").getOrElse(true)).getOrElse(true)
   def editorStaticTemplate = editorConfig.map(c => c.getString("staticView").getOrElse("static")).getOrElse("static")
+  def editorHideAfterCompile = editorConfig.map(c => c.getBoolean("hideAfterCompile").getOrElse(true)).getOrElse(true)
 }
