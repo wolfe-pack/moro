@@ -4,8 +4,8 @@ import controllers.{ConfigEntry, OutputFormats, Input}
 import play.api.libs.json.Json
 
 import scala.collection.mutable.ArrayBuffer
-import controllers.util.JacksonWrapper
-import java.io.{FileInputStream, InputStream, PrintWriter}
+import controllers.util.{MoroConfig, JacksonWrapper}
+import java.io.{File, FileInputStream, InputStream, PrintWriter}
 import scala.io.Source
 
 /**
@@ -63,6 +63,20 @@ object Document {
   implicit val ceWrites = Json.writes[ConfigEntry]
 
   def configEntriesJson: String = Json.stringify(Json.toJson(configEntries))
+
+  val moroConfig = new MoroConfig(play.api.Play.current.configuration.getConfig("moro").get)
+
+  lazy val tempDir: String = {
+    val tmpDir = moroConfig.docRoot + "/tmp"
+    val tmpFile = new File(tmpDir)
+    if(tmpFile.exists()) {
+      assert(tmpFile.isDirectory, tmpFile.getCanonicalPath + " is not a directory.")
+      assert(tmpFile.canWrite, tmpFile.getCanonicalPath + " is not writeable.")
+    } else {
+      tmpFile.mkdir()
+    }
+    tmpDir + "/"
+  }
 
   def main(args: Array[String]): Unit = {
     val d = new Document("test", Seq(Cell(0, "scala", Input("10*10", OutputFormats.html, Map("fragment" -> "true")))))
