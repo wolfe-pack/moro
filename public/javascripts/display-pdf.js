@@ -1,4 +1,4 @@
-function displayPDF(pathToPDF, canvasID) {
+function displayPDF(pathToPDF, canvasID, zoom) {
 /* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
 
@@ -14,7 +14,7 @@ function displayPDF(pathToPDF, canvasID) {
 PDFJS.getDocument(pathToPDF).then(function(pdf) {
   // Using promise to fetch the page
   pdf.getPage(1).then(function(page) {
-    var scale = 1.5;
+    var scale = zoom;
     var viewport = page.getViewport(scale);
 
     //

@@ -24,7 +24,6 @@ class Compilers extends mutable.Traversable[Compiler] {
 class AllCompilers(config: MoroConfig) extends Compilers {
   this += new ScalaServer(config) with Caching
   this += new WolfeEvalServer(config) with Caching
-  this += new WolfeNoEvalServer(config)
   this += new PegdownCompiler with Caching
   this += new SectionCompiler
   this += new LatexCompiler
@@ -32,5 +31,6 @@ class AllCompilers(config: MoroConfig) extends Compilers {
   this += new HTMLCompiler
   this += new ImageURLCompiler
   this += new GoogleDocsViewer
+  this += new PdflatexCompiler
   this.foreach(_.start)
 }
