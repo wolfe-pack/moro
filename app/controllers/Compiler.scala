@@ -5,7 +5,7 @@ import play.api.libs.json.Json
 import scala.collection.mutable
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.{IMain, ILoop}
-import java.io.File
+import java.io.{FileWriter, File}
 import play.api.Configuration
 import controllers.util.MoroConfig
 import scala.collection.JavaConverters._
@@ -26,6 +26,7 @@ import OutputFormats._
 
 case class Input(code: String, outputFormat: String = OutputFormats.html, extraFields: Map[String, String] = Map.empty) {
   def config: Map[String, String] = if (extraFields == null) Map.empty else extraFields
+
   def configJson = Json.stringify(Json.toJson(config))
 }
 
@@ -496,4 +497,50 @@ class RawCompiler extends Compiler with TextInputEditor {
 
 class RawOutsideCompiler extends RawCompiler {
   override def name: String = "rawOutside"
+}
+
+class PdflatexCompiler extends Compiler with TextInputEditor {
+  override def name: String = "pdflatex"
+
+  override def compile(input: Input): Result = {
+    val userDir = System.getProperty("user.dir")
+    val tmp = new File(userDir + "/public/tmp")
+    tmp.delete()
+    tmp.mkdir()
+    val dir = java.io.File.createTempFile("/pdf", System.nanoTime().toString, tmp)
+
+
+    //val dir = java.io.File.createTempFile("/pdf", System.nanoTime().toString)
+    dir.delete()
+    dir.mkdir()
+
+    val pathToFile = dir.getCanonicalPath + "/tmp.tex"
+    val latexWriter = new FileWriter(pathToFile)
+    latexWriter.write(input.code)
+    latexWriter.close()
+
+    import scala.sys.process._
+    val pathDir = new File(dir.getCanonicalPath)
+
+    //blocks until finished
+    println(Process("pdflatex -interaction nonstopmode -shell-escape tmp.tex", pathDir).!!)
+
+    //now tmp.pdf available
+    val moroPathToPDF = "/assets" + dir.getCanonicalPath.substring(userDir.length + 7) + "/tmp.pdf"
+    //val moroPathToPDF = "file:/" + dir.getCanonicalPath + "/tmp.pdf"
+    println("path: " + moroPathToPDF)
+
+    val scale = input.extraFields.getOrElse("scale", "3.0")
+
+    val canvasId = System.nanoTime().toString
+    Result(
+      s"""
+        |<canvas id="$canvasId"/>
+        |<script>
+        |displayPDF("$moroPathToPDF", "$canvasId", "$scale");
+        |</script>
+      """.stripMargin)
+  }
+
+  override def fieldLabel: String = "Latex Code"
 }

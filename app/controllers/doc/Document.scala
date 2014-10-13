@@ -79,7 +79,7 @@ object Document {
   }
 
   def main(args: Array[String]): Unit = {
-    val d = new Document("test", Seq(Cell(0, "scala", Input("10*10", OutputFormats.html, Map("fragment" -> "true")))))
-    d.save("test.json")
+    //val d = new Document("test", Seq(Cell(0, "scala", Input("10*10", OutputFormats.html, Map("fragment" -> "true")))))
+    //d.save("test.json")
   }
 }
