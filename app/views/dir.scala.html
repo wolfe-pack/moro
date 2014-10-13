@@ -79,21 +79,21 @@
             </div>
             <div class="col-md-4 text-right">
                 <span class="text-muted">
-                    @if(dir.subDirs.size > 0) {
-                      @{dir.subDirs.size} folders
+                    @if(dir.subDirs.filterNot(_.hidden).size > 0) {
+                      @{dir.subDirs.filterNot(_.hidden).size} folders
                     }
-                    @if(dir.files.size > 0) {
-                      @if(dir.subDirs.size > 0) {
-                        , @{dir.files.size} notebooks
+                    @if(dir.files.filterNot(_.hidden).size > 0) {
+                      @if(dir.subDirs.filterNot(_.hidden).size > 0) {
+                        , @{dir.files.filterNot(_.hidden).size} notebooks
                       } else {
-                        @{dir.files.size} notebooks
+                        @{dir.files.filterNot(_.hidden).size} notebooks
                       }
                     }
-                    @if(dir.otherFiles.size > 0) {
-                      @if(dir.subDirs.size > 0 || dir.files.size > 0 ) {
-                        , @{dir.otherFiles.size} other files
+                    @if(dir.otherFiles.filterNot(_.hidden).size > 0) {
+                      @if(dir.subDirs.filterNot(_.hidden).size > 0 || dir.files.filterNot(_.hidden).size > 0 ) {
+                        , @{dir.otherFiles.filterNot(_.hidden).size} other files
                       } else {
-                        @{dir.otherFiles.size} other files
+                        @{dir.otherFiles.filterNot(_.hidden).size} other files
                       }
                     }
                     .
@@ -101,7 +101,7 @@
             </div>
         </div>
         <ul class="list-group">
-            @for(c <- dir.subDirs) {
+            @for(c <- dir.subDirs; if !c.hidden) {
             <li class="list-group-item">
                 <i class="fa fa-folder-o fa-1x fa-fw"></i>
                 <span class="badge">@{c.badgeCount}</span>
@@ -126,14 +126,14 @@
             </li>
             }
         </ul>
-        <ul class="list-group">
-            @for(f <- dir.otherFiles) {
-            <li class="list-group-item">
+        <div class="list-group">
+            @for(f <- dir.otherFiles; if !f.hidden) {
+            <div class="list-group-item">
                 <i class="fa fa-question-circle fa-1x fa-fw"></i>
-                <a href="/assets/docs@{f.href}" class="text-primary">@{f.name}</a>
-            </li>
+                <a href="/assets/docs@{f.href}" class="">@{f.name}</a>
+            </div>
             }
-        </ul>
+        </div>
     </div>
     <script>
         bootstrap_alert = function(alertType, title, message, time, onClose) {

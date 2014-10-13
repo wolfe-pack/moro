@@ -28,7 +28,7 @@ class Directory(val path: String, val docRoot: String) {
     val files = new File(docRoot + path).listFiles().filter(_.isDirectory)
     files.map(f => {
       val count = f.listFiles().filterNot(_.isDirectory).size
-      SubDirectory(f.getName, canonPath + "/" + f.getName, count)
+      SubDirectory(f.getName, canonPath + "/" + f.getName, count, f.isHidden)
     }).toSeq.sortBy(_.name)
   }
 
@@ -38,7 +38,7 @@ class Directory(val path: String, val docRoot: String) {
     files.map(f => {
       val d = Document.load(new FileInputStream(f))
       val name = f.getName.dropRight(5)
-      Notebook(name, d.name, canonPath + "/" + name, sdf.format(f.lastModified()))
+      Notebook(name, d.name, canonPath + "/" + name, sdf.format(f.lastModified()), f.isHidden)
     }).toSeq.sortBy(_.name)
   }
 
@@ -46,17 +46,17 @@ class Directory(val path: String, val docRoot: String) {
     val files = new File(docRoot + path).listFiles().filterNot(_.isDirectory).filterNot(_.getName.endsWith(".json"))
     files.map(f => {
       val name = f.getName
-      OtherFile(name, canonPath + "/" + name)
+      OtherFile(name, canonPath + "/" + name, f.isHidden)
     }).toSeq.sortBy(_.name)
   }
 
   override def toString: String = "Dir(%s, %s, %s)\n\t%s\n\t%s" format(name, path, superDirs, subDirs.mkString(", "), files.mkString(", "))
 }
 
-case class OtherFile(name: String, href: String)
+case class OtherFile(name: String, href: String, hidden: Boolean = false)
 
 case class SuperDirectory(name: String, href: String)
 
-case class SubDirectory(name: String, href: String, badgeCount: Int)
+case class SubDirectory(name: String, href: String, badgeCount: Int, hidden: Boolean = false)
 
-case class Notebook(name: String, title: String, href: String, lastModified: String)
+case class Notebook(name: String, title: String, href: String, lastModified: String, hidden: Boolean = false)
