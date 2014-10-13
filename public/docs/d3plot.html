@@ -38,7 +38,7 @@
     /*These lines are all chart setup.  Pick and choose which chart features you want to utilize. */
   nv.addGraph(function() {
   var chart = nv.models.lineChart()
-                .margin({left: 20})  //Adjust chart margins to give the x-axis some breathing room.
+                .margin({left: 100, right:100})  //Adjust chart margins to give the x-axis some breathing room.
                 .useInteractiveGuideline(true)  //We want nice looking tooltips and a guideline!
                 .transitionDuration(350)  //how fast do you want the lines to transition?
                 .showLegend(true)       //Show the legend, allowing users to turn on/off line series.
@@ -46,13 +46,29 @@
                 .showXAxis(true)        //Show the x-axis
   ;
 
+  //chart.xDomain([0,20]);
+  var xScale = d3.scale.log();//.tickFormat(1,d3.format('.01f'));
+  //xScale.tickFormat(1,d3.format('.01f'));
+  chart.xScale(xScale);
+
+  var logFormat = function(i) {
+    if (Math.log10(i) % 1 === 0)
+      return i
+    else
+      return "";
+  };
+  var linearFormat = d3.format('.00f')
+
   chart.xAxis     //Chart x-axis settings
       .axisLabel('Time (ms)')
-      .tickFormat(d3.format(',r'));
+      .ticks(2)
+      .tickFormat(logFormat);
+
 
   chart.yAxis     //Chart y-axis settings
       .axisLabel('Voltage (v)')
-      .tickFormat(d3.format('.02f'));
+      .tickFormat(linearFormat);
+
 
   /* Done setting the chart up? Time to render it!*/
   var myData = sinAndCos();   //You need data...
@@ -73,10 +89,10 @@ function sinAndCos() {
       cos = [];
 
   //Data is represented as an array of {x,y} pairs.
-  for (var i = 0; i < 100; i++) {
-    sin.push({x: i, y: Math.sin(i/10)});
-    sin2.push({x: i, y: Math.sin(i/10) *0.25 + 0.5});
-    cos.push({x: i, y: .5 * Math.cos(i/10)});
+  for (var i = 1; i < 100; i++) {
+    sin.push({x: i * 1000, y: Math.sin(i/10)});
+    sin2.push({x: i* 1000, y: Math.sin(i/10) *0.25 + 0.5});
+    cos.push({x: i * 1000, y: .5 * Math.cos(i/10)});
   }
 
   //Line chart data should be sent as an array of series objects.
