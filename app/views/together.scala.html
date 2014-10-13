@@ -1,0 +1,12 @@
+@(user: Option[MoroUser])
+
+<script>
+    TogetherJSConfig_siteName = "moro"
+    TogetherJSConfig_toolName = "Collaboration"
+    TogetherJSConfig_dontShowClicks = true
+    TogetherJSConfig_cloneClicks = true
+    @if(user.isDefined) {
+      TogetherJSConfig_getUserName = function () {return '@user.get.firstName';};
+      TogetherJSConfig_getUserAvatar = function () {return '@user.get.avatarUrl.get';};
+    }
+</script>

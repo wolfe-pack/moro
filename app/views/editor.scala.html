@@ -1,4 +1,4 @@
-@(document: controllers.doc.Document.DocumentData, file: String, compilers: Compilers, config: util.MoroConfig)
+@(document: controllers.doc.Document.DocumentData, file: String, compilers: Compilers, config: util.MoroConfig, user: Option[MoroUser])
 
 @import helper._
 
@@ -57,6 +57,11 @@
     </div>
     <div class="row container topbar">
             <div id="alertDiv" class="alertDiv"></div>
+        <ol class="breadcrumb">
+            <li class="text-muted">@{file}</li>
+            @userNavBtn(user)
+        </ol>
+
         <!--div class="col-md-2"-->
             <div class="input-group text-right">
                         <span class="input-group-btn text-right">

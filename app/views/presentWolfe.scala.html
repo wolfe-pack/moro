@@ -1,4 +1,4 @@
-@(document: controllers.doc.Document, compilers: Compilers, docRoot: String)
+@(document: controllers.doc.Document, compilers: Compilers, docRoot: String, user: Option[MoroUser])
 
 @import helper._
 
@@ -166,29 +166,29 @@
         // Full list of configuration options available here:
         // https://github.com/hakimel/reveal.js#configuration
         setTimeout(function() {
-            Reveal.initialize({
-                controls: true,
-                progress: true,
-                center: true,
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
 
-                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-                transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+            theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+            transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
 
                 center: Reveal.getQueryHash().center || true,
 
-                dependencies: [
-                    // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
-                    { src: '@routes.Assets.at("javascripts/reveal.js/lib/js/classList.js")', condition: function() { return !document.body.classList; } },
+            dependencies: [
+                // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+                { src: '@routes.Assets.at("javascripts/reveal.js/lib/js/classList.js")', condition: function() { return !document.body.classList; } },
 
-                    // Interpret Markdown in <section> elements
-                    { src: '@routes.Assets.at("javascripts/reveal.js/plugin/markdown/marked.js")', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-                    { src: '@routes.Assets.at("javascripts/reveal.js/plugin/markdown/markdown.js")', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                // Interpret Markdown in <section> elements
+                { src: '@routes.Assets.at("javascripts/reveal.js/plugin/markdown/marked.js")', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '@routes.Assets.at("javascripts/reveal.js/plugin/markdown/markdown.js")', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 
-                    // Syntax highlight for <code> elements
-                    { src: '@routes.Assets.at("javascripts/reveal.js/plugin/highlight/highlight.js")', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                // Syntax highlight for <code> elements
+                { src: '@routes.Assets.at("javascripts/reveal.js/plugin/highlight/highlight.js")', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
 
-                    // MathJax
-                    { src: '@routes.Assets.at("javascripts/reveal.js/plugin/math/math.js")', async: true },
+                // MathJax
+                { src: '@routes.Assets.at("javascripts/reveal.js/plugin/math/math.js")', async: true },
 
                     // Zoom
 					{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/zoom-js/zoom.js")', async: true, condition: function() { return !!document.body.classList; } },
@@ -200,5 +200,7 @@
             , 50);
     });
 </script>
+@together(user)
+<script src="https://togetherjs.com/togetherjs-min.js"></script>
 </body>
 </html>

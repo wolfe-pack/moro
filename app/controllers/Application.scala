@@ -33,31 +33,34 @@ object Application extends Controller with securesocial.core.SecureSocial {
 
   def editor(file: String) =
     if (config.editorEnabled) {
-      Action {
-        import Document._
-        println(config.docRoot + file + ".json")
-        Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers, config))
+      UserAwareAction {
+        implicit request =>
+          import Document._
+          println(config.docRoot + file + ".json")
+          Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers, config,
+            request.user.map(_.asInstanceOf[MoroUser])))
       }
     } else SecuredAction {
       implicit request =>
         import Document._
         println(request.user)
         println(config.docRoot + file + ".json")
-        Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers, config))
+        Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers, config,
+          Some(request.user.asInstanceOf[MoroUser])))
     }
 
   // adapted from http://thomasheuring.wordpress.com/2013/01/29/scala-playframework-2-04-get-pages-dynamically/
   object Dynamic {
 
-    def render(keyword: String, file: String): Option[play.api.templates.Html] = {
-      renderDynamic("views.html." + keyword, file: String)
+    def render(keyword: String, file: String, user: Option[MoroUser]): Option[play.api.templates.Html] = {
+      renderDynamic("views.html." + keyword, file: String, user)
     }
 
-    def renderDynamic(viewClazz: String, file: String): Option[play.api.templates.Html] = {
+    def renderDynamic(viewClazz: String, file: String, user: Option[MoroUser]): Option[play.api.templates.Html] = {
       try {
         val clazz: Class[_] = Play.current.classloader.loadClass(viewClazz)
-        val render = clazz.getDeclaredMethod("apply", classOf[Document], classOf[Compilers], classOf[String])
-        val view = render.invoke(clazz, Document.load(config.docRoot + file + ".json"), allCompilers, config.docRoot).asInstanceOf[play.api.templates.Html]
+        val render = clazz.getDeclaredMethod("apply", classOf[Document], classOf[Compilers], classOf[String], classOf[Option[MoroUser]])
+        val view = render.invoke(clazz, Document.load(config.docRoot + file + ".json"), allCompilers, config.docRoot, user).asInstanceOf[play.api.templates.Html]
         return Some(view)
       } catch {
         case ex: ClassNotFoundException => Logger.error("Html.renderDynamic() : could not find view " + viewClazz, ex)
@@ -67,34 +70,41 @@ object Application extends Controller with securesocial.core.SecureSocial {
     }
   }
 
-  def template(name: String, file: String) = Action {
+  def template(name: String, file: String) = UserAwareAction {
+    implicit request =>
     println("%s: %s" format(name, file))
-    Dynamic.render(name, file) match {
+    Dynamic.render(name, file, request.user.map(_.asInstanceOf[MoroUser])) match {
       case Some(i) => Ok(i)
       case None => NotFound("template: " + name)
     }
   }
 
-  def staticDoc(file: String) = Action {
+  def staticDoc(file: String) = UserAwareAction {
+    implicit request =>
     import Document._
     println(config.docRoot + file + ".json")
-    Ok(views.html.static(load(config.docRoot + file + ".json"), allCompilers, config.docRoot))
+    Ok(views.html.static(load(config.docRoot + file + ".json"), allCompilers, config.docRoot,
+      request.user.map(_.asInstanceOf[MoroUser])))
   }
 
-  def presentDoc(file: String) = Action {
+  def presentDoc(file: String) = UserAwareAction {
+    implicit request =>
     import Document._
     println(config.docRoot + file + ".json")
-    Ok(views.html.present(load(config.docRoot + file + ".json"), allCompilers, config.docRoot))
+    Ok(views.html.present(load(config.docRoot + file + ".json"), allCompilers, config.docRoot,
+      request.user.map(_.asInstanceOf[MoroUser])))
   }
 
-  def wolfeStaticDoc(file: String) = Action {
+  def wolfeStaticDoc(file: String) = UserAwareAction {
+    implicit request =>
     import Document._
     println("wolfe: %s (%s%s.json)" format(file, config.docRoot, file))
-    Ok(views.html.wolfe(load(config.docRoot + file + ".json"), allCompilers, config.docRoot))
+    Ok(views.html.wolfe(load(config.docRoot + file + ".json"), allCompilers, config.docRoot,
+      request.user.map(_.asInstanceOf[MoroUser])))
   }
 
-  def save(file: String) = Action {
-    request =>
+  def save(file: String) = UserAwareAction {
+    implicit request =>
       request.body.asJson.map {
         json => val d = Document.loadJson(json.toString())
           println(d + " --> " + file)
@@ -114,8 +124,8 @@ object Application extends Controller with securesocial.core.SecureSocial {
       Ok(views.html.dir(dir, config, request.user.map(_.asInstanceOf[MoroUser])))
   }
 
-  def dirAddFile(path: String) = Action {
-    request =>
+  def dirAddFile(path: String) = UserAwareAction {
+    implicit request =>
       request.body.asJson.map {
         json => {
           try {
@@ -135,8 +145,8 @@ object Application extends Controller with securesocial.core.SecureSocial {
       }
   }
 
-  def dirRemoveFile(path: String) = Action {
-    request =>
+  def dirRemoveFile(path: String) = UserAwareAction {
+    implicit request =>
       request.body.asJson.map {
         json => {
           try {
@@ -155,8 +165,8 @@ object Application extends Controller with securesocial.core.SecureSocial {
       }
   }
 
-  def dirAddFolder(path: String) = Action {
-    request =>
+  def dirAddFolder(path: String) = UserAwareAction {
+    implicit request =>
       request.body.asJson.map {
         json => {
           try {
@@ -175,8 +185,8 @@ object Application extends Controller with securesocial.core.SecureSocial {
       }
   }
 
-  def dirRemoveFolder(path: String) = Action {
-    request =>
+  def dirRemoveFolder(path: String) = UserAwareAction {
+    implicit request =>
       request.body.asJson.map {
         json => {
           try {

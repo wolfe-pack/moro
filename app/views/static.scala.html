@@ -1,9 +1,13 @@
-@(document: controllers.doc.Document, compilers: Compilers, docRoot: String)
+@(document: controllers.doc.Document, compilers: Compilers, docRoot: String, user: Option[MoroUser])
 
 @import helper._
 
 @main(document.name) {
 <div class="container">
+    <ol class="breadcrumb">
+        <li class="text-muted">@{document.name}</li>
+        @userNavBtn(user)
+    </ol>
     <h1>@Html(document.name)</h1>
 </div>
 <script src="@routes.Assets.at("javascripts/moro-static.js")" type="text/javascript"></script>
