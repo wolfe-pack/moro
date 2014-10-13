@@ -202,9 +202,9 @@
     }
   }, {
     "id" : 25,
-    "compiler" : "scala",
+    "compiler" : "markdown",
     "input" : {
-      "code" : "val x = (0.0 to 6.28 by 0.25)\nxyChart(x -> (math.sin(_), math.cos(_)))",
+      "code" : "Using `scalaplot`, we can define simple line and bar plots.",
       "outputFormat" : "html",
       "extraFields" : { }
     }
@@ -212,15 +212,15 @@
     "id" : 26,
     "compiler" : "section",
     "input" : {
-      "code" : "others",
+      "code" : "xyplot",
       "outputFormat" : "html",
       "extraFields" : { }
     }
   }, {
     "id" : 27,
-    "compiler" : "markdown",
+    "compiler" : "scala",
     "input" : {
-      "code" : "### Or pretty much any file format*\n\nThose supported by [Google Drive viewer](https://support.google.com/drive/answer/2423485?hl=en&p=docs_viewer&rd=1), i.e.\n\n* Image files (.JPEG, .PNG, .GIF, .TIFF, .BMP) <!-- .element: class=\"fragment\" -->\n* Video files (WebM, .MPEG4, .3GPP, .MOV, .AVI, .MPEGPS, .WMV, .FLV, .ogg)  <!-- .element: class=\"fragment\" -->\n* Text files (.TXT)  <!-- .element: class=\"fragment\" -->\n* Markup/Code (.CSS, .HTML, .PHP, .C, .CPP, .H, .HPP, .JS)  <!-- .element: class=\"fragment\" -->\n* Microsoft Word (.DOC and .DOCX)  <!-- .element: class=\"fragment\" -->\n* Microsoft Excel (.XLS and .XLSX)  <!-- .element: class=\"fragment\" -->\n* Microsoft PowerPoint (.PPT and .PPTX)  <!-- .element: class=\"fragment\" -->\n* Adobe Portable Document Format (.PDF)  <!-- .element: class=\"fragment\" -->\n* Apple Pages (.PAGES)\n* Adobe Illustrator (.AI)\n* Adobe Photoshop (.PSD)\n* Tagged Image File Format (.TIFF)\n* Autodesk AutoCad (.DXF)\n* Scalable Vector Graphics (.SVG)\n* PostScript (.EPS, .PS)\n* TrueType (.TTF)\n* XML Paper Specification (.XPS)\n* Archive file types (.ZIP, .RAR, tar, gzip)\n* Audio formats (MP3, MPEG, WAV, .ogg)\n* .MTS files\n* Raw Image formats",
+      "code" : "val x = (0.0 to 6.28 by 0.25)\nxyChart(x -> (math.sin(_), math.cos(_)))",
       "outputFormat" : "html",
       "extraFields" : { }
     }
@@ -228,12 +228,44 @@
     "id" : 28,
     "compiler" : "section",
     "input" : {
-      "code" : "pdfs",
+      "code" : "barplot",
       "outputFormat" : "html",
       "extraFields" : { }
     }
   }, {
     "id" : 29,
+    "compiler" : "scala",
+    "input" : {
+      "code" : "val bx = 0 until 5\nbarChart(\n    bx.map(\"x\" + _) ->(bx.map(i => math.sin(i / 3.0) + 0.5), \n        bx.map(i => math.cos(i / 3.0) + 0.5)))",
+      "outputFormat" : "html",
+      "extraFields" : { }
+    }
+  }, {
+    "id" : 30,
+    "compiler" : "section",
+    "input" : {
+      "code" : "others",
+      "outputFormat" : "html",
+      "extraFields" : { }
+    }
+  }, {
+    "id" : 31,
+    "compiler" : "markdown",
+    "input" : {
+      "code" : "### Or pretty much any file format*\n\nThose supported by [Google Drive viewer](https://support.google.com/drive/answer/2423485?hl=en&p=docs_viewer&rd=1), i.e.\n\n* Image files (.JPEG, .PNG, .GIF, .TIFF, .BMP) <!-- .element: class=\"fragment\" -->\n* Video files (WebM, .MPEG4, .3GPP, .MOV, .AVI, .MPEGPS, .WMV, .FLV, .ogg)  <!-- .element: class=\"fragment\" -->\n* Text files (.TXT)  <!-- .element: class=\"fragment\" -->\n* Markup/Code (.CSS, .HTML, .PHP, .C, .CPP, .H, .HPP, .JS)  <!-- .element: class=\"fragment\" -->\n* Microsoft Word (.DOC and .DOCX)  <!-- .element: class=\"fragment\" -->\n* Microsoft Excel (.XLS and .XLSX)  <!-- .element: class=\"fragment\" -->\n* Microsoft PowerPoint (.PPT and .PPTX)  <!-- .element: class=\"fragment\" -->\n* Adobe Portable Document Format (.PDF)  <!-- .element: class=\"fragment\" -->\n* Apple Pages (.PAGES)\n* Adobe Illustrator (.AI)\n* Adobe Photoshop (.PSD)\n* Tagged Image File Format (.TIFF)\n* Autodesk AutoCad (.DXF)\n* Scalable Vector Graphics (.SVG)\n* PostScript (.EPS, .PS)\n* TrueType (.TTF)\n* XML Paper Specification (.XPS)\n* Archive file types (.ZIP, .RAR, tar, gzip)\n* Audio formats (MP3, MPEG, WAV, .ogg)\n* .MTS files\n* Raw Image formats",
+      "outputFormat" : "html",
+      "extraFields" : { }
+    }
+  }, {
+    "id" : 32,
+    "compiler" : "section",
+    "input" : {
+      "code" : "pdfs",
+      "outputFormat" : "html",
+      "extraFields" : { }
+    }
+  }, {
+    "id" : 33,
     "compiler" : "heading4",
     "input" : {
       "code" : "e.g. PDFs",
@@ -241,7 +273,7 @@
       "extraFields" : { }
     }
   }, {
-    "id" : 30,
+    "id" : 34,
     "compiler" : "google_viewer",
     "input" : {
       "code" : "http://www.riedelcastro.org//publications/papers/riedel13relation.pdf",
@@ -249,7 +281,7 @@
       "extraFields" : { }
     }
   }, {
-    "id" : 31,
+    "id" : 35,
     "compiler" : "section",
     "input" : {
       "code" : "thanks",
@@ -257,7 +289,7 @@
       "extraFields" : { }
     }
   }, {
-    "id" : 32,
+    "id" : 36,
     "compiler" : "heading1",
     "input" : {
       "code" : "Thanks!",
