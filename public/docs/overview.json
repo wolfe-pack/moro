@@ -22,7 +22,9 @@
     "input" : {
       "code" : "Heading",
       "outputFormat" : "html",
-      "extraFields" : { }
+      "extraFields" : {
+        "fragment" : "true"
+      }
     }
   }, {
     "id" : 3,
@@ -30,7 +32,9 @@
     "input" : {
       "code" : "Heading",
       "outputFormat" : "html",
-      "extraFields" : { }
+      "extraFields" : {
+        "fragment" : "true"
+      }
     }
   }, {
     "id" : 4,
@@ -38,7 +42,9 @@
     "input" : {
       "code" : "Heading",
       "outputFormat" : "html",
-      "extraFields" : { }
+      "extraFields" : {
+        "fragment" : "true"
+      }
     }
   }, {
     "id" : 5,
@@ -46,7 +52,9 @@
     "input" : {
       "code" : "Heading",
       "outputFormat" : "html",
-      "extraFields" : { }
+      "extraFields" : {
+        "fragment" : "true"
+      }
     }
   }, {
     "id" : 6,
@@ -86,7 +94,9 @@
     "input" : {
       "code" : "\\alpha+\\beta=\\sum_{i=0}^{n}\\gamma\\cfrac{1}{\\mathcal{Z}}",
       "outputFormat" : "html",
-      "extraFields" : { }
+      "extraFields" : {
+        "fragment" : "true"
+      }
     }
   }, {
     "id" : 11,
@@ -110,7 +120,9 @@
     "input" : {
       "code" : "http://1.bp.blogspot.com/-1Ub3QovBjkM/UUYRy5t-53I/AAAAAAAACr4/PUpU70GJaJ0/s1600/Princess+mononoke+photos1.jpg",
       "outputFormat" : "html",
-      "extraFields" : { }
+      "extraFields" : {
+        "fragment" : "true"
+      }
     }
   }, {
     "id" : 14,
@@ -142,7 +154,9 @@
     "input" : {
       "code" : "def f(x:Int) = x * x\nf(10)",
       "outputFormat" : "html",
-      "extraFields" : { }
+      "extraFields" : {
+        "fragment" : "true"
+      }
     }
   }, {
     "id" : 18,
@@ -182,7 +196,9 @@
     "input" : {
       "code" : "// Matrices!\nval random = new util.Random()\nMatrix((0 until 10).map(i => (0 until 10).map(j => (i+j)+2*random.nextDouble())))",
       "outputFormat" : "html",
-      "extraFields" : { }
+      "extraFields" : {
+        "fragment" : "true"
+      }
     }
   }, {
     "id" : 23,
@@ -294,7 +310,9 @@
     "input" : {
       "code" : "Thanks!",
       "outputFormat" : "html",
-      "extraFields" : { }
+      "extraFields" : {
+        "fragment" : "true"
+      }
     }
   } ],
   "config" : {
