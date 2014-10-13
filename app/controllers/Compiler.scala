@@ -530,12 +530,14 @@ class PdflatexCompiler extends Compiler with TextInputEditor {
     //val moroPathToPDF = "file:/" + dir.getCanonicalPath + "/tmp.pdf"
     println("path: " + moroPathToPDF)
 
+    val scale = input.extraFields.getOrElse("scale", "3.0")
+
     val canvasId = System.nanoTime().toString
     Result(
       s"""
         |<canvas id="$canvasId"/>
         |<script>
-        |displayPDF("$moroPathToPDF", "$canvasId", "3.0");
+        |displayPDF("$moroPathToPDF", "$canvasId", "$scale");
         |</script>
       """.stripMargin)
   }
