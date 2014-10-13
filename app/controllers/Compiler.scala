@@ -437,7 +437,7 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
       "Compile Error!!"
     }
     println("result: " + result)
-    Result("<blockquote>" + result.toString + "</blockquote>")
+    Result("<div class=\"string-result\">" + "<blockquote>" + result.toString + "</blockquote>" + "</div>")
   }
 }
 
