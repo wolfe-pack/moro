@@ -47,6 +47,7 @@ object CompilerConfigKeys {
   val CacheResults = "cache"
   val Aggregate = "aggregate"
   val Scope = "scope"
+  val Fragment = "fragment"
 }
 
 /**
@@ -85,7 +86,8 @@ trait Compiler {
     ConfigEntry(Hide, "Hide Cell?", "Hide this cell in static/presentation views.", "checkbox", "false"),
     ConfigEntry(CacheResults, "Cached", "Use cached results, uncheck if running again should produce different results.", "checkbox", "true"),
     ConfigEntry(Aggregate, "Aggregate", "If compiler allows, aggregate inputs across cells of the same type (and scope).", "checkbox", "true"),
-    ConfigEntry(Scope, "Scope", "Scope use when aggregating cells (not used otherwise).", "text", "_default")
+    ConfigEntry(Scope, "Scope", "Scope use when aggregating cells (not used otherwise).", "text", "_default"),
+    ConfigEntry(Fragment, "Fragment", "If checked, the presentation mode pauses before displaying this cell.", "checkbox", "false")
   )
 
   implicit val ceWrites = Json.writes[ConfigEntry]

@@ -43,11 +43,14 @@ function compileStaticCell(id,doc,mode,input,compilers) {
 
 function createStaticCellHTML(id,section,doc,mode,input,compilers) {
   var createEditor = !compilers[mode].hideAfterCompile;
-
+  if(input.extraFields == null)
+    input.extraFields = {}
   var cellDiv = document.createElement('div');
   cellDiv.id = 'cell'+id;
-  cellDiv.class = 'cellWrapper';
-  if(input.extraFields != null && input.extraFields.hasOwnProperty('hide'))
+  cellDiv.className = 'cellWrapper';
+  if(input.extraFields.hasOwnProperty && input.extraFields.fragment === 'true')
+    cellDiv.className += ' fragment';
+  if(input.extraFields.hasOwnProperty('hide'))
     cellDiv.setAttribute('hidden', input.extraFields.hide)
   if(createEditor) {
     // edit cell
