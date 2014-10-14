@@ -50,6 +50,7 @@
 .reveal code {
   color: white;
   width: 100%;
+  padding-left: 8px;
 }
 
 .reveal pre code {

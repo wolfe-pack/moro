@@ -533,16 +533,30 @@ class PdflatexCompiler extends Compiler with TextInputEditor {
     //val moroPathToPDF = "file:/" + dir.getCanonicalPath + "/tmp.pdf"
     println("path: " + moroPathToPDF)
 
-    val scale = input.extraFields.getOrElse("scale", "3.0")
+    val scale = input.extraFields.getOrElse("scale", "1.0").toDouble
 
-    val canvasId = System.nanoTime().toString
-    Result(
-      s"""
+    val png = input.extraFields.getOrElse("png", "false").toBoolean
+
+    if (!png) {
+      val pdfScale = scale * 3.0
+      val canvasId = System.nanoTime().toString
+      Result(
+        s"""
         |<canvas id="$canvasId"/>
         |<script>
-        |displayPDF("$moroPathToPDF", "$canvasId", "$scale");
+        |displayPDF("$moroPathToPDF", "$canvasId", "$pdfScale");
         |</script>
       """.stripMargin)
+    } else {
+      val dpi = scale * 200
+      println(Process(s"convert -density $dpi tmp.pdf -quality 90 tmp.png", pathDir).!!)
+      Result(
+        s"""
+          |
+          |<img src="${moroPathToPDF.dropRight(4) + ".png"}">
+          |
+        """.stripMargin, OutputFormats.html)
+    }
   }
 
   override def fieldLabel: String = "Latex Code"
