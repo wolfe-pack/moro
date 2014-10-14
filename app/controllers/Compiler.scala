@@ -1,5 +1,6 @@
 package controllers
 
+import controllers.doc.Document
 import play.api.libs.json.Json
 
 import scala.collection.mutable
@@ -503,6 +504,8 @@ class PdflatexCompiler extends Compiler with TextInputEditor {
   override def name: String = "pdflatex"
 
   override def compile(input: Input): Result = {
+    //Document.tempDir
+
     val userDir = System.getProperty("user.dir")
     val tmp = new File(userDir + "/public/tmp")
     tmp.delete()
