@@ -454,7 +454,7 @@ trait Caching extends Compiler {
   override def process(input: Input): Result = {
     import CompilerConfigKeys._
     val useCache = input.config.getOrElse(CacheResults, "true").toBoolean
-    if (useCache) return super.process(input)
+    if (!useCache) return super.process(input)
     if (_cache.contains(input)) {
       _cache(input)
     } else {
