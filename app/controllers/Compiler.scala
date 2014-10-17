@@ -59,6 +59,8 @@ trait Compiler {
   // name of the compiler that should be unique in a collection of compilers
   def name: String
 
+  def config: Option[Configuration] = None
+
   // code to construct the editor for a cell of this type
   def editorJavascript: String
 
@@ -408,7 +410,7 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
 
   def name = "scala"
 
-  val config = c.config(this)
+  override val config = c.config(this)
   val classPath = config.map(c => c.getStringList("classPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
   val classesForJarPath = config.map(c => c.getStringList("classesForJarPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
   val imports = config.map(c => c.getStringList("imports")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
@@ -444,7 +446,8 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
 }
 
 trait Caching extends Compiler {
-  def maxCacheSize = 10
+  def config: Option[Configuration]
+  def maxCacheSize = config.map(c => c.getInt("maxCacheSize").getOrElse(10)).getOrElse(10)
 
   type CacheEntry = Input
 
