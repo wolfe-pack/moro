@@ -42,16 +42,18 @@ function compileStaticCell(id,doc,mode,input,compilers) {
 }
 
 function createStaticCellHTML(id,section,doc,mode,input,compilers) {
-  var createEditor = !compilers[mode].hideAfterCompile;
   if(input.extraFields == null)
     input.extraFields = {}
   var cellDiv = document.createElement('div');
   cellDiv.id = 'cell'+id;
   cellDiv.className = 'cellWrapper';
-  if(input.extraFields.hasOwnProperty && input.extraFields.fragment === 'true')
+  if(input.extraFields.hasOwnProperty('fragment') && input.extraFields.fragment === 'true')
     cellDiv.className += ' fragment';
   if(input.extraFields.hasOwnProperty('hide'))
     cellDiv.setAttribute('hidden', input.extraFields.hide)
+  var createEditor = !compilers[mode].hideAfterCompile;
+  if(input.extraFields.hasOwnProperty('showEditor') && input.extraFields.showEditor === 'true')
+    createEditor = true
   if(createEditor) {
     // edit cell
     var editCellDiv = document.createElement('div');
