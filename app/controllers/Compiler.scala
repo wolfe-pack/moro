@@ -1,5 +1,6 @@
 package controllers
 
+import controllers.doc.Document
 import play.api.libs.json.Json
 
 import scala.collection.mutable
@@ -58,6 +59,8 @@ object CompilerConfigKeys {
 trait Compiler {
   // name of the compiler that should be unique in a collection of compilers
   def name: String
+
+  def config: Option[Configuration] = None
 
   // code to construct the editor for a cell of this type
   def editorJavascript: String
@@ -409,7 +412,7 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
 
   def name = "scala"
 
-  val config = c.config(this)
+  override val config = c.config(this)
   val classPath = config.map(c => c.getStringList("classPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
   val classesForJarPath = config.map(c => c.getStringList("classesForJarPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
   val imports = config.map(c => c.getStringList("imports")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
@@ -445,7 +448,8 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
 }
 
 trait Caching extends Compiler {
-  def maxCacheSize = 10
+  def config: Option[Configuration]
+  def maxCacheSize = config.map(c => c.getInt("maxCacheSize").getOrElse(10)).getOrElse(10)
 
   type CacheEntry = Input
 
@@ -455,7 +459,7 @@ trait Caching extends Compiler {
   override def process(input: Input): Result = {
     import CompilerConfigKeys._
     val useCache = input.config.getOrElse(CacheResults, "true").toBoolean
-    if (useCache) return super.process(input)
+    if (!useCache) return super.process(input)
     if (_cache.contains(input)) {
       _cache(input)
     } else {
@@ -505,6 +509,8 @@ class PdflatexCompiler extends Compiler with TextInputEditor {
   override def name: String = "pdflatex"
 
   override def compile(input: Input): Result = {
+    //Document.tempDir
+
     val userDir = System.getProperty("user.dir")
     val tmp = new File(userDir + "/public/tmp")
     tmp.delete()
@@ -532,16 +538,30 @@ class PdflatexCompiler extends Compiler with TextInputEditor {
     //val moroPathToPDF = "file:/" + dir.getCanonicalPath + "/tmp.pdf"
     println("path: " + moroPathToPDF)
 
-    val scale = input.extraFields.getOrElse("scale", "3.0")
+    val scale = input.extraFields.getOrElse("scale", "1.0").toDouble
 
-    val canvasId = System.nanoTime().toString
-    Result(
-      s"""
+    val png = input.extraFields.getOrElse("png", "false").toBoolean
+
+    if (!png) {
+      val pdfScale = scale * 3.0
+      val canvasId = System.nanoTime().toString
+      Result(
+        s"""
         |<canvas id="$canvasId"/>
         |<script>
-        |displayPDF("$moroPathToPDF", "$canvasId", "$scale");
+        |displayPDF("$moroPathToPDF", "$canvasId", "$pdfScale");
         |</script>
       """.stripMargin)
+    } else {
+      val dpi = scale * 200
+      println(Process(s"convert -density $dpi tmp.pdf -quality 90 tmp.png", pathDir).!!)
+      Result(
+        s"""
+          |
+          |<img src="${moroPathToPDF.dropRight(4) + ".png"}">
+          |
+        """.stripMargin, OutputFormats.html)
+    }
   }
 
   override def fieldLabel: String = "Latex Code"

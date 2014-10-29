@@ -32,6 +32,7 @@ PDFJS.getDocument(pathToPDF).then(function(pdf) {
       canvasContext: context,
       viewport: viewport
     };
+
     page.render(renderContext);
   });
 });

@@ -31,6 +31,6 @@ class AllCompilers(config: MoroConfig) extends Compilers {
   this += new HTMLCompiler
   this += new ImageURLCompiler
   this += new GoogleDocsViewer
-  this += new PdflatexCompiler
+  this += new PdflatexCompiler with Caching
   this.foreach(_.start)
 }
