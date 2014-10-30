@@ -13,6 +13,7 @@ licenses := Seq("The Apache Software License, Version 2.0" -> url("http://www.ap
 homepage := Some(url("http://wolfe-pack.github.io/moro"))
 
 resolvers ++= Seq(
+  Resolver.file("Local repo", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns),
   "IESL Release" at "https://dev-iesl.cs.umass.edu/nexus/content/groups/public",
   "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository",
   Resolver.sonatypeRepo("snapshots"),
