@@ -19,7 +19,8 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots"),
   Resolver.sonatypeRepo("releases"),
   "Wolfe Release" at "http://homeniscient.cs.ucl.ac.uk:8081/nexus/content/repositories/releases",
-  "Wolfe Snapshots" at "http://homeniscient.cs.ucl.ac.uk:8081/nexus/content/repositories/snapshots"
+  "Wolfe Snapshots" at "http://homeniscient.cs.ucl.ac.uk:8081/nexus/content/repositories/snapshots",
+  "UIUC Releases" at "http://cogcomp.cs.illinois.edu/m2repo"
 )
 
 // disable using the Scala version in output paths and artifacts
@@ -68,6 +69,7 @@ libraryDependencies ++= Seq(
   "org.sameersingh.htmlgen" % "htmlgen" % "0.1.3",
   "org.sameersingh.scalaplot" % "scalaplot" % "0.0.4",
   "ml.wolfe" %% "wolfe-core" % "0.4.0-SNAPSHOT",
+  "ml.wolfe" %% "wolfe-util" % "0.4.0-SNAPSHOT",
   "ml.wolfe" %% "wolfe-examples" % "0.4.0-SNAPSHOT",
   "ml.wolfe" %% "wolfe-nlp" % "0.4.0-SNAPSHOT",
   "ml.wolfe" %% "wolfe-ui" % "0.4.0-SNAPSHOT",
