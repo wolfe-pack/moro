@@ -50,6 +50,7 @@
         <link href="@routes.Assets.at("stylesheets/octicons/octicons.css")" rel="stylesheet">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/htmlgen.css")">
         <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="@routes.Assets.at("stylesheets/nv.d3.css")" rel="stylesheet">
     <script type="text/javascript" src="@routes.Assets.at("javascripts/d3.v3.min.js")"></script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/nv.d3.min.js")"></script>
     <script src="@routes.Assets.at("javascripts/htmlgen/d3utils.js")" type="text/javascript" charset="utf-8"></script>
@@ -68,51 +69,22 @@
         <!--{% include primary-nav-items.html %}-->
     </nav>
     <div class="grid">
-        <div class="unit two-fifths center-on-mobiles">
+        <div class="unit center-on-mobiles">
             <h1>
                 <a href="/">
                     <span>Jekyll</span>
                     <img width="80px" src="@routes.Assets.at("images/wolfe-logo-yellow.png")" style="vertical-align: text-bottom">
-                    <h1 class="logo-text"> Wolfe</h1>
+                    <h1 class="logo-text">Wolfe</h1>
 
                 </a>
             </h1>
         </div>
-        <nav class="main-nav unit three-fifths hide-on-mobiles">
-            <ul>
-                <li>
-                    <a href="http://www.wolfe.ml/">Home</a>
-                </li>
-                <li class="current">
-                    <a href="/template/wolfe/wolfe-docs/gettingstarted/01_welcome">Doc<span class="show-on-mobiles">s</span><span class="hide-on-mobiles">umentation</span></a>
-                </li>
-                <li>
-                    <a href="http://www.wolfe.ml/news">News</a>
-                </li>
-                <li>
-                    <a href="https://github.com/wolfe-pack/wolfe"><span class="hide-on-mobiles">View on </span>GitHub</a>
-                </li>
-            </ul>
-
-        </nav>
     </div>
 </header>
     <section>
         <div class="grid">
-            <div id="cells" class="unit four-fifths center-on-mobiles">
+            <div id="cells" class="unit center-on-mobiles">
                 <h1>@Html(document.name)</h1>
-            </div>
-            <div class="unit one-fifth hide-on-mobiles">
-                <div class="doc-nav">
-                    <h4>Getting Started</h4>
-                    @dirNav("wolfe-docs/gettingstarted")
-                    <h4>Concepts</h4>
-                    @dirNav("wolfe-docs/concepts")
-                    <h4>Examples</h4>
-                    @dirNav("wolfe-docs/examples")
-
-                </div>
-                <!--</aside>-->
             </div>
         </div>
     </section>

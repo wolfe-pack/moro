@@ -77,6 +77,20 @@
   text-shadow: none;
 }
 
+.btn-default {
+  text-shadow: none;
+  color: #fc0;
+  background-color: #333;
+  border-color: #fc0;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active {
+  color: #f90;
+  text-shadow: none;
+  background-color: #333;
+  border-color: #f90;
+}
+
 .string-result {
   margin-left: 40px;
   margin-bottom: 20px;
@@ -1335,4 +1349,26 @@ svg.barchart {
   -o-user-select: none;
   user-select: none;
   cursor: pointer;
+}
+
+/* D3 Graphs */
+.nodeLabel {
+  fill: white;
+  font-family: sans-serif
+}
+
+.nodeGroup0 {
+  fill: #d64526;
+}
+
+.nodeGroup1 {
+  fill: #169133;
+}
+
+.nodeGroup2 {
+  fill: #7DC8F5;
+}
+
+.nodeGroup3 {
+  fill: #fff;
 }

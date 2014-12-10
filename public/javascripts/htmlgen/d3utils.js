@@ -3,7 +3,7 @@ function drawGraph(graph, divId) {
   var width = 750,
       height = 450;
 
-  var color = d3.scale.category20();
+  var color = d3.scale.category20c();
 
   var force = d3.layout.force()
     .charge(-1000)
@@ -48,8 +48,9 @@ function drawGraph(graph, divId) {
       .data(graph.edges)
       .enter().append("line")
         .attr("class", "link")
-        .style("stroke-width", function(d) { return Math.sqrt(10*d.value); })
-        .style("stroke", function(d) { return color(d.group); });
+        .attr("opacity", function(d) { return d.value; })
+        .style("stroke-width", function(d) { return Math.sqrt(10); })
+        .style("stroke", "#888") //function(d) { return color(d.group); });
   link.append("svg:title")
       .text(function(d) { return JSON.stringify(d.description, null, '\t'); });
 
@@ -60,8 +61,10 @@ function drawGraph(graph, divId) {
         .call(drag);
       //CIRCLE
       node.append("svg:circle")
-        .attr("r", function(d) { return 10*d.value; })
+        .attr("r", function(d) { return 10; })
         .attr("fill", function(d) { return color(d.group); })
+        .attr("opacity", function(d) { return d.value; })
+        .attr("class", function(d) { return "nodeGroup" + d.group; })
         .append("svg:title")
         .text(function(d) { return JSON.stringify(d.description, null, '\t'); });
 
@@ -72,7 +75,8 @@ function drawGraph(graph, divId) {
         .attr("y",            function(d) { return 10*d.value + 5; })
         .attr("font-family",  "Bree Serif")
         .attr("font-size",    function(d) {  return  "1em"; })
-        .attr("text-anchor",  function(d) { return  "beginning";});
+        .attr("text-anchor",  function(d) { return  "beginning";})
+        .attr("class", "nodeLabel");
 
   force.on("tick", function(e) {
     node.attr("transform", function(d, i) {

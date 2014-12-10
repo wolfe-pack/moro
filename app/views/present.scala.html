@@ -128,7 +128,7 @@
 
     /* Now add cells */
     lastSection = $('section#init');
-    lastSection.append('<h1>@Html(document.name)</h1>');
+    lastSection.append('<h2>@Html(document.name)</h2>');
     @for(cell <- document.cells) {
        var mode = '@Html(cell.compiler)';
        var input = @Html(cell.inputJson);
@@ -161,6 +161,8 @@
             controls: true,
             progress: true,
             center: true,
+            autoSlide: 5000,
+            loop: true,
 
             theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
             transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
