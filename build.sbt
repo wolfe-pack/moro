@@ -73,6 +73,7 @@ libraryDependencies ++= Seq(
   "ml.wolfe" %% "wolfe-examples" % "0.4.0-SNAPSHOT",
   "ml.wolfe" %% "wolfe-nlp" % "0.4.0-SNAPSHOT",
   "ml.wolfe" %% "wolfe-ui" % "0.4.0-SNAPSHOT",
+  "ml.wolfe" %% "wolfe-examples" % "0.4.0-SNAPSHOT",
   "org.scala-lang" % "scala-library" % "2.10.3",
   "org.pegdown" % "pegdown" % "1.4.2",
   "ws.securesocial" %% "securesocial" % "2.1.4",
