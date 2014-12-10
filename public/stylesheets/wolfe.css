@@ -1382,8 +1382,8 @@ svg.barchart {
 
 /* Starting div styles */
 .typeName {
-  color:#ff22ff;
-  background-color:#444444;
+  color:#111111;
+  background-color:#333333;
 }
 
 .asString {
@@ -1409,7 +1409,7 @@ svg.barchart {
 }
 
 .field {
-  background-color:#555555;
+  background-color:#333333;
   padding: 0px;
   margin: 0px;
 }
