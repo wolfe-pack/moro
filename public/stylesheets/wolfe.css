@@ -459,6 +459,11 @@ body > footer a:hover img {
   }
 }
 
+img.displayed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 /* Code */
 
 .quickstart .code {
@@ -1371,4 +1376,75 @@ svg.barchart {
 
 .nodeGroup3 {
   fill: #fff;
+}
+
+/* htmlgen */
+.property {
+    background-color:#444;
+    color:#080808;
+    font-size:80%;
+}
+
+/* Starting div styles */
+.typeName {
+  color:#111111;
+  background-color:#333333;
+}
+
+.asString {
+  color:dark-grey;
+}
+
+.asIterable {
+  color:blue;
+}
+
+.asProduct {
+  color:green;
+}
+
+.asMap {
+  color:black;
+}
+
+.fields {
+  padding-left:25px;
+  background-color:#333333;
+  margin: 0px;
+}
+
+.field {
+  background-color:#333333;
+  padding: 0px;
+  margin: 0px;
+}
+
+.fieldName {
+  color:#999999;
+}
+
+.fieldValue {
+  color:#aaaaaa;
+}
+
+div.matrix {
+  background-color: black;
+  border: 2px solid white;
+  padding: 3px;
+  width:250px;
+  height:250px;
+}
+
+div.matrixRow {
+  clear: both;
+}
+
+div.matrixCellContainer {
+  float:left;
+}
+
+div.matrixCell {
+  width: 100%;
+  height: 100%;
+  background-color: #fc0;
 }
