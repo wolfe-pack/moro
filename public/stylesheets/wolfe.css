@@ -1448,3 +1448,16 @@ div.matrixCell {
   height: 100%;
   background-color: #fc0;
 }
+
+/* Reveal */
+.slides .header{
+  position:absolute;
+  top: -75%;
+  left: -50%;
+  color: #fc0;
+}
+.slides .footer{
+  position:absolute;
+  bottom: 50%;
+  left: -50%;
+}

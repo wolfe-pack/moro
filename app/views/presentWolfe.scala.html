@@ -102,6 +102,7 @@
     /* add sections */
     /* Figure out which sections need to be marked "markdown only" */
     var divSlides = $('#slides');
+    divSlides.append('<div class="header">@Html(document.name)</div>');
     var lastSectionId = 'init';
     var lastSectionIsMdOnly = false;
     @for(cell <- document.cells) {
