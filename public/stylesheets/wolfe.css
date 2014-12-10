@@ -459,6 +459,11 @@ body > footer a:hover img {
   }
 }
 
+img.displayed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 /* Code */
 
 .quickstart .code {
