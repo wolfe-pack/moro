@@ -12,7 +12,7 @@
     "id" : 1,
     "compiler" : "scala",
     "input" : {
-      "code" : "exp.train(SGDConfig(10000, lambda = 0.1, observedRelWeight = 1.0, learningRate = 0.1))\n\"Train:\\n\" + exp.evalTrain().mkString(\"\\t\", \"\\n\\t\", \"\\n\") + \"\\n\" +\n\"Test:\\n\" + exp.evalTest().mkString(\"\\t\", \"\\n\\t\", \"\\n\")",
+      "code" : "exp.train(SGDConfig(10000, lambda = 0.1, observedRelWeight = 1.0, learningRate = 0.1))",
       "outputFormat" : "html",
       "extraFields" : { }
     }
