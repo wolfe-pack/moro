@@ -235,7 +235,10 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
      * Class loader for finding classes compiled by this StringCompiler.
      * After each reset, this class loader will not be able to find old compiled classes.
      */
-    var classLoader = new AbstractFileClassLoader(target, this.getClass.getClassLoader)
+    val parentClassLoader = new URLClassLoader(impliedClassPath.map(p => new File(p).toURI.toURL).toArray, this.getClass.getClassLoader) {
+      println(impliedClassPath.mkString("\t"))
+    }
+    var classLoader = new AbstractFileClassLoader(target, parentClassLoader)
 
     def reset() {
       targetDir match {
@@ -253,7 +256,8 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
       }
       cache.clear()
       reporter.reset
-      classLoader = new AbstractFileClassLoader(target, this.getClass.getClassLoader)
+      val parentClassLoader = new URLClassLoader(pathList.map(p => new File(p).toURI.toURL).toArray, this.getClass.getClassLoader)
+      var classLoader = new AbstractFileClassLoader(target, parentClassLoader)
     }
 
     object Debug {
