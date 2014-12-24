@@ -107,9 +107,9 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
    * and a digest of code
    */
   def applyProcessed[T](code: String, resetState: Boolean): T = {
-    // val id = uniqueId(code)
-    // val className = "Evaluator__" + id
-    applyProcessed("Moro", code, resetState)
+    val id = uniqueId(code)
+    val className = "Moro__" + id
+    applyProcessed(className, code, resetState)
   }
 
   /**
@@ -126,7 +126,7 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
     val digest = MessageDigest.getInstance("SHA-1").digest(code.getBytes())
     val sha = new BigInteger(1, digest).toString(16)
     idOpt match {
-      case Some(id) => sha + "_" + jvmId
+      case Some(id) => sha + "_" + id
       case _ => sha
     }
   }
