@@ -118,8 +118,10 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
   def applyProcessed[T](className: String, code: String, resetState: Boolean): T = {
     val wrappedCode = wrapCodeInClass(className, code)
     println("code: " + wrappedCode)
-    val cls = compiler(wrappedCode, className, resetState)
-    cls.getConstructor().newInstance().asInstanceOf[() => Any].apply().asInstanceOf[T]
+    val cls = compiler(wrappedCode, className + "$", resetState)
+    //cls.getConstructor().newInstance().asInstanceOf[() => Any].apply().asInstanceOf[T]
+    val objectRef = cls.getField("MODULE$").get(null)
+    objectRef.asInstanceOf[() => Any].apply().asInstanceOf[T]
   }
 
   private def uniqueId(code: String, idOpt: Option[Int] = Some(jvmId)): String = {
@@ -135,7 +137,7 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
    * Wrap source code in a new class with an apply method.
    */
   private def wrapCodeInClass(className: String, code: String) = {
-    "class " + className + " extends (() => Any) {\n" +
+    "object " + className + " extends (() => Any) {\n" +
       imports.map(i => "import " + i + "\n").mkString("") +
       "  def apply(): org.sameersingh.htmlgen.HTML = {\n" +
       code + "\n" +
