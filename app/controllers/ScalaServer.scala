@@ -33,7 +33,8 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
 
   def compile(input: Input) = {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)
-    val code = input.code;
+    val code = input.code
+    //println(classPath.mkString("\t"))
     val eval = new Evaluator(None, classPath, imports, classesForJarPath)
     println("compiling code : " + code)
     val result = try {
@@ -48,7 +49,7 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
     } finally {
       "Compile Error!!"
     }
-    println("result: " + result)
+    //println("result: " + result)
     Result("<div class=\"string-result\">" + "<blockquote>" + result.toString + "</blockquote>" + "</div>")
   }
 }
