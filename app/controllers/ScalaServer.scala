@@ -33,6 +33,8 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
   val numCompiledClasses = 10
   val compiledMap = new mutable.HashMap[String,Any]
 
+  //val eval = new Evaluator(Some(new File("runtime-classes")), classPath, imports, classesForJarPath)
+  val interpreter = new ScalaInterpreter(None, classPath, imports, classesForJarPath)
 
   def compile(input: Input) = {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)
@@ -40,10 +42,9 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
     println(aggregatedCells.mkString("{", "}, {", "}"))
     val code = input.code
     //println(classPath.mkString("\t"))
-    // Some(new File("runtime-classes"))
-    val eval = new Evaluator(None, classPath, imports, classesForJarPath)
     val result = try {
-      eval.applyProcessed[org.sameersingh.htmlgen.HTML](aggregatedCells ++ Array(code)).source
+      //eval.applyProcessed[org.sameersingh.htmlgen.HTML](aggregatedCells ++ Array(code)).source
+      interpreter.execute[org.sameersingh.htmlgen.HTML](aggregatedCells ++ Array(code)).source
     } catch {
       case e: CompilerException => {
         e.printStackTrace()
@@ -51,8 +52,11 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
         "<span class=\"label label-danger\">Error: %s</span>" format(e.m.head._2)
 
       }
+      case e: Exception => {
+        e.printStackTrace()
+      }
     } finally {
-      "Compile Error!!"
+        "Compile Error!!"
     }
     //println("result: " + result)
     Result("<div class=\"string-result\">" + "<blockquote>" + result.toString + "</blockquote>" + "</div>")
