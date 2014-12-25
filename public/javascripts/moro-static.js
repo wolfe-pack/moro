@@ -25,15 +25,16 @@ function addStaticCellFromJson(id,doc,mode,input,compilers) {
 function compileStaticCell(id,doc,mode,input,compilers) {
   var compiler = compilers[mode];
   if(compiler.aggregate) {
-    var prefixInput = "";
+    var aggregatedCells = new Array();
     for(var midx in doc.ids) {
       var mid = doc.ids[midx];
       if(doc.cells[mid].mode == mode) {
         if(id == mid) break;
-        prefixInput = prefixInput + compiler.editorToInput(doc, doc.cells[mid].id).code + "\n";
+        // code
+        aggregatedCells.push(compiler.editorToInput(doc, doc.cells[mid].id).code);
       }
     }
-    input.code = prefixInput + input.code;
+    input.extraFields['aggregatedCells'] = JSON.stringify(aggregatedCells);
   }
   compileCode(input,
       function(x) {

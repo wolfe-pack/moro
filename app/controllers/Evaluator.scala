@@ -93,6 +93,33 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
   private[this] val STYLE_INDENT = 2
   private[this] lazy val compiler = new StringCompiler(STYLE_INDENT, target)
 
+  def getClassAndName(codes: Array[String]): (String, Class[_]) = {
+    assert(codes.length > 0)
+    if(codes.length == 1) {
+      val id = uniqueId(codes.head)
+      val className = "Moro__" + id
+      val wrappedCode = wrapCodeInClass(className, codes.head)
+      println("code: " + wrappedCode)
+      val cls = compiler(wrappedCode, className + "$", false)
+      (className, cls)
+    } else {
+      val (parentClassName, parentClassObj) = getClassAndName(codes.dropRight(1))
+      val code = "import " + parentClassName + "._\n\n" + codes.last
+      val id = uniqueId(code)
+      val className = "Moro__" + id
+      val wrappedCode = wrapCodeInClass(className, code)
+      println("code: " + wrappedCode)
+      val cls = compiler(wrappedCode, className + "$", false)
+      (className, cls)
+    }
+  }
+
+  def applyProcessed[T](codes: Array[String]): T = {
+    val (clsName, cls) = getClassAndName(codes)
+    val objectRef = cls.getField("MODULE$").get(null)
+    objectRef.asInstanceOf[() => Any].apply().asInstanceOf[T]
+  }
+
   /**
    * val i: Int = new Eval()("1 + 1") // => 2
    */
@@ -139,6 +166,7 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
   private def wrapCodeInClass(className: String, code: String) = {
     "object " + className + " extends (() => Any) {\n" +
       imports.map(i => "import " + i + "\n").mkString("") +
+      code + "\n" +
       "  def apply(): org.sameersingh.htmlgen.HTML = {\n" +
       code + "\n" +
       "  }\n" +
@@ -259,7 +287,7 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
       cache.clear()
       reporter.reset
       val parentClassLoader = new URLClassLoader(pathList.map(p => new File(p).toURI.toURL).toArray, this.getClass.getClassLoader)
-      var classLoader = new AbstractFileClassLoader(target, parentClassLoader)
+      classLoader = new AbstractFileClassLoader(target, parentClassLoader)
     }
 
     object Debug {

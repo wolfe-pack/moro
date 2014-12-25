@@ -1,6 +1,9 @@
 package controllers
 
+import java.io.File
+
 import controllers.util.MoroConfig
+import play.api.libs.json.Json
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 
@@ -33,12 +36,14 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
 
   def compile(input: Input) = {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)
+    val aggregatedCells = Json.fromJson[Array[String]](Json.parse(input.extraFields("aggregatedCells"))).get
+    println(aggregatedCells.mkString("{", "}, {", "}"))
     val code = input.code
     //println(classPath.mkString("\t"))
+    // Some(new File("runtime-classes"))
     val eval = new Evaluator(None, classPath, imports, classesForJarPath)
-    println("compiling code : " + code)
     val result = try {
-      eval.apply[org.sameersingh.htmlgen.HTML](code, false).source
+      eval.applyProcessed[org.sameersingh.htmlgen.HTML](aggregatedCells ++ Array(code)).source
     } catch {
       case e: CompilerException => {
         e.printStackTrace()

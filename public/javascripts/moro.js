@@ -54,7 +54,7 @@ function runCode(doc, id, compilers) {
     aggregateScope = input.extraFields.scope;
   if(compiler.aggregate && aggregateCell) {
     var prefixConfig = {};
-    var prefixInput = "";
+    var aggregatedCells = new Array();
     for(var midx in doc.ids) {
       var mid = doc.ids[midx];
       var scope = "_default"
@@ -70,7 +70,7 @@ function runCode(doc, id, compilers) {
           prefixConfig[ck] = doc.cells[mid].config[ck];
         }
         // code
-        prefixInput = prefixInput + compiler.editorToInput(doc, doc.cells[mid].id).code + "\n";
+        aggregatedCells.push(compiler.editorToInput(doc, doc.cells[mid].id).code);
       }
     }
     for(var ck in prefixConfig) {
@@ -79,7 +79,7 @@ function runCode(doc, id, compilers) {
       }
       input.extraFields[ck] = prefixConfig[ck];
     }
-    input.code = prefixInput + input.code;
+    input.extraFields['aggregatedCells'] = JSON.stringify(aggregatedCells);
   }
   compileCode(input,
       function(x) {
