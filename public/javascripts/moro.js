@@ -45,6 +45,7 @@ function runCode(doc, id, compilers) {
   var mode = doc.cells[id].mode;
   var compiler = compilers[mode];
   var input = compiler.editorToInput(doc, id);
+  input.sessionId = doc.guid;
   input.extraFields = doc.cells[id].config;
   var aggregateCell = true;
   if(input.extraFields != null && input.extraFields.hasOwnProperty('aggregate'))

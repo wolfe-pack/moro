@@ -24,7 +24,7 @@ object OutputFormats extends Enumeration {
 
 import OutputFormats._
 
-case class Input(code: String, outputFormat: String = OutputFormats.html, extraFields: Map[String, String] = Map.empty) {
+case class Input(sessionId: String, code: String, extraFields: Map[String, String] = Map.empty) {
   def config: Map[String, String] = if (extraFields == null) Map.empty else extraFields
 
   def configJson = Json.stringify(Json.toJson(config))
@@ -142,7 +142,6 @@ trait NoEditor {
       |function (doc, id) {
       |  input = {}
       |  input.code = '';
-      |  input.outputFormat = "html";
       |  return input;
       |};
     """.stripMargin
@@ -238,7 +237,6 @@ trait ACEEditor {
       |function (doc, id) {
       |  input = {}
       |  input.code = doc.cells[id].editor.getSession().getValue();
-      |  input.outputFormat = "html";
       |  return input;
       |};
     """.stripMargin
@@ -288,7 +286,6 @@ trait TextInputEditor {
       |function (doc, id) {
       |  input = {}
       |  input.code = doc.cells[id].editor.val();
-      |  input.outputFormat = "html";
       |  return input;
       |};
     """.stripMargin

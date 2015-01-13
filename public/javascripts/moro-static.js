@@ -43,6 +43,8 @@ function compileStaticCell(id,doc,mode,input,compilers) {
 }
 
 function createStaticCellHTML(id,section,doc,mode,input,compilers) {
+  input.sessionId = doc.guid;
+  delete input[outputFormat];
   if(input.extraFields == null)
     input.extraFields = {}
   var cellDiv = document.createElement('div');
