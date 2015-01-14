@@ -24,7 +24,7 @@ object OutputFormats extends Enumeration {
 
 import OutputFormats._
 
-case class Input(sessionId: String, code: String, extraFields: Map[String, String] = Map.empty) {
+case class Input(sessionId: String, code: String, extraFields: Map[String, String] = Map.empty, outputFormat: Option[String] = None) {
   def config: Map[String, String] = if (extraFields == null) Map.empty else extraFields
 
   def configJson = Json.stringify(Json.toJson(config))
