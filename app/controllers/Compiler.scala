@@ -8,7 +8,7 @@ import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.{IMain, ILoop}
 import java.io.{FileWriter, File}
 import play.api.Configuration
-import controllers.util.MoroConfig
+import controllers.util.{Cache, MoroConfig}
 
 /**
  * @author sameer
@@ -407,27 +407,13 @@ trait Caching extends Compiler {
 
   type CacheEntry = Input
 
-  val _cache = new mutable.HashMap[CacheEntry, Result]
-  val _queue = new mutable.Queue[CacheEntry]()
+  lazy val _cache = new Cache[Input, Result](maxCacheSize)
 
   override def process(input: Input): Result = {
     import CompilerConfigKeys._
     val useCache = input.config.getOrElse(CacheResults, "true").toBoolean
     if (!useCache) return super.process(input)
-    if (_cache.contains(input)) {
-      _cache(input)
-    } else {
-      val result = super.process(input)
-      _cache(input) = result
-      _queue += input
-      if (_cache.size > maxCacheSize) {
-        // get rid of the oldest input
-        val deleted = _queue.dequeue()
-        _cache.remove(deleted)
-        println("Too big, removing.. " + deleted)
-      }
-      result
-    }
+    _cache.getOrElseUpdate(input, super.process(input))
   }
 }
 
