@@ -59,6 +59,8 @@ object ScalaIMainInterpreter {
     }
   }
 
+  def codeName(code: String) = "Moro_" + uniqueId(code)
+
 }
 
 class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[String] = List.empty,
@@ -124,38 +126,40 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     im
   })
 
-  def checkCodeCompiled(sessionId: String, code: String): Boolean = {
-    val id = uniqueId(code)
-    val className = "Moro_" + id
-    imain(sessionId).valueOfTerm(className).isDefined
+  def checkCodeCompiled(sessionId: String, code: String): Boolean = checkCodeCompiled(imain(sessionId), code)
+
+  def checkCodeCompiled(im: IMain, code: String): Boolean = {
+    im.valueOfTerm(codeName(code)).isDefined
+  }
+
+  def interpret(im: IMain, code: String): Unit = {
+    val result = im.interpret(code)
+    assert(result == Results.Success, "Compilation Failed")
+    val anyVar = im.mostRecentVar
+    im.interpret("val " + codeName(code) + ": org.sameersingh.htmlgen.HTML = " + anyVar)
+    assert(checkCodeCompiled(im, code))
+  }
+
+  def getValue(im: IMain, code: String): HTML = {
+    val html = im.valueOfTerm(codeName(code))
+    assert(html.isDefined)
+    html.get.asInstanceOf[HTML]
   }
 
   def execute(sessionId: String, snippets: Array[String]): org.sameersingh.htmlgen.HTML = {
-    import org.sameersingh.htmlgen.DivConverter.Implicits._
     val im = imain(sessionId)
     // find first changed snippet
-    val firstChanged = snippets.toSeq.indexWhere(code => !checkCodeCompiled(sessionId, code))
+    val firstChanged = snippets.toSeq.indexWhere(code => !checkCodeCompiled(im, code))
     println(s"First Changed Index $firstChanged of ${snippets.size}")
     // compile and run all code after, keeping track of last
     if(firstChanged >= 0) {
       println("First Changed: " + snippets(firstChanged))
-      for (idx <- firstChanged until snippets.length - 1) {
+      for (idx <- firstChanged until snippets.length) {
         val code = snippets(idx)
-        val classname = "Moro_" + uniqueId(code)
-        im.interpret("object " + classname)
-        assert(checkCodeCompiled(sessionId, code))
-        val result = im.interpret(snippets(idx))
-        assert(result == Results.Success, "Compilation Failed")
+        interpret(im, code)
       }
     }
-    val classname = "Moro_" + uniqueId(snippets.last)
-    val classResult = im.interpret("object " + classname)
-    assert(classResult == Results.Success, "Compilation Failed")
-    assert(checkCodeCompiled(sessionId, snippets.last))
-    val result = im.interpret(snippets.last)
-    assert(result == Results.Success, "Compilation Failed")
-    val any = im.valueOfTerm(im.mostRecentVar)
-    any.getOrElse("No value returned.")
+    getValue(im, snippets.last)
   }
 
   override def compile(sessionId: String, codes: Array[String]): HTML = execute(sessionId, codes)
