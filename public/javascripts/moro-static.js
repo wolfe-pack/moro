@@ -21,8 +21,21 @@ function addStaticCellFromJson(id,doc,mode,input,compilers) {
   }
 }
 */
+function seqCompileCells(ids, doc, compilers) {
+  console.log(ids);
+  if(ids.length == 1) {
+    var id = ids[0];
+    var cell = doc.cells[id];
+    compileStaticCell(id, doc, cell.mode, cell.input, compilers)
+  } else {
+    // get the first id
+    var id = ids[0];
+    var cell = doc.cells[id];
+    compileStaticCell(id, doc, cell.mode, cell.input, compilers, function() { seqCompileCells(ids.slice(1), doc, compilers) })
+  }
+}
 
-function compileStaticCell(id,doc,mode,input,compilers) {
+function compileStaticCell(id,doc,mode,input,compilers,post) {
   var compiler = compilers[mode];
   if(compiler.aggregate) {
     var aggregatedCells = new Array();
@@ -39,6 +52,7 @@ function compileStaticCell(id,doc,mode,input,compilers) {
   compileCode(input,
       function(x) {
         outputResult(doc, id, x, compilers);
+        if(typeof post !== "undefined") post();
       }, doc.cells[id].mode);
 }
 
@@ -74,7 +88,7 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
     $(editCellDiv).append(inputDiv);
     $(cellDiv).append(editCellDiv);
   }
-  $(cellDiv).append('<div id="renderDisplay'+id+'" class="cell">Loading...</div>');
+  $(cellDiv).append('<div id="renderDisplay'+id+'" class="cell"><div class="text-center"><img src="/assets/images/ajax-loader.gif"></img></div></div>');
   section.append(cellDiv);
 
   // make functional
@@ -90,5 +104,13 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
     $('#editCell' + id).show();
     doc.cells[id].editor = compilers[mode].editor(id, input.code);
   }
-  compileStaticCell(id, doc, mode, input, compilers);
+  if(!compilers[mode].aggregate) compileStaticCell(id, doc, mode, input, compilers);
+}
+
+function compileAll(doc,compilers) {
+  var ids = doc.ids.filter(function(id) {
+    var cell = doc.cells[id];
+    return compilers[cell.mode].aggregate;
+  });
+  seqCompileCells(ids,doc,compilers)
 }
