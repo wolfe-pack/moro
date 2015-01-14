@@ -10,7 +10,7 @@ class Cache[A, B](val maxCacheSize: Int = 100) extends mutable.Map[A,B] {
   val _cache = new mutable.HashMap[A, B]
   val _queue = new mutable.Queue[A]()
 
-  override def +=(kv: (A, B)): Cache[A, B] = {
+  override def +=(kv: (A, B)) = {
     _cache += kv
     _queue += kv._1
     if (_cache.size > maxCacheSize) {
@@ -22,7 +22,7 @@ class Cache[A, B](val maxCacheSize: Int = 100) extends mutable.Map[A,B] {
     this
   }
 
-  override def -=(key: A): Cache[A, B] = {
+  override def -=(key: A) = {
     _cache -= key
     _queue.dequeueFirst(_ == key)
     this

@@ -6,6 +6,8 @@ import java.net.URLClassLoader
 import java.security.MessageDigest
 import java.util.jar.JarFile
 
+import controllers.util.Cache
+
 import scala.reflect.io.VirtualDirectory
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.IMain
@@ -127,46 +129,48 @@ class ScalaInterpreter(targetDir: Option[File] = None, classPath: List[String] =
   settings.classpath.value = (pathList ::: impliedClassPath).mkString(File.pathSeparator)
   println(settings.classpath.value)
 
-  def getClassAndName(codes: Array[String]): String = {
+  def getClassAndName(sessionId: String, codes: Array[String]): String = {
     assert(codes.length > 0)
     if (codes.length == 1) {
       val id = uniqueId(codes.head)
       val className = "Moro_" + id
       val wrappedCode = wrapCodeInClass(className, codes.head, imports)
       println("code: " + wrappedCode)
-      compile(wrappedCode, className)
+      compile(sessionId, wrappedCode, className)
       className
     } else {
-      val parentClassName = getClassAndName(codes.dropRight(1))
+      val parentClassName = getClassAndName(sessionId, codes.dropRight(1))
       val code = "import " + parentClassName + "._\n\n" + codes.last
       val id = uniqueId(code)
       val className = "Moro_" + id
       val wrappedCode = wrapCodeInClass(className, code, imports)
       println("code: " + wrappedCode)
-      compile(wrappedCode, className)
+      compile(sessionId, wrappedCode, className)
       className
     }
   }
 
-  private val imain = new IMain(settings)
+  private val imainCache = new Cache[String, IMain]
 
-  def checkObjectCompiled(className: String): Boolean = {
-    imain.valueOfTerm(className).isDefined
+  private def imain(sessionId: String) = imainCache.getOrElseUpdate(sessionId, new IMain(settings))
+
+  def checkObjectCompiled(sessionId: String, className: String): Boolean = {
+    imain(sessionId).valueOfTerm(className).isDefined
   }
 
-  def compile(snippet: String, className: String): Unit = {
-    if (!checkObjectCompiled(className))
-      imain.interpret(snippet)
+  def compile(sessionId: String, snippet: String, className: String): Unit = {
+    if (!checkObjectCompiled(sessionId, className))
+      imain(sessionId).interpret(snippet)
       //imain.compileString(snippet)
   }
 
-  def execute[A](snippets: Array[String]): A = {
+  def execute[A](sessionId: String, snippets: Array[String]): A = {
     //imain.resetClassLoader()
-    val className = getClassAndName(snippets)
+    val className = getClassAndName(sessionId, snippets)
     //val result = imain.interpret("val ret = " + className + ".apply()")
     // val any = imain.valueOfTerm("ret").get
     // any.asInstanceOf[A]
-    val any = imain.valueOfTerm(className).get
+    val any = imain(sessionId).valueOfTerm(className).get
     any.asInstanceOf[() => A].apply()
   }
 }
