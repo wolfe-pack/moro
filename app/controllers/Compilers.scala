@@ -22,7 +22,7 @@ class Compilers extends mutable.Traversable[Compiler] {
 }
 
 class AllCompilers(config: MoroConfig) extends Compilers {
-  this += new ScalaServer(config) with Caching
+  this += new ScalaServer(config) //with Caching
   this += new WolfeEvalServer(config) with Caching
   this += new PegdownCompiler with Caching
   this += new SectionCompiler

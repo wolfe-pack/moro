@@ -34,13 +34,13 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
   val compiledMap = new mutable.HashMap[String,Any]
 
   val interpreter: ScalaInterpreter =
-    new Evaluator(None, classPath, imports, classesForJarPath, false) //Some(new File("runtime-classes")
-  //val interpreter = new ScalaInterpreter(None, classPath, imports, classesForJarPath)
+    //new Evaluator(None, classPath, imports, classesForJarPath, false) //Some(new File("runtime-classes")
+    new ScalaIMainInterpreter(None, classPath, imports, classesForJarPath)
 
   def compile(input: Input) = {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)
     val aggregatedCells = Json.fromJson[Array[String]](Json.parse(input.extraFields("aggregatedCells"))).get
-    println(aggregatedCells.mkString("{", "}, {", "}"))
+    //println(aggregatedCells.mkString("{", "}, {", "}"))
     val code = input.code
     //println(classPath.mkString("\t"))
     val result = try {

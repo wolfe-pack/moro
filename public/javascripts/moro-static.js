@@ -21,20 +21,6 @@ function addStaticCellFromJson(id,doc,mode,input,compilers) {
   }
 }
 */
-function seqCompileCells(ids, doc, compilers) {
-  console.log(ids);
-  if(ids.length == 1) {
-    var id = ids[0];
-    var cell = doc.cells[id];
-    compileStaticCell(id, doc, cell.mode, cell.input, compilers)
-  } else {
-    // get the first id
-    var id = ids[0];
-    var cell = doc.cells[id];
-    compileStaticCell(id, doc, cell.mode, cell.input, compilers, function() { seqCompileCells(ids.slice(1), doc, compilers) })
-  }
-}
-
 function compileStaticCell(id,doc,mode,input,compilers,post) {
   var compiler = compilers[mode];
   if(compiler.aggregate) {
@@ -112,5 +98,8 @@ function compileAll(doc,compilers) {
     var cell = doc.cells[id];
     return compilers[cell.mode].aggregate;
   });
-  seqCompileCells(ids,doc,compilers)
+  seqCall(ids,function(id, post) {
+    var cell = doc.cells[id];
+    compileStaticCell(id, doc, cell.mode, cell.input, compilers, post)
+  })
 }

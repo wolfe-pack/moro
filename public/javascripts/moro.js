@@ -1,11 +1,26 @@
-function compileCode (input, usage, mode) {
+function seqCall(ids, func) {
+  console.log(ids);
+  var id = ids[0];
+  if(ids.length == 1) {
+    func(id)
+  } else {
+    // get the first id
+    var id = ids[0];
+    func(id, function() { seqCall(ids.slice(1), func); });
+  }
+}
+
+function compileCode (input, usage, mode, post) {
     $.ajax({
        type: "POST",
        contentType: "application/json",
        url: '/compiler/' + mode,
        data: JSON.stringify(input),
        dataType: "json",
-       success: usage,
+       success: function(x) {
+          usage(x);
+          if(typeof post !== "undefined") post();
+       },
        error: function(j, t, e) {}
     });
 };
@@ -38,7 +53,7 @@ function outputResult(doc, id, result, compilers) {
 }
 
 
-function runCode(doc, id, compilers) {
+function runCode(doc, id, compilers, post) {
   outputResult(doc, id, { format: "html", result: '<div class="text-center">' +
                                                   '   <img src="/assets/images/ajax-loader.gif"></img>' +
                                                   '</div>' }, compilers)
@@ -86,7 +101,7 @@ function runCode(doc, id, compilers) {
       function(x) {
         outputResult(doc, id, x, compilers);
         if(compilers[doc.cells[id].mode].hideAfterCompile) toggleEditor(doc, id);
-      }, doc.cells[id].mode);
+      }, doc.cells[id].mode, post);
 }
 
 function changeMode(id, newMode) {
@@ -235,10 +250,19 @@ function saveDoc(doc, compilers) {
 }
 
 function runAll(doc, compilers) {
+  var ids = [];
   for (var idx in doc.ids){
     var id = doc.ids[idx];
     if (doc.cells.hasOwnProperty(id)) {
-      runCode(doc, id, compilers);
+      var cell = doc.cells[id];
+      if(compilers[cell.mode].aggregate)
+        ids.push(id);
+      else
+        runCode(doc, id, compilers);
     }
   }
+  seqCall(ids, function(id, post) {
+    var cell = doc.cells[id];
+    runCode(doc, id, compilers, post)
+  })
 }
