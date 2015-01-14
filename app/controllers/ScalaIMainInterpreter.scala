@@ -7,6 +7,7 @@ import java.security.MessageDigest
 import java.util.jar.JarFile
 
 import controllers.util.Cache
+import org.sameersingh.htmlgen.HTML
 
 import scala.reflect.io.VirtualDirectory
 import scala.tools.nsc.Settings
@@ -19,7 +20,7 @@ import scala.util.matching.Regex
  * @author sameer
  * @since 12/24/14.
  */
-object ScalaInterpreter {
+object ScalaIMainInterpreter {
   private val jvmId = java.lang.Math.abs(new Random().nextInt())
   val classCleaner: Regex = "\\W".r
 
@@ -74,11 +75,11 @@ object ScalaInterpreter {
 
 }
 
-class ScalaInterpreter(targetDir: Option[File] = None, classPath: List[String] = List.empty,
+class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[String] = List.empty,
                        imports: List[String] = List.empty,
-                       classesForJarPath: List[String] = List.empty) {
+                       classesForJarPath: List[String] = List.empty) extends ScalaInterpreter {
 
-  import ScalaInterpreter._
+  import ScalaIMainInterpreter._
 
   private lazy val additionalPath =
     classesForJarPath.map(c =>
@@ -173,4 +174,6 @@ class ScalaInterpreter(targetDir: Option[File] = None, classPath: List[String] =
     val any = imain(sessionId).valueOfTerm(className).get
     any.asInstanceOf[() => A].apply()
   }
+
+  override def compile(sessionId: String, codes: Array[String]): HTML = execute[org.sameersingh.htmlgen.HTML](sessionId, codes)
 }

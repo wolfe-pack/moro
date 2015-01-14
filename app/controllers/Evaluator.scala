@@ -16,6 +16,7 @@ package controllers
  * limitations under the License.
  */
 
+import org.sameersingh.htmlgen.HTML
 import string._
 
 import java.io._
@@ -63,7 +64,7 @@ object Evaluator {
 class Evaluator(target: Option[File] = None, classPath: List[String] = List.empty,
                 imports: List[String] = List.empty,
                 classesForJarPath: List[String] = List.empty,
-                multipleObjs: Boolean = true) {
+                multipleObjs: Boolean = true) extends ScalaInterpreter {
 
   import Evaluator.jvmId
 
@@ -124,6 +125,8 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
       (className, cls)
     }
   }
+
+  override def compile(sessionId: String, codes: Array[String]): HTML = applyProcessed[org.sameersingh.htmlgen.HTML](codes)
 
   def applyProcessed[T](codes: Array[String]): T = {
     val (clsName, cls) = getClassAndName(codes)
