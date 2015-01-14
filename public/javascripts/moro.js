@@ -1,11 +1,9 @@
 function seqCall(ids, func) {
-  console.log(ids);
+  if(ids.length == 0) return;
   var id = ids[0];
   if(ids.length == 1) {
     func(id)
   } else {
-    // get the first id
-    var id = ids[0];
     func(id, function() { seqCall(ids.slice(1), func); });
   }
 }

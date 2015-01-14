@@ -155,7 +155,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     val result = im.interpret(snippets.last)
     assert(result == Results.Success, "Compilation Failed")
     val any = im.valueOfTerm(im.mostRecentVar)
-    any.getOrElse(null)
+    any.getOrElse("No value returned.")
   }
 
   override def compile(sessionId: String, codes: Array[String]): HTML = execute(sessionId, codes)
