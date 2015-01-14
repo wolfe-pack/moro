@@ -33,8 +33,8 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
   val numCompiledClasses = 10
   val compiledMap = new mutable.HashMap[String,Any]
 
-  //val eval = new Evaluator(Some(new File("runtime-classes")), classPath, imports, classesForJarPath)
-  val interpreter = new ScalaInterpreter(None, classPath, imports, classesForJarPath)
+  val eval = new Evaluator(None, classPath, imports, classesForJarPath, false) //Some(new File("runtime-classes")
+  //val interpreter = new ScalaInterpreter(None, classPath, imports, classesForJarPath)
 
   def compile(input: Input) = {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)
@@ -43,8 +43,8 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
     val code = input.code
     //println(classPath.mkString("\t"))
     val result = try {
-      //eval.applyProcessed[org.sameersingh.htmlgen.HTML](aggregatedCells ++ Array(code)).source
-      interpreter.execute[org.sameersingh.htmlgen.HTML](aggregatedCells ++ Array(code)).source
+      eval.applyProcessed[org.sameersingh.htmlgen.HTML](aggregatedCells ++ Array(code)).source
+      //interpreter.execute[org.sameersingh.htmlgen.HTML](aggregatedCells ++ Array(code)).source
     } catch {
       case e: CompilerException => {
         e.printStackTrace()

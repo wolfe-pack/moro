@@ -62,7 +62,8 @@ object Evaluator {
  */
 class Evaluator(target: Option[File] = None, classPath: List[String] = List.empty,
                 imports: List[String] = List.empty,
-                classesForJarPath: List[String] = List.empty) {
+                classesForJarPath: List[String] = List.empty,
+                multipleObjs: Boolean = true) {
 
   import Evaluator.jvmId
 
@@ -95,20 +96,30 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
 
   def getClassAndName(codes: Array[String]): (String, Class[_]) = {
     assert(codes.length > 0)
-    if(codes.length == 1) {
-      val id = uniqueId(codes.head)
-      val className = "Moro__" + id
-      val wrappedCode = wrapCodeInClass(className, codes.head)
-      println("code: " + wrappedCode)
-      val cls = compiler(wrappedCode, className + "$", false)
-      (className, cls)
+    if (multipleObjs) {
+      if (codes.length == 1) {
+        val id = uniqueId(codes.head)
+        val className = "Moro__" + id
+        val wrappedCode = wrapCodeInClass(className, codes.head, true)
+        println("code: " + wrappedCode)
+        val cls = compiler(wrappedCode, className + "$", false)
+        (className, cls)
+      } else {
+        val (parentClassName, parentClassObj) = getClassAndName(codes.dropRight(1))
+        val code = "import " + parentClassName + "._\n\n" + codes.last
+        val id = uniqueId(code)
+        val className = "Moro__" + id
+        val wrappedCode = wrapCodeInClass(className, code, true)
+        println("code: " + wrappedCode)
+        val cls = compiler(wrappedCode, className + "$", false)
+        (className, cls)
+      }
     } else {
-      val (parentClassName, parentClassObj) = getClassAndName(codes.dropRight(1))
-      val code = "import " + parentClassName + "._\n\n" + codes.last
-      val id = uniqueId(code)
+      val combinedCode = codes.mkString("\n")
+      val id = uniqueId(combinedCode)
       val className = "Moro__" + id
-      val wrappedCode = wrapCodeInClass(className, code)
-      println("code: " + wrappedCode)
+      val wrappedCode = wrapCodeInClass(className, combinedCode, true)
+      println("wrapped code: " + wrappedCode)
       val cls = compiler(wrappedCode, className + "$", false)
       (className, cls)
     }
@@ -163,10 +174,10 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
   /*
    * Wrap source code in a new class with an apply method.
    */
-  private def wrapCodeInClass(className: String, code: String) = {
+  private def wrapCodeInClass(className: String, code: String, repeat: Boolean = true) = {
     "object " + className + " extends (() => Any) {\n" +
       imports.map(i => "import " + i + "\n").mkString("") +
-      code + "\n" +
+      (if (repeat) code else "") + "\n" +
       "  def apply(): org.sameersingh.htmlgen.HTML = {\n" +
       code + "\n" +
       "  }\n" +
