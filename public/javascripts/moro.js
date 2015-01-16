@@ -40,11 +40,13 @@ var heightUpdateFunction = function(editor, id) {
 
 function outputResult(doc, id, result, compilers) {
   //if(compilers[doc.cells[id].mode].hideAfterCompile) toggleEditor(doc, id);
-  switch(result.format) {
-    case "html": doc.cells[id].renderDisplay.html(result.result); break;
-    //case "string": doc.cells[id].renderDisplay.html("<div class=\"string-result\">" + result.result + "</div>"); break;
-  }
-  MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
+  console.log(result);
+  var output = "";
+  // if(result.log && result.log != '')
+  //  output += '<pre>' + result.log + '</pre>'
+  output += result.result;
+  doc.cells[id].renderDisplay.html(output);
+  //MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
   $('pre code').each(function(i, block) {
     hljs.highlightBlock(block);
   });
@@ -52,7 +54,7 @@ function outputResult(doc, id, result, compilers) {
 
 
 function runCode(doc, id, compilers, post) {
-  outputResult(doc, id, { format: "html", result: '<div class="text-center">' +
+  outputResult(doc, id, { log: "", result: '<div class="text-center">' +
                                                   '   <img src="/assets/images/ajax-loader.gif"></img>' +
                                                   '</div>' }, compilers)
   var mode = doc.cells[id].mode;
@@ -161,12 +163,12 @@ function makeCellFunctional(doc,id,compiler,compilers,initialContent,config) {
     }
 }
 
-function addCellFromJson(doc,format,content,compilers,config) {
+function addCellFromJson(doc,mode,content,compilers,config) {
   $( "#cells" ).append(newCellDiv(doc.numCells));
   doc.ids.push(doc.numCells);
-  makeCellFunctional(doc,doc.numCells,format,compilers,content, config);
+  makeCellFunctional(doc,doc.numCells,mode,compilers,content, config);
   //doc.cells[doc.numCells].editor.getSession().setValue(content);
-  $('#modeForm'+ doc.numCells +' label input[value='+ format +']').parent().click()
+  $('#modeForm'+ doc.numCells +' label input[value='+ mode +']').parent().click()
   //runCode(doc, doc.numCells, compilers);
   doc.numCells += 1;
 }

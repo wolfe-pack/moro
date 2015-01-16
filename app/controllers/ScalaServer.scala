@@ -44,25 +44,26 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
     val code = input.code
     //println(classPath.mkString("\t"))
     val result = try {
-      interpreter.compile(input.sessionId, aggregatedCells ++ Array(code)).source
+      interpreter.compile(input.sessionId, aggregatedCells ++ Array(code))
     } catch {
       case e: CompilerException => {
         e.printStackTrace()
         //"<span class=\"label label-danger\">Error on line %d, col %d: %s</span>" format(e.m.head._1.line - 4, e.m.head._1.column - 4, e.m.head._2)
-        "<span class=\"label label-danger\">Error: %s</span>" format(e.m.head._2)
+        Result("<span class=\"label label-danger\">Compile Error!\n%s\n</span>" format(e.m.head._2))
 
       }
       case e: Exception => {
         e.printStackTrace()
+        Result("<span class=\"label label-danger\">Error!</span>\n%s" format(e.getMessage))
       }
     } finally {
-        "Compile Error!!"
+        Result("Compile Error!!")
     }
     //println("result: " + result)
-    Result("<div class=\"string-result\">" + "<blockquote>" + result.toString + "</blockquote>" + "</div>")
+    Result("<div class=\"string-result\">" + "<blockquote>" + result.result + "</blockquote>" + "</div>", result.log)
   }
 }
 
 trait ScalaInterpreter {
-  def compile(sessionId: String, codes: Array[String]): org.sameersingh.htmlgen.HTML
+  def compile(sessionId: String, codes: Array[String]): Result
 }

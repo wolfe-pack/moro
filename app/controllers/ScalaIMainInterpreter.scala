@@ -1,6 +1,6 @@
 package controllers
 
-import java.io.File
+import java.io.{StringWriter, PrintWriter, Writer, File}
 import java.math.BigInteger
 import java.net.URLClassLoader
 import java.security.MessageDigest
@@ -10,8 +10,8 @@ import controllers.util.Cache
 import org.sameersingh.htmlgen.HTML
 
 import scala.reflect.io.VirtualDirectory
-import scala.tools.nsc.Settings
-import scala.tools.nsc.interpreter.{Results, IMain}
+import scala.tools.nsc.{NewLinePrintWriter, Settings}
+import scala.tools.nsc.interpreter.{JPrintWriter, Results, IMain}
 import scala.tools.nsc.io._
 import scala.util.Random
 import scala.util.matching.Regex
@@ -118,13 +118,17 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
   settings.classpath.value = (pathList ::: impliedClassPath).mkString(File.pathSeparator)
   println(settings.classpath.value)
 
-  private val imainCache = new Cache[String, IMain]
+  private val imainCache = new Cache[String, (IMain, StringWriter)]
 
-  private def imain(sessionId: String) = imainCache.getOrElseUpdate(sessionId, {
-    val im = new IMain(settings)
+  private def imainPair(sessionId: String) = imainCache.getOrElseUpdate(sessionId, {
+    val w = new StringWriter()
+    val im = new IMain(settings, new NewLinePrintWriter(w, true))
     imports.foreach(i => im.interpret("import " + i + "\n"))
-    im
+    im -> w
   })
+
+  private def imain(sessionId: String) = imainPair(sessionId)._1
+  private def imainWriter(sessionId: String) = imainPair(sessionId)._2
 
   def checkCodeCompiled(sessionId: String, code: String): Boolean = checkCodeCompiled(imain(sessionId), code)
 
@@ -132,35 +136,53 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     im.valueOfTerm(codeName(code)).isDefined
   }
 
-  def interpret(im: IMain, code: String): Unit = {
+  def interpret(im: IMain, w: StringWriter, code: String): Unit = {
+    w.getBuffer.delete(0, w.getBuffer.length())
     val result = im.interpret(code)
-    assert(result == Results.Success, "Compilation Failed")
-    val anyVar = im.mostRecentVar
-    im.interpret("val " + codeName(code) + ": org.sameersingh.htmlgen.HTML = " + anyVar)
+    val log = w.getBuffer.toString
+    w.getBuffer.delete(0, w.getBuffer.length())
+    //assert(result == Results.Success, "Compilation Failed")
+    val cname = codeName(code)
+    if(result == Results.Success) {
+      val anyVar = im.mostRecentVar
+      im.interpret("val " + cname + ": org.sameersingh.htmlgen.HTML = " + anyVar)
+    } else {
+      if(log.trim.isEmpty) throw new Exception("")
+      else {
+        val errString = log
+        throw new Exception("<pre class=\"error\">" + errString + "</pre>") //.replaceAll("\n", "</pre><pre>") + "</pre>")
+      }
+    }
+    im.bind(cname + "Log", "String", log)
     assert(checkCodeCompiled(im, code))
   }
 
-  def getValue(im: IMain, code: String): HTML = {
-    val html = im.valueOfTerm(codeName(code))
-    assert(html.isDefined)
-    html.get.asInstanceOf[HTML]
+  def getValue(im: IMain, code: String): Result = {
+    val cname = codeName(code)
+    val html = im.valueOfTerm(cname)
+    //assert(html.isDefined)
+    val log = im.valueOfTerm(cname + "Log")
+    assert(log.isDefined)
+    if(html.isDefined)
+      Result(html.get.asInstanceOf[HTML].source, log.get.asInstanceOf[String])
+    else Result("<b>Compile Error!</b>", log.get.asInstanceOf[String])
   }
 
-  def execute(sessionId: String, snippets: Array[String]): org.sameersingh.htmlgen.HTML = {
-    val im = imain(sessionId)
+  def execute(sessionId: String, snippets: Array[String]): Result = {
+    val (im, w) = imainPair(sessionId)
     // find first changed snippet
     val firstChanged = snippets.toSeq.indexWhere(code => !checkCodeCompiled(im, code))
     println(s"First Changed Index $firstChanged of ${snippets.size}")
     // compile and run all code after, keeping track of last
-    if(firstChanged >= 0) {
+    if (firstChanged >= 0) {
       println("First Changed: " + snippets(firstChanged))
       for (idx <- firstChanged until snippets.length) {
         val code = snippets(idx)
-        interpret(im, code)
+        interpret(im, w, code)
       }
     }
     getValue(im, snippets.last)
   }
 
-  override def compile(sessionId: String, codes: Array[String]): HTML = execute(sessionId, codes)
+  override def compile(sessionId: String, codes: Array[String]): Result = execute(sessionId, codes)
 }

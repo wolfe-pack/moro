@@ -99,6 +99,17 @@ img.displayed {
   font-size: 13px;
   clear:left;
 }
+
+.string-result .error {
+  margin: 0px;
+  color: #d9534f;
+  background-color: #fff;
+  border: 1px solid #d9534f;
+  border-radius: 0.25em;
+  font-size: 75%;
+  display: block;
+  padding: 5px;
+}
 hr {
   /* border-top: 1px dotted #ddd;
   color: #fff;

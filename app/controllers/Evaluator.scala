@@ -126,7 +126,7 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
     }
   }
 
-  override def compile(sessionId: String, codes: Array[String]): HTML = applyProcessed[org.sameersingh.htmlgen.HTML](codes)
+  override def compile(sessionId: String, codes: Array[String]): Result = Result(applyProcessed[org.sameersingh.htmlgen.HTML](codes).source)
 
   def applyProcessed[T](codes: Array[String]): T = {
     val (clsName, cls) = getClassAndName(codes)

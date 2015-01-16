@@ -30,7 +30,7 @@ case class Input(sessionId: String, code: String, extraFields: Map[String, Strin
   def configJson = Json.stringify(Json.toJson(config))
 }
 
-case class Result(result: String, format: String = OutputFormats.html)
+case class Result(result: String, log: String = "")
 
 /**
  * A Description of a configuration element
