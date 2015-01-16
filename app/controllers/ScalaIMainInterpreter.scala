@@ -10,8 +10,9 @@ import controllers.util.Cache
 import org.sameersingh.htmlgen.HTML
 
 import scala.reflect.io.VirtualDirectory
+import scala.tools.nsc.interpreter.Completion.{ScalaCompleter, Candidates}
 import scala.tools.nsc.{NewLinePrintWriter, Settings}
-import scala.tools.nsc.interpreter.{JPrintWriter, Results, IMain}
+import scala.tools.nsc.interpreter._
 import scala.tools.nsc.io._
 import scala.util.Random
 import scala.util.matching.Regex
@@ -182,6 +183,38 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
       }
     }
     getValue(im, snippets.last)
+  }
+
+  override def autocomplete(sessionId: String, prefix: String): Seq[String] = {
+    // From: http://stackoverflow.com/a/20333972
+    val im = imain(sessionId)
+    val comp      = new JLineCompletion(im)
+    val completer = comp.completer()
+    val Candidates(_, choices) = completer.complete(prefix, prefix.length)
+    choices
+  }
+
+  override def autocompleteLine(sessionId: String, prefix: String): Seq[String] = {
+    // From: http://stackoverflow.com/a/20333972
+    import scala.collection.JavaConversions._
+    import scala.tools.jline.console.completer._
+    def scalaToJline(tc: ScalaCompleter): Completer = new Completer {
+      def complete(_buf: String, cursor: Int, candidates: JList[CharSequence]): Int = {
+        val buf   = if (_buf == null) "" else _buf
+        val Candidates(newCursor, newCandidates) = tc.complete(buf, cursor)
+        newCandidates foreach (candidates add _)
+        newCursor
+      }
+    }
+
+    val im = imain(sessionId)
+    val comp      = new JLineCompletion(im)
+    val completer = comp.completer()
+    val argCompletor: ArgumentCompleter = new ArgumentCompleter(new JLineDelimiter, scalaToJline(comp.completer))
+    argCompletor.setStrict(false)
+    val maybes = new java.util.ArrayList[CharSequence]
+    argCompletor.complete(prefix, prefix.length, maybes)
+    maybes.toSeq.map(_.toString)
   }
 
   override def compile(sessionId: String, codes: Array[String]): Result = execute(sessionId, codes)

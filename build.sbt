@@ -76,7 +76,8 @@ libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-library" % "2.10.3",
   "org.pegdown" % "pegdown" % "1.4.2",
   "ws.securesocial" %% "securesocial" % "2.1.4",
-  "com.typesafe" %% "play-plugins-mailer" % "2.1-RC2"
+  "com.typesafe" %% "play-plugins-mailer" % "2.1-RC2",
+  "org.scala-lang" % "jline" % "2.10.3"
 )
 
 play.Project.playScalaSettings

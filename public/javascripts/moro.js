@@ -40,7 +40,6 @@ var heightUpdateFunction = function(editor, id) {
 
 function outputResult(doc, id, result, compilers) {
   //if(compilers[doc.cells[id].mode].hideAfterCompile) toggleEditor(doc, id);
-  console.log(result);
   var output = "";
   // if(result.log && result.log != '')
   //  output += '<pre>' + result.log + '</pre>'
@@ -265,4 +264,30 @@ function runAll(doc, compilers) {
     var cell = doc.cells[id];
     runCode(doc, id, compilers, post)
   })
+}
+
+function enableAceScalaCompletion() {
+    var acelangTools = ace.require("ace/ext/language_tools");
+    var scalaCompleter = {
+      getCompletions: function(editor, session, pos, prefix, callback) {
+          var line = editor.session.getLine(pos.row).slice(0,pos.column);
+          console.log(line);
+          if (prefix.length === 0) { callback(null, []); return }
+          $.ajax({
+             type: "POST",
+             contentType: "application/json",
+             url: '/autocomplete/scala/' + doc.guid,
+             data: JSON.stringify({ 'line': line, 'prefix': prefix }),
+             dataType: "json",
+             success: function(wordList) {
+                console.log(wordList);
+                callback(null, wordList.map(function(ea) {
+                    return {name: ea, value: ea, score: 100, meta: "serverLine"}
+                }));
+             },
+             error: function(j, t, e) {}
+          });
+      }
+    }
+    acelangTools.addCompleter(scalaCompleter);
 }

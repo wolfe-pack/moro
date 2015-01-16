@@ -205,4 +205,20 @@ object Application extends Controller with securesocial.core.SecureSocial {
       }
   }
 
+  def autocompleteScala(sessionId: String) = Action {
+    request =>
+      request.body.asJson.map {
+        json => Ok(JacksonWrapper.serialize(
+          allCompilers.get("scala").fold(Seq.empty[String])(
+            compiler => {
+              val line = (json \ "line").as[String]
+              val prefix = (json \ "prefix").as[String]
+              val intp = compiler.asInstanceOf[ScalaServer].interpreter
+              println("Trying to autocomplete, line: " + line + ", prefix: " + prefix)
+              intp.autocompleteLine(sessionId, line) ++ intp.autocomplete(sessionId, prefix)
+            })))
+      }.getOrElse {
+        BadRequest("Expecting Json data")
+      }
+  }
 }

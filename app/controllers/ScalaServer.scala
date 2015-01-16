@@ -66,4 +66,6 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
 
 trait ScalaInterpreter {
   def compile(sessionId: String, codes: Array[String]): Result
+  def autocomplete(sessionId: String, prefix: String): Seq[String] = Seq.empty
+  def autocompleteLine(sessionId: String, prefix: String): Seq[String] = Seq.empty
 }

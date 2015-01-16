@@ -39,6 +39,8 @@ POST /dir/folder/add/*path                        controllers.Application.dirAdd
 POST /dir/folder/remove                              controllers.Application.dirRemoveFolder(path = "")
 POST /dir/folder/remove/*path                        controllers.Application.dirRemoveFolder(path)
 
+# Scala specific
+POST /autocomplete/scala/:sessionId                        controllers.Application.autocompleteScala(sessionId: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
