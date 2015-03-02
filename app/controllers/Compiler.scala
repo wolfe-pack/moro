@@ -212,6 +212,34 @@ trait ACEEditor {
       |            document.getElementById('remove' + id).click();
       |        }
       |    })
+      |    editor.commands.addCommand({
+      |        name: "moveCursorDown",
+      |        bindKey: {win: 'Down', mac: 'Down'},
+      |        exec: function(editor) {
+      |            if(editor.getCursorPosition().row + 1 == editor.getSession().getDocument().getLength()) {
+      |              ne=nextEditor(doc,id);
+      |              if(typeof(ne)!='undefined') {
+      |                ne.navigateTo(0, editor.getCursorPosition().column);
+      |                ne.focus();
+      |              }
+      |            }
+      |            editor.navigateDown(1);
+      |        }
+      |    })
+      |    editor.commands.addCommand({
+      |        name: "moveCursorUp",
+      |        bindKey: {win: 'Up', mac: 'Up'},
+      |        exec: function(editor) {
+      |            if(editor.getCursorPosition().row == 0) {
+      |              pe=prevEditor(doc,id);
+      |              if(typeof(pe)!='undefined') {
+      |                pe.navigateTo(pe.getSession().getDocument().getLength()-1, editor.getCursorPosition().column);
+      |                pe.focus();
+      |              }
+      |            }
+      |            editor.navigateUp(1);
+      |        }
+      |    })
       |    //heightUpdateFunction(editor, '#editor'+id);
       |    return editor;
       |}
