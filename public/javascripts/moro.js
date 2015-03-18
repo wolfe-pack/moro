@@ -45,7 +45,7 @@ function outputResult(doc, id, result, compilers) {
   //  output += '<pre>' + result.log + '</pre>'
   output += result.result;
   doc.cells[id].renderDisplay.html(output);
-  //MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
   $('pre code').each(function(i, block) {
     hljs.highlightBlock(block);
   });
