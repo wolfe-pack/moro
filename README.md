@@ -4,6 +4,19 @@ Moro
 
 Interactive documentation and programming with Scala, inspired by IPython notebook.
 
+Installation
+---
+
+```
+git clone https://github.com/wolfe-pack/wolfe-docs.git
+cd htmlgen
+mvn clean install  -Dgpg.skip=true
+cd ../wolfe
+sbt publishLocal
+cd ../moro
+sbt clean run
+```
+
 
 Open Source Projects
 ---
