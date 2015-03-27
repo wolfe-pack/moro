@@ -7,6 +7,7 @@ import java.security.MessageDigest
 import java.util.jar.JarFile
 
 import controllers.util.Cache
+import jline.console.completer.{ArgumentCompleter, Completer}
 import org.sameersingh.htmlgen.HTML
 
 import scala.reflect.io.VirtualDirectory
@@ -34,6 +35,9 @@ object ScalaIMainInterpreter {
     val indexOfFile = path.indexOf("file:") + 5
     val indexOfSeparator = path.lastIndexOf('!')
     List(path.substring(indexOfFile, indexOfSeparator))
+  } catch {
+    case e: Throwable =>
+      throw new RuntimeException(s"Unable to load $className from classpath", e)
   }
 
 
@@ -45,7 +49,7 @@ object ScalaIMainInterpreter {
   }
 
   lazy val libPath = try {
-    jarPathOfClass("scala.ScalaObject")
+    jarPathOfClass("scala.Array")
   } catch {
     case e: Throwable =>
       throw new RuntimeException("Unable to load scala base object from classpath (scala-library jar is missing?)", e)
@@ -197,7 +201,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
   override def autocompleteLine(sessionId: String, prefix: String): Seq[String] = {
     // From: http://stackoverflow.com/a/20333972
     import scala.collection.JavaConversions._
-    import scala.tools.jline.console.completer._
+    //import scala.tools.jline.console.completer._
     def scalaToJline(tc: ScalaCompleter): Completer = new Completer {
       def complete(_buf: String, cursor: Int, candidates: JList[CharSequence]): Int = {
         val buf   = if (_buf == null) "" else _buf

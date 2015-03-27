@@ -2,11 +2,11 @@ package controllers
 
 import _root_.java.io.{PrintWriter, FileOutputStream}
 
-import play.api.Application
+import play.api.{Application => PlayApplication}
 import play.api.libs.Codecs
 import play.api.libs.json.{Json, JsValue, Writes}
-import securesocial.core._
-import securesocial.core.providers.Token
+//import securesocial.core._
+//import securesocial.core.providers.Token
 
 import scala.collection.mutable
 
@@ -14,7 +14,11 @@ import scala.collection.mutable
 /**
  * Created by sameer on 10/1/14.
  */
-class MoroUserService(application: Application) extends UserServicePlugin(application) {
+class MoroUserService(application: PlayApplication) { //extends UserServicePlugin(application) {
+
+  type Token = String
+  type IdentityId = Any
+  type Identity = Int
 
   val tokens = new mutable.HashMap[String, Token]()
 
@@ -24,7 +28,7 @@ class MoroUserService(application: Application) extends UserServicePlugin(applic
    * @param id the user id
    * @return an optional user
    */
-  def find(id: IdentityId):Option[Identity] = UserIO.find(id)
+  def find(id: IdentityId):Option[Identity] = None //UserIO.find(id)
 
   /**
    * Finds a user by email and provider id.
@@ -38,7 +42,8 @@ class MoroUserService(application: Application) extends UserServicePlugin(applic
    */
   def findByEmailAndProvider(email: String, providerId: String):Option[Identity] = {
     println("finding: " + email + " (" + providerId + ")")
-    UserIO.find(email, providerId)
+    //UserIO.find(email, providerId)
+    None
   }
 
   /**
@@ -47,9 +52,9 @@ class MoroUserService(application: Application) extends UserServicePlugin(applic
    * @param identity
    */
   def save(identity: Identity) = {
-    val user = UserIO(identity)
-    println("saving: " + user.email.get + " (" + user.identityId + ")")
-    if(UserIO.find(user.identityId).isEmpty) user.save
+    val user = "" //UserIO(identity)
+    //println("saving: " + user.email.get + " (" + user.identityId + ")")
+    //if(UserIO.find(user.identityId).isEmpty) user.save
     user
   }
 
@@ -63,7 +68,7 @@ class MoroUserService(application: Application) extends UserServicePlugin(applic
    * @param token The token to save
    */
   def save(token: Token) = {
-    tokens(token.uuid) = token
+    //tokens(token.uuid) = token
   }
 
 
@@ -98,7 +103,7 @@ class MoroUserService(application: Application) extends UserServicePlugin(applic
    *
    */
   def deleteExpiredTokens() {
-    val ids = tokens.filter(_._2.isExpired).map(_._1)
-    ids.foreach(tokens.remove(_))
+    //val ids = tokens.filter(_._2.isExpired).map(_._1)
+    //ids.foreach(tokens.remove(_))
   }
 }

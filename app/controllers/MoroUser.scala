@@ -3,8 +3,8 @@ package controllers
 import play.api.libs.Codecs
 import play.api.libs.json.Json
 import java.io.{File, FileOutputStream, PrintWriter}
-import securesocial.core._
-import securesocial.core.providers.Token
+//import securesocial.core._
+//import securesocial.core.providers.Token
 
 /**
  * @author sameer
@@ -12,20 +12,21 @@ import securesocial.core.providers.Token
  */
 case class MoroUser(
                  id: Option[Long],
-                 identityId: IdentityId,
+                 //identityId: IdentityId,
                  firstName: String,
                  lastName: String,
                  email: Option[String],
-                 avatarUrl: Option[String],
-                 authMethod: AuthenticationMethod,
-                 oAuth1Info: Option[OAuth1Info],
-                 oAuth2Info: Option[OAuth2Info],
-                 passwordInfo: Option[PasswordInfo]
-                 ) extends Identity {
+                 avatarUrl: Option[String]
+                 //authMethod: AuthenticationMethod,
+                 //oAuth1Info: Option[OAuth1Info],
+                 //oAuth2Info: Option[OAuth2Info],
+                 //passwordInfo: Option[PasswordInfo]
+                 ) { //extends Identity
   def fullName: String = s"$firstName $lastName"
   def avatar: Option[String] = avatarUrl.orElse {
     email.map { e => s"http://www.gravatar.com/avatar/${Codecs.md5(e.getBytes)}.png" }
   }
+  /*
   def updateIdentity(i: Identity): MoroUser = {
     this.copy(
       identityId = i.identityId,
@@ -45,11 +46,12 @@ case class MoroUser(
     val w = new PrintWriter(new FileOutputStream(UserIO.filename, true), true)
     w.println(json)
     w.close()
-  }
+  }*/
 }
 object UserIO {
   val filename = "users.json"
 
+  /*
   def apply(i: Identity): MoroUser = {
     new MoroUser(
       id = None,
@@ -92,6 +94,6 @@ object UserIO {
   }
   def find(id: IdentityId): Option[MoroUser] = {
     readUsers.find(u => u.identityId == id).headOption
-  }
+  }*/
 }
 

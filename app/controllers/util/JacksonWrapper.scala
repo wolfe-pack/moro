@@ -1,10 +1,9 @@
 package controllers.util
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.{ObjectWriter, ObjectMapper}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.core.`type`.TypeReference
 import java.lang.reflect.{ParameterizedType, Type}
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.core.`type`.TypeReference
 
@@ -23,7 +22,8 @@ class JacksonWrapper {
   }
 
   def serializePretty(value: Any): String = {
-    val writer = mapper.writer().withDefaultPrettyPrinter()
+    val tmp: ObjectWriter = mapper.writer()
+    val writer = tmp.withDefaultPrettyPrinter()
     writer.writeValueAsString(value)
   }
 

@@ -28,7 +28,7 @@ import java.util.jar.JarFile
 import scala.collection.mutable
 import scala.io.Source
 import scala.tools.nsc.{Global, Settings}
-import scala.tools.nsc.interpreter.AbstractFileClassLoader
+import scala.tools.nsc.util.AbstractFileClassLoader
 import scala.tools.nsc.io.{AbstractFile, VirtualDirectory}
 import scala.tools.nsc.reporters.AbstractReporter
 import scala.reflect.internal.util.BatchSourceFile
@@ -76,7 +76,7 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
   }
 
   private lazy val libPath = try {
-    jarPathOfClass("scala.ScalaObject")
+    jarPathOfClass("scala.Any")
   } catch {
     case e: Throwable =>
       throw new RuntimeException("Unable to load scala base object from classpath (scala-library jar is missing?)", e)
