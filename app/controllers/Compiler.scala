@@ -174,6 +174,8 @@ trait ACEEditor {
       |    });
       |    editor.setTheme("ace/theme/%s");
       |    editor.getSession().setMode("ace/mode/%s");
+      |    editor.getSession().setUseWrapMode(true);
+      |    editor.getSession().setWrapLimitRange(100, 100);
       |    var contentToAdd = ""
       |    if(content=="") contentToAdd = '%s';
       |    else contentToAdd = content;
