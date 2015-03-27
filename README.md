@@ -8,7 +8,7 @@ Installation
 ---
 
 ```
-git clone https://github.com/wolfe-pack/wolfe-docs.git
+git clone https://github.com/sameersingh/htmlgen.git
 cd htmlgen
 mvn clean install  -Dgpg.skip=true
 cd ../wolfe
