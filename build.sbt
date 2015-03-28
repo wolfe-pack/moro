@@ -72,7 +72,7 @@ libraryDependencies ++= Seq(
   "ml.wolfe" %% "wolfe-core" % "0.5.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
   "ml.wolfe" %% "wolfe-util" % "0.5.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
   "ml.wolfe" %% "wolfe-examples" % "0.5.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
-  "ml.wolfe" %% "wolfe-nlp" % "0.5.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
+//  "ml.wolfe" %% "wolfe-nlp" % "0.5.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
   "ml.wolfe" %% "wolfe-ui" % "0.5.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
   "org.scala-lang" % "scala-library" % "2.11.4",
   "org.pegdown" % "pegdown" % "1.4.2",
