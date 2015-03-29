@@ -120,7 +120,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
   settings.outputDirs.setSingleOutput(target)
   private val pathList = compilerPath ::: libPath ::: additionalPath
   settings.bootclasspath.value = pathList.mkString(File.pathSeparator)
-  settings.classpath.value = (impliedClassPath ::: pathList).mkString(File.pathSeparator)
+  settings.classpath.value = (pathList ::: impliedClassPath).mkString(File.pathSeparator)
   settings.plugin.value = List("/Users/riedel/.ivy2/cache/org.scalamacros/paradise_2.11.4/jars/paradise_2.11.4-2.1.0-M5.jar")
   println("Provided cp: " + classPath)
   println(settings.classpath.value)
