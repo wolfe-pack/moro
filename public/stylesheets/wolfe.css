@@ -1452,7 +1452,7 @@ div.matrixCell {
 /* Reveal */
 .slides .header{
   position:absolute;
-  top: -75%;
+  top: -55%;
   left: -50%;
   color: #fc0;
 }
@@ -1461,3 +1461,8 @@ div.matrixCell {
   bottom: 50%;
   left: -50%;
 }
+
+.typeName {
+  color: white;
+}
+
