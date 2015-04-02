@@ -57,14 +57,14 @@ object ScalaIMainInterpreter {
 
   def uniqueId(code: String, idOpt: Option[Int] = Some(jvmId)): String = {
     val digest = MessageDigest.getInstance("SHA-1").digest(code.getBytes())
-    val sha = new BigInteger(1, digest).toString(16)
+    val sha = new BigInteger(1, digest).toString(26)
     idOpt match {
       case Some(id) => sha + "_" + id
       case _ => sha
     }
   }
 
-  def codeName(code: String) = "Moro_" + uniqueId(code)
+  def codeName(code: String) = "moro_" + uniqueId(code)
 
 }
 
@@ -109,32 +109,32 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     })
   }
 
-  private val target = targetDir match {
-    case Some(dir) => AbstractFile.getDirectory(dir)
-    case None => new VirtualDirectory("(memory)", None)
-  }
-
-  private val settings = new Settings
-  settings.usejavacp.value = false
-  settings.nowarnings.value = true // warnings are exceptions, so disable
-  settings.outputDirs.setSingleOutput(target)
-  private val pathList = compilerPath ::: libPath ::: additionalPath
-  settings.bootclasspath.value = pathList.mkString(File.pathSeparator)
-  settings.classpath.value = (pathList ::: impliedClassPath).mkString(File.pathSeparator)
-  settings.plugin.value = List("/Users/riedel/.ivy2/cache/org.scalamacros/paradise_2.11.4/jars/paradise_2.11.4-2.1.0-M5.jar")
-  println("Provided cp: " + classPath)
-  println(settings.classpath.value)
-
   private val imainCache = new Cache[String, (IMain, StringWriter)]
 
   private def imainPair(sessionId: String) = imainCache.getOrElseUpdate(sessionId, {
     val w = new StringWriter()
+    val settings = new Settings
+    settings.usejavacp.value = false
+    settings.nowarnings.value = true // warnings are exceptions, so disable
+    val target = targetDir match {
+      case Some(dir) => AbstractFile.getDirectory(dir)
+      case None => new VirtualDirectory("(" + sessionId + ")", None)
+    }
+    settings.outputDirs.setSingleOutput(target)
+    val pathList = compilerPath ::: libPath ::: additionalPath
+    settings.bootclasspath.value = pathList.mkString(File.pathSeparator)
+    settings.classpath.value = (pathList ::: impliedClassPath).mkString(File.pathSeparator)
+    settings.plugin.value = List("/Users/riedel/.ivy2/cache/org.scalamacros/paradise_2.11.4/jars/paradise_2.11.4-2.1.0-M5.jar")
+    println("Provided cp: " + classPath)
+    println(settings.classpath.value)
+
     val im = new IMain(settings, new NewLinePrintWriter(w, true))
     imports.foreach(i => im.interpret("import " + i + "\n"))
     im -> w
   })
 
   private def imain(sessionId: String) = imainPair(sessionId)._1
+
   private def imainWriter(sessionId: String) = imainPair(sessionId)._2
 
   def checkCodeCompiled(sessionId: String, code: String): Boolean = checkCodeCompiled(imain(sessionId), code)
@@ -144,24 +144,32 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
   }
 
   def interpret(im: IMain, w: StringWriter, code: String): Unit = {
-    w.getBuffer.delete(0, w.getBuffer.length())
+    //w.getBuffer.delete(0, w.getBuffer.length())
     val result = im.interpret(code)
     val log = w.getBuffer.toString
-    w.getBuffer.delete(0, w.getBuffer.length())
+    //w.getBuffer.delete(0, w.getBuffer.length())
     //assert(result == Results.Success, "Compilation Failed")
     val cname = codeName(code)
-    if(result == Results.Success) {
+    if (result == Results.Success) {
       val anyVar = im.mostRecentVar
-      im.interpret("val " + cname + ": org.sameersingh.htmlgen.HTML = " + anyVar)
+      val res = im.interpret("val " + cname + ": HTML = " + anyVar)
+      //im.interpret(cname)
+      println(im.definedTerms.mkString(", "))
+      println(im.mostRecentVar)
+      println(im.valueOfTerm(im.mostRecentVar))
+      val llog = w.getBuffer.toString
+      //w.getBuffer.delete(0, w.getBuffer.length())
+      assert(im.valueOfTerm(cname).isDefined, s"Recent var: ${im.mostRecentVar}\n${cname}: ${im.valueOfTerm(cname)}\n$llog")
+      im.bind(cname + "Log", "String", log)
+      //assert(checkCodeCompiled(im, code), s"Code not compiled:\n$code")
     } else {
-      if(log.trim.isEmpty) throw new Exception("")
+      if (log.trim.isEmpty) throw new Exception("<pre class=\"error\">Could not compile</pre>")
       else {
         val errString = log
         throw new Exception("<pre class=\"error\">" + errString + "</pre>") //.replaceAll("\n", "</pre><pre>") + "</pre>")
       }
+      //assert(false, "Should not be here")
     }
-    im.bind(cname + "Log", "String", log)
-    assert(checkCodeCompiled(im, code))
   }
 
   def getValue(im: IMain, code: String): Result = {
@@ -169,8 +177,8 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     val html = im.valueOfTerm(cname)
     //assert(html.isDefined)
     val log = im.valueOfTerm(cname + "Log")
-    assert(log.isDefined)
-    if(html.isDefined)
+    //assert(log.isDefined, s"Cannot find value of " + cname + "Log")
+    if (html.isDefined)
       Result(html.get.asInstanceOf[HTML].source, log.get.asInstanceOf[String])
     else Result("<b>Compile Error!</b>", log.get.asInstanceOf[String])
   }
@@ -179,7 +187,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     val (im, w) = imainPair(sessionId)
     // find first changed snippet
     val firstChanged = snippets.toSeq.indexWhere(code => !checkCodeCompiled(im, code))
-    println(s"First Changed Index $firstChanged of ${snippets.size}")
+    println(s"First Changed Index ${firstChanged + 1} of ${snippets.size}")
     // compile and run all code after, keeping track of last
     if (firstChanged >= 0) {
       println("First Changed: " + snippets(firstChanged))
@@ -194,7 +202,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
   override def autocomplete(sessionId: String, prefix: String): Seq[String] = {
     // From: http://stackoverflow.com/a/20333972
     val im = imain(sessionId)
-    val comp      = new JLineCompletion(im)
+    val comp = new JLineCompletion(im)
     val completer = comp.completer()
     val Candidates(_, choices) = completer.complete(prefix, prefix.length)
     choices
@@ -206,7 +214,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     //import scala.tools.jline.console.completer._
     def scalaToJline(tc: ScalaCompleter): Completer = new Completer {
       def complete(_buf: String, cursor: Int, candidates: JList[CharSequence]): Int = {
-        val buf   = if (_buf == null) "" else _buf
+        val buf = if (_buf == null) "" else _buf
         val Candidates(newCursor, newCandidates) = tc.complete(buf, cursor)
         newCandidates foreach (candidates add _)
         newCursor
@@ -214,7 +222,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     }
 
     val im = imain(sessionId)
-    val comp      = new JLineCompletion(im)
+    val comp = new JLineCompletion(im)
     val completer = comp.completer()
     val argCompletor: ArgumentCompleter = new ArgumentCompleter(new JLineDelimiter, scalaToJline(comp.completer))
     argCompletor.setStrict(false)
