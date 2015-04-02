@@ -85,10 +85,12 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
   doc.cells[id].renderDisplay = $('#renderDisplay' + id);
   doc.cells[id].input = input;
   doc.cells[id].config = input.extraFields;
+  doc.cells[id].showEditor = false;
   if(createEditor) {
     $('.btn').button();
     $('#editCell' + id).show();
     doc.cells[id].editor = compilers[mode].editor(id, input.code);
+    doc.cells[id].showEditor = true;
   }
   if(!compilers[mode].aggregate) compileStaticCell(id, doc, mode, input, compilers);
 }
@@ -98,6 +100,7 @@ function compileAll(doc,compilers) {
     var cell = doc.cells[id];
     return compilers[cell.mode].aggregate;
   });
+  console.log(ids);
   seqCall(ids,function(id, post) {
     var cell = doc.cells[id];
     compileStaticCell(id, doc, cell.mode, cell.input, compilers, post)

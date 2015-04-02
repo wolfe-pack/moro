@@ -4,8 +4,9 @@ function nextEditor(doc, id) {
   pos = pos + 1;
   while(pos < doc.ids.length
   && !((doc.ids[pos] in doc.cells)
+    && doc.cells[doc.ids[pos]].showEditor
     && typeof(doc.cells[doc.ids[pos]].editor.getCursorPosition)=='function'
-    && doc.cells[doc.ids[pos]].showEditor)) {
+    )) {
     pos += 1
   }
   if(pos >= doc.ids.length) return undefined;
@@ -17,8 +18,9 @@ function prevEditor(doc, id) {
   // find prev undeleted one
   pos = pos - 1;
   while(pos >= 0 && !((doc.ids[pos] in doc.cells)
+        && doc.cells[doc.ids[pos]].showEditor
         && typeof(doc.cells[doc.ids[pos]].editor.getCursorPosition)=='function'
-        && doc.cells[doc.ids[pos]].showEditor)) {
+        )) {
     pos -= 1
   }
   if(pos < 0) return undefined;
