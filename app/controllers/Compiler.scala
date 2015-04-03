@@ -45,6 +45,7 @@ case class ConfigEntry(key: String, label: String, description: String, inputTyp
 
 object CompilerConfigKeys {
   val Hide = "hide"
+  val HideOutput = "hide_output"
   val ShowEditor = "showEditor"
   val CacheResults = "cache"
   val Aggregate = "aggregate"
@@ -88,6 +89,7 @@ trait Compiler {
 
   def configEntries: Seq[ConfigEntry] = Seq(
     ConfigEntry(Hide, "Hide Cell?", "Hide this cell in static/presentation views.", "checkbox", "false"),
+    ConfigEntry(HideOutput, "Hide Cell Output?", "Hide this cell's output.", "checkbox", "false"),
     ConfigEntry(ShowEditor, "Show Editor?", "Whether to show the editor of this cell around in static/presentation views.", "checkbox", "false"),
     ConfigEntry(CacheResults, "Cached", "Use cached results, uncheck if running again should produce different results.", "checkbox", "true"),
     ConfigEntry(Aggregate, "Aggregate", "If compiler allows, aggregate inputs across cells of the same type (and scope).", "checkbox", "true"),
@@ -433,7 +435,7 @@ class LatexCompiler extends Compiler with ACEEditor {
 
 trait Caching extends Compiler {
   def config: Option[Configuration]
-  def maxCacheSize = config.map(c => c.getInt("maxCacheSize").getOrElse(10)).getOrElse(10)
+  def maxCacheSize = config.map(c => c.getInt("maxCacheSize").getOrElse(100)).getOrElse(100)
 
   type CacheEntry = Input
 

@@ -44,7 +44,13 @@ function outputResult(doc, id, result, compilers) {
   // if(result.log && result.log != '')
   //  output += '<pre>' + result.log + '</pre>'
   output += result.result;
-  doc.cells[id].renderDisplay.html(output);
+  if(doc.cells[id].config != null && doc.cells[id].config.hasOwnProperty('hide_output') && doc.cells[id].config.hide_output) {
+    console.log("hiding output " + id)
+    doc.cells[id].renderDisplay.hide();
+  } else {
+    doc.cells[id].renderDisplay.show();
+    doc.cells[id].renderDisplay.html(output);
+  }
   MathJax.Hub.Queue(["Typeset",MathJax.Hub,"renderDisplay"+id]);
   $('pre code').each(function(i, block) {
     hljs.highlightBlock(block);
@@ -78,12 +84,13 @@ function runCode(doc, id, compilers, post) {
       if(doc.cells[mid].mode === mode && aggregateScope === scope) {
         if(id == mid) break;
         // config
+        /*
         for(var ck in doc.cells[mid].config) {
           if(prefixConfig.hasOwnProperty(ck) && prefixConfig[ck] != doc.cells[mid].config[ck]) {
             console.log("Replacing config " + ck + " = " + prefixConfig[ck] + " with " + doc.cells[mid].config[ck])
           }
           prefixConfig[ck] = doc.cells[mid].config[ck];
-        }
+        }*/
         // code
         aggregatedCells.push(compiler.editorToInput(doc, doc.cells[mid].id).code);
       }

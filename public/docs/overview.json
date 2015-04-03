@@ -76,12 +76,24 @@
     "compiler" : "markdown",
     "input" : {
       "sessionId" : null,
-      "code" : "### Markdown!\n\nThis notebook can support all markdown features, such as **bold**, _italics_, [links](http://sameersingh.org/), `code`, etc.\n\nAnd the equations can be inlined if definining \\\\(\\theta\\\\) and \\\\(\\pi\\\\) in text.\n\nAlso, non interactive code block!\n\n```scala\ndef f(x: Int) = x*x\n\nf(10)\n```",
+      "code" : "### Markdown!\n\nThis notebook can support all markdown features, such as **bold**, _italics_, [links](http://sameersingh.org/), `code`, etc.\n\nAnd the equations can be inlined if definining \\\\(\\theta\\\\) and \\\\(\\pi\\\\) in text.\n\nAlso, editable code block without any output.",
       "extraFields" : { },
       "outputFormat" : null
     }
   }, {
     "id" : 8,
+    "compiler" : "scala",
+    "input" : {
+      "sessionId" : null,
+      "code" : "def f(x: Int) = x*x\nf(1)",
+      "extraFields" : {
+        "hide_output" : "true",
+        "aggregatedCells" : "[]"
+      },
+      "outputFormat" : null
+    }
+  }, {
+    "id" : 9,
     "compiler" : "section",
     "input" : {
       "sessionId" : null,
@@ -90,7 +102,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 9,
+    "id" : 10,
     "compiler" : "heading3",
     "input" : {
       "sessionId" : null,
@@ -99,7 +111,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 10,
+    "id" : 11,
     "compiler" : "latex",
     "input" : {
       "sessionId" : null,
@@ -110,7 +122,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 11,
+    "id" : 12,
     "compiler" : "section",
     "input" : {
       "sessionId" : null,
@@ -119,7 +131,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 12,
+    "id" : 13,
     "compiler" : "heading3",
     "input" : {
       "sessionId" : null,
@@ -128,7 +140,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 13,
+    "id" : 14,
     "compiler" : "imageurl",
     "input" : {
       "sessionId" : null,
@@ -139,7 +151,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 14,
+    "id" : 15,
     "compiler" : "section",
     "input" : {
       "sessionId" : null,
@@ -148,7 +160,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 15,
+    "id" : 16,
     "compiler" : "heading3",
     "input" : {
       "sessionId" : null,
@@ -157,7 +169,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 16,
+    "id" : 17,
     "compiler" : "markdown",
     "input" : {
       "sessionId" : null,
@@ -166,19 +178,19 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 17,
+    "id" : 18,
     "compiler" : "scala",
     "input" : {
       "sessionId" : null,
-      "code" : "def f(x:Int) = x * x\nf(10)",
+      "code" : "f(10)",
       "extraFields" : {
         "fragment" : "true",
-        "aggregatedCells" : "[]"
+        "aggregatedCells" : "[\"def f(x: Int) = x*x\\nf(1)\"]"
       },
       "outputFormat" : null
     }
   }, {
-    "id" : 18,
+    "id" : 19,
     "compiler" : "section",
     "input" : {
       "sessionId" : null,
@@ -187,19 +199,19 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 19,
+    "id" : 20,
     "compiler" : "scala",
     "input" : {
       "sessionId" : null,
       "code" : "def f2(x:Int) = x + x\nMap(10 -> \"ten\", 100 -> \"hundred\")",
       "extraFields" : {
         "fragment" : "true",
-        "aggregatedCells" : "[\"def f(x:Int) = x * x\\nf(10)\"]"
+        "aggregatedCells" : "[\"def f(x: Int) = x*x\\nf(1)\",\"f(10)\"]"
       },
       "outputFormat" : null
     }
   }, {
-    "id" : 20,
+    "id" : 21,
     "compiler" : "section",
     "input" : {
       "sessionId" : null,
@@ -208,7 +220,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 21,
+    "id" : 22,
     "compiler" : "heading2",
     "input" : {
       "sessionId" : null,
@@ -217,19 +229,19 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 22,
+    "id" : 23,
     "compiler" : "scala",
     "input" : {
       "sessionId" : null,
       "code" : "// Matrices!\nval random = new util.Random()\nMatrix((0 until 10).map(i => (0 until 10).map(j => (i+j)+2*random.nextDouble())))",
       "extraFields" : {
         "fragment" : "true",
-        "aggregatedCells" : "[\"def f(x:Int) = x * x\\nf(10)\",\"def f2(x:Int) = x + x\\nMap(10 -> \\\"ten\\\", 100 -> \\\"hundred\\\")\"]"
+        "aggregatedCells" : "[\"def f(x: Int) = x*x\\nf(1)\",\"f(10)\",\"def f2(x:Int) = x + x\\nMap(10 -> \\\"ten\\\", 100 -> \\\"hundred\\\")\"]"
       },
       "outputFormat" : null
     }
   }, {
-    "id" : 23,
+    "id" : 24,
     "compiler" : "section",
     "input" : {
       "sessionId" : null,
@@ -238,7 +250,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 24,
+    "id" : 25,
     "compiler" : "markdown",
     "input" : {
       "sessionId" : null,
@@ -247,19 +259,19 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 25,
+    "id" : 26,
     "compiler" : "scala",
     "input" : {
       "sessionId" : null,
       "code" : "// Vectors\nval means = Seq(Seq.fill(10)(-10.0), Seq.fill(10)(10.0))\nval vectors = Vectors(\n  means.zipWithIndex.map(xi => (0 until 10).map(j => (xi._2, xi._2 + \"_\" + j, xi._1.map(v => v + random.nextGaussian() * 0.1)))).flatten\n)\norg.sameersingh.htmlgen.D3jsConverter.convert(vectors)",
       "extraFields" : {
         "fragment" : "true",
-        "aggregatedCells" : "[\"def f(x:Int) = x * x\\nf(10)\",\"def f2(x:Int) = x + x\\nMap(10 -> \\\"ten\\\", 100 -> \\\"hundred\\\")\",\"// Matrices!\\nval random = new util.Random()\\nMatrix((0 until 10).map(i => (0 until 10).map(j => (i+j)+2*random.nextDouble())))\"]"
+        "aggregatedCells" : "[\"def f(x: Int) = x*x\\nf(1)\",\"f(10)\",\"def f2(x:Int) = x + x\\nMap(10 -> \\\"ten\\\", 100 -> \\\"hundred\\\")\",\"// Matrices!\\nval random = new util.Random()\\nMatrix((0 until 10).map(i => (0 until 10).map(j => (i+j)+2*random.nextDouble())))\"]"
       },
       "outputFormat" : null
     }
   }, {
-    "id" : 26,
+    "id" : 27,
     "compiler" : "section",
     "input" : {
       "sessionId" : null,
@@ -268,7 +280,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 27,
+    "id" : 28,
     "compiler" : "heading2",
     "input" : {
       "sessionId" : null,
@@ -277,7 +289,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 28,
+    "id" : 29,
     "compiler" : "markdown",
     "input" : {
       "sessionId" : null,
@@ -286,7 +298,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 29,
+    "id" : 30,
     "compiler" : "section",
     "input" : {
       "sessionId" : null,
@@ -295,19 +307,19 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 30,
+    "id" : 31,
     "compiler" : "scala",
     "input" : {
       "sessionId" : null,
       "code" : "val x = (0.0 to 6.28 by 0.25)\nxyChart(x -> (math.sin(_), math.cos(_)))",
       "extraFields" : {
         "fragment" : "true",
-        "aggregatedCells" : "[\"def f(x:Int) = x * x\\nf(10)\",\"def f2(x:Int) = x + x\\nMap(10 -> \\\"ten\\\", 100 -> \\\"hundred\\\")\",\"// Matrices!\\nval random = new util.Random()\\nMatrix((0 until 10).map(i => (0 until 10).map(j => (i+j)+2*random.nextDouble())))\",\"// Vectors\\nval means = Seq(Seq(0.0, 0.0, 0.0), Seq(1.0, 1.0, 1.0))\\nval vecsPerClust = 4\\nval noise = 0.1\\nval vectors = Vectors(\\n  means.zipWithIndex.map(xi => (0 until vecsPerClust).map(j => (xi._2, xi._2 + \\\"_\\\" + j, xi._1.map(v => v + random.nextGaussian() * noise)))).flatten\\n)\\norg.sameersingh.htmlgen.D3jsConverter.convert(vectors)\"]"
+        "aggregatedCells" : "[\"def f(x: Int) = x*x\\nf(1)\",\"f(10)\",\"def f2(x:Int) = x + x\\nMap(10 -> \\\"ten\\\", 100 -> \\\"hundred\\\")\",\"// Matrices!\\nval random = new util.Random()\\nMatrix((0 until 10).map(i => (0 until 10).map(j => (i+j)+2*random.nextDouble())))\",\"// Vectors\\nval means = Seq(Seq.fill(10)(-10.0), Seq.fill(10)(10.0))\\nval vectors = Vectors(\\n  means.zipWithIndex.map(xi => (0 until 10).map(j => (xi._2, xi._2 + \\\"_\\\" + j, xi._1.map(v => v + random.nextGaussian() * 0.1)))).flatten\\n)\\norg.sameersingh.htmlgen.D3jsConverter.convert(vectors)\"]"
       },
       "outputFormat" : null
     }
   }, {
-    "id" : 31,
+    "id" : 32,
     "compiler" : "section",
     "input" : {
       "sessionId" : null,
@@ -316,19 +328,19 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 32,
+    "id" : 33,
     "compiler" : "scala",
     "input" : {
       "sessionId" : null,
       "code" : "val bx = 0 until 5\nbarChart(\n    bx.map(\"x\" + _) ->(bx.map(i => math.sin(i / 3.0) + 0.5), \n        bx.map(i => math.cos(i / 3.0) + 0.5)))",
       "extraFields" : {
         "fragment" : "true",
-        "aggregatedCells" : "[\"def f(x:Int) = x * x\\nf(10)\",\"def f2(x:Int) = x + x\\nMap(10 -> \\\"ten\\\", 100 -> \\\"hundred\\\")\",\"// Matrices!\\nval random = new util.Random()\\nMatrix((0 until 10).map(i => (0 until 10).map(j => (i+j)+2*random.nextDouble())))\",\"// Vectors\\nval means = Seq(Seq(0.0, 0.0, 0.0), Seq(1.0, 1.0, 1.0))\\nval vecsPerClust = 4\\nval noise = 0.1\\nval vectors = Vectors(\\n  means.zipWithIndex.map(xi => (0 until vecsPerClust).map(j => (xi._2, xi._2 + \\\"_\\\" + j, xi._1.map(v => v + random.nextGaussian() * noise)))).flatten\\n)\\norg.sameersingh.htmlgen.D3jsConverter.convert(vectors)\",\"val x = (0.0 to 6.28 by 0.25)\\nxyChart(x -> (math.sin(_), math.cos(_)))\"]"
+        "aggregatedCells" : "[\"def f(x: Int) = x*x\\nf(1)\",\"f(10)\",\"def f2(x:Int) = x + x\\nMap(10 -> \\\"ten\\\", 100 -> \\\"hundred\\\")\",\"// Matrices!\\nval random = new util.Random()\\nMatrix((0 until 10).map(i => (0 until 10).map(j => (i+j)+2*random.nextDouble())))\",\"// Vectors\\nval means = Seq(Seq.fill(10)(-10.0), Seq.fill(10)(10.0))\\nval vectors = Vectors(\\n  means.zipWithIndex.map(xi => (0 until 10).map(j => (xi._2, xi._2 + \\\"_\\\" + j, xi._1.map(v => v + random.nextGaussian() * 0.1)))).flatten\\n)\\norg.sameersingh.htmlgen.D3jsConverter.convert(vectors)\",\"val x = (0.0 to 6.28 by 0.25)\\nxyChart(x -> (math.sin(_), math.cos(_)))\"]"
       },
       "outputFormat" : null
     }
   }, {
-    "id" : 33,
+    "id" : 34,
     "compiler" : "section",
     "input" : {
       "sessionId" : null,
@@ -337,7 +349,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 34,
+    "id" : 35,
     "compiler" : "markdown",
     "input" : {
       "sessionId" : null,
@@ -346,7 +358,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 35,
+    "id" : 36,
     "compiler" : "section",
     "input" : {
       "sessionId" : null,
@@ -355,7 +367,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 36,
+    "id" : 37,
     "compiler" : "heading4",
     "input" : {
       "sessionId" : null,
@@ -364,7 +376,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 37,
+    "id" : 38,
     "compiler" : "google_viewer",
     "input" : {
       "sessionId" : null,
@@ -373,7 +385,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 38,
+    "id" : 39,
     "compiler" : "section",
     "input" : {
       "sessionId" : null,
@@ -382,7 +394,7 @@
       "outputFormat" : null
     }
   }, {
-    "id" : 39,
+    "id" : 40,
     "compiler" : "heading1",
     "input" : {
       "sessionId" : null,
