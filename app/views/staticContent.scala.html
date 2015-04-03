@@ -1,0 +1,30 @@
+@(document: controllers.doc.Document, compilers: Compilers, docRoot: String, user: Option[MoroUser])
+
+<div id="static_content" class="container">
+    <h1>@Html(document.name)</h1>
+</div>
+<script>
+            /* COMPILERS OBJECT */
+            var compilers = {};
+            @for(c <- compilers) {
+            compilers.@{c.name} = {};
+            compilers.@{c.name}.hideAfterCompile = @{c.hideAfterCompile};
+            compilers.@{c.name}.editor = @Html(c.editorJavascript);
+            compilers.@{c.name}.editorToInput = @Html(c.editorToInput);
+            compilers.@{c.name}.aggregate = @{c.aggregatePrevious};
+            }
+
+            /* DOCUMENT OBJECT */
+            var doc = newDoc("@(document.name)");
+
+            /* add cells */
+            var divCells = $('#static_content');
+            @for(cell <- document.cells) {
+            var mode = '@Html(cell.compiler)';
+            var input = @Html(cell.inputJson);
+            var id = @{cell.id};
+            createStaticCellHTML(id, divCells, doc, mode, input, compilers);
+            }
+            compileAll(doc,compilers);
+            enableAceScalaCompletion();
+        </script>
