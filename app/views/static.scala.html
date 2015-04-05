@@ -2,40 +2,34 @@
 
 @import helper._
 
-@main(document.name) {
-<div class="container">
-    <ol class="breadcrumb">
-        <li class="text-muted">@{document.name}</li>
-        @userNavBtn(user)
-    </ol>
-    <h1>@Html(document.name)</h1>
-</div>
-<script src="@routes.Assets.at("javascripts/editor.js")" type="text/javascript"></script>
-<script src="@routes.Assets.at("javascripts/moro-static.js")" type="text/javascript"></script>
-<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/static.css")">
-<script>
-    /* COMPILERS OBJECT */
-    var compilers = {};
-    @for(c <- compilers) {
-    compilers.@{c.name} = {};
-    compilers.@{c.name}.hideAfterCompile = @{c.hideAfterCompile};
-    compilers.@{c.name}.editor = @Html(c.editorJavascript);
-    compilers.@{c.name}.editorToInput = @Html(c.editorToInput);
-    compilers.@{c.name}.aggregate = @{c.aggregatePrevious};
-    }
+<!DOCTYPE html>
 
-    /* DOCUMENT OBJECT */
-    var doc = newDoc("@(document.name)");
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@{document.name}</title>
+    @staticImports()
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+    </head>
+    <body>
+      <div id="wrap">
+          <div class="container">
+              <ol class="breadcrumb">
+                  <li class="text-muted">@{document.name}</li>
+                  @userNavBtn(user)
+              </ol>
+              <div id="static_content">
+                  <h1>@Html(document.name)</h1>
+              </div>
+              @staticContent("static_content", document, compilers, docRoot, user)
+          </div>
+      </div>
+      <script src="https://togetherjs.com/togetherjs-min.js"></script>
+    <div id="footer">
+        <div class="container">
+            <p class="text-muted">This is <a href="http://github.com/wolfe-pack/moro">the Moro project</a>, developed by <a href="http://sameersingh.org">Sameer Singh</a>.</p>
+        </div>
+    </div>
+    </body>
+</html>
 
-    /* add cells */
-    var divCells = $('div.container');
-    @for(cell <- document.cells) {
-    var mode = '@Html(cell.compiler)';
-    var input = @Html(cell.inputJson);
-    var id = @{cell.id};
-    createStaticCellHTML(id, divCells, doc, mode, input, compilers);
-    }
-    compileAll(doc,compilers);
-    enableAceScalaCompletion();
-</script>
-}
