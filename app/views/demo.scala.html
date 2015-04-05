@@ -30,6 +30,9 @@
     </header>
     <section>
         <div class="grid">
+            <div>
+                @for(c <- compilers) { @Html(c.prefixHTML) }
+            </div>
             <div id="static_content" class="unit center-on-mobiles">
                 <h1>@Html(document.name)</h1>
             </div>

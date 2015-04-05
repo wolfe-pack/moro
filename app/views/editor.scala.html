@@ -57,7 +57,7 @@
             </div>
         </div>
     </div>
-    <div class="row container topbar">
+    <div class="container topbar">
             <div id="alertDiv" class="alertDiv"></div>
         <ol class="breadcrumb">
             <li class="text-muted">@{file}</li>
@@ -81,6 +81,9 @@
     </div>
     <div class="container">
         <h1 id="docName" ondblclick="$('#docNameDialog').modal()">@(document.name)</h1>
+        <div>
+          @for(c <- compilers) { @Html(c.prefixHTML) }
+        </div>
         <div id="cells"></div>
 
         <div id="postCells">

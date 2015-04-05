@@ -69,6 +69,9 @@ new Directory(path, docRoot)
     </header>
     <section>
         <div class="grid">
+            <div>
+                @for(c <- compilers) { @Html(c.prefixHTML) }
+            </div>
             <div id="static_content" class="unit four-fifths center-on-mobiles">
                 <h1>@Html(document.name)</h1>
             </div>
