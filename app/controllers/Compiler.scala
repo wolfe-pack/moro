@@ -3,6 +3,7 @@ package controllers
 import controllers.doc.Document
 import play.api.libs.json.Json
 
+import scala.StringBuilder
 import scala.collection.mutable
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.{IMain, ILoop}
@@ -84,6 +85,9 @@ trait Compiler {
 
   // aggregate all the previous cells as well?
   def aggregatePrevious: Boolean = false
+
+  // HTML imports that are added before the cells, needed to run cells of this type
+  def prefixHTML: String = ""
 
   import CompilerConfigKeys._
 
@@ -420,8 +424,10 @@ class PegdownCompiler extends Compiler with ACEEditor {
   }
 }
 
-class LatexCompiler extends Compiler with ACEEditor {
+class LatexCompiler(c: MoroConfig) extends Compiler with ACEEditor {
   def name = "latex"
+
+  override val config = c.config(this)
 
   // icon that is used in the toolbar
   override def toolbarIcon: String = "<i class=\"fa fa-superscript\"></i>"
@@ -431,10 +437,26 @@ class LatexCompiler extends Compiler with ACEEditor {
     Result("$$" + input.code + "$$")
   }
 
+  override def prefixHTML = {
+    import scala.collection.JavaConversions._
+    config.map(cfg => {
+      cfg.getStringList("imports").map(macros => {
+        val sb = new StringBuilder()
+        sb.append("\n\\(\n")
+        macros.foreach(str => {
+          sb.append("  %s\n".format(str))
+        })
+        sb.append("\\)".stripMargin)
+        sb.toString()
+      }).getOrElse("")
+    }).getOrElse("")
+  }
+
 }
 
 trait Caching extends Compiler {
   def config: Option[Configuration]
+
   def maxCacheSize = config.map(c => c.getInt("maxCacheSize").getOrElse(100)).getOrElse(100)
 
   type CacheEntry = Input
@@ -519,19 +541,17 @@ class PdflatexCompiler extends Compiler with TextInputEditor {
       val canvasId = System.nanoTime().toString
       Result(
         s"""
-        |<canvas id="$canvasId"/>
-        |<script>
-        |displayPDF("$moroPathToPDF", "$canvasId", "$pdfScale");
-        |</script>
+           |<canvas id="$canvasId"/>
+           |<script>
+           |  displayPDF("$moroPathToPDF", "$canvasId", "$pdfScale");
+           |</script>
       """.stripMargin)
     } else {
       val dpi = scale * 200
       println(Process(s"convert -density $dpi tmp.pdf -quality 90 tmp.png", pathDir).!!)
       Result(
         s"""
-          |
-          |<img src="${moroPathToPDF.dropRight(4) + ".png"}">
-          |
+           |<img src="${moroPathToPDF.dropRight(4) + ".png"}">
         """.stripMargin, OutputFormats.html)
     }
   }

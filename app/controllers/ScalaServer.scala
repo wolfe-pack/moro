@@ -22,6 +22,8 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
   println("cp: " + config.get.getStringList("classPath"))
   println("docRoot: " + config.get.getStringList("classPath"))
 
+  override def aceTheme: String = config.get.getString("aceTheme").getOrElse("tomorrow")
+
   val classPath = config.map(c => c.getStringList("classPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
   val classesForJarPath = config.map(c => c.getStringList("classesForJarPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
   val imports = config.map(c => c.getStringList("imports")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)

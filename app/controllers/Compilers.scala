@@ -26,7 +26,7 @@ class AllCompilers(config: MoroConfig) extends Compilers {
   this += new WolfeEvalServer(config) with Caching
   this += new PegdownCompiler with Caching
   this += new SectionCompiler
-  this += new LatexCompiler
+  this += new LatexCompiler(config)
   for (i <- 1 to 5) this += new HeadingCompiler(i)
   this += new HTMLCompiler
   this += new ImageURLCompiler
