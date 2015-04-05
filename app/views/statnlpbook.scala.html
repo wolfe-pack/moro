@@ -1,0 +1,40 @@
+@(document: controllers.doc.Document, compilers: Compilers, docRoot: String, user: Option[MoroUser])
+
+@import helper._
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@{document.name}</title>
+    @staticImports()
+    @wolfeImports()
+</head>
+<body class="wrap">
+    <header>
+        <nav class="mobile-nav show-on-mobiles">
+            <!--{% include primary-nav-items.html %}-->
+        </nav>
+        <div class="grid">
+            <div class="unit center-on-mobiles">
+                <h1>
+                    <a href="/">
+                        <span>Jekyll</span>
+                        <h1 class="logo-text">StatNLP</h1>
+                    </a>
+                </h1>
+            </div>
+        </div>
+    </header>
+    <section>
+        <div class="grid">
+            <div id="static_content" class="unit center-on-mobiles">
+                <h1>@Html(document.name)</h1>
+            </div>
+            @staticContent("static_content", document, compilers, docRoot, user)
+        </div>
+    </section>
+</body>
+</html>
+
