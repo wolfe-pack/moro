@@ -74,7 +74,7 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
     $(editCellDiv).append(inputDiv);
     $(cellDiv).append(editCellDiv);
   }
-  $(cellDiv).append('<div id="renderDisplay'+id+'" class="cell"><div class="text-center"><img src="/assets/images/ajax-loader.gif"></img></div></div>');
+  $(cellDiv).append('<div id="renderDisplay'+id+'" class="cell"><div class="text-center"><i class="fa fa-refresh fa-spin fa-lg"></i></div></div>');
   section.append(cellDiv);
 
   // make functional

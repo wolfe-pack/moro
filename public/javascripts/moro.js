@@ -59,9 +59,7 @@ function outputResult(doc, id, result, compilers) {
 
 
 function runCode(doc, id, compilers, post) {
-  outputResult(doc, id, { log: "", result: '<div class="text-center">' +
-                                                  '   <img src="/assets/images/ajax-loader.gif"></img>' +
-                                                  '</div>' }, compilers)
+  outputResult(doc, id, { log: "", result: '<div class="text-center"><i class="fa fa-refresh fa-spin fa-lg"></i></div>' }, compilers)
   var mode = doc.cells[id].mode;
   var compiler = compilers[mode];
   var input = compiler.editorToInput(doc, id);
