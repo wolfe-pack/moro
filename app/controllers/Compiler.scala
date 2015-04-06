@@ -342,9 +342,10 @@ trait ACEEditor {
       |  var oldDiv = editor.container
       |  var newDiv = oldDiv.cloneNode(false)
       |  newDiv.textContent = value
+      |  newDiv.classList.remove("ace-%s");
       |  oldDiv.parentNode.replaceChild(newDiv, oldDiv)
       |}
-    """.stripMargin
+    """.stripMargin.format(aceTheme)
 
   // javascript that extracts the code from the editor and creates a default input
   def editorToInput: String =
