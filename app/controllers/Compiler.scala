@@ -249,6 +249,30 @@ trait ACEEditor {
       |        }
       |    })
       |    editor.commands.addCommand({
+      |        name: "mergeBefore",
+      |        bindKey: {win: "Shift-Backspace|Backspace", mac: "Ctrl-Backspace|Shift-Backspace|Backspace|Ctrl-H"},
+      |        exec: function(editor) {
+      |            var curPos = editor.getCursorPosition();
+      |            if(curPos.row == 0 && curPos.column == 0) {
+      |              pe=prevEditor(doc,id);
+      |              if(typeof(pe)!='undefined') {
+      |                console.log("merge with previous!");
+      |                var text = editor.getSession().getDocument().getValue();
+      |                console.log(text);
+      |                pe.focus();
+      |                pe.gotoLine(pe.getSession().getDocument().getLength());
+      |                pe.navigateLineEnd();
+      |                var newCurPos = pe.getCursorPosition();
+      |                pe.insert('\n'+ text);
+      |                pe.navigateTo(newCurPos.row+1, 0);
+      |                document.getElementById('remove' + id).click();
+      |              }
+      |            } else {
+      |              editor.remove("left");
+      |            }
+      |        }
+      |    })
+      |    editor.commands.addCommand({
       |        name: "modeWolfe",
       |        bindKey: {win: "Ctrl-Y w", mac: "Cmd-Y w"},
       |        exec: function(editor) {
