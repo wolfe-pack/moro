@@ -211,6 +211,16 @@ trait ACEEditor {
       |        bindKey: {win: "Shift-Enter", mac: "Shift-Enter"},
       |        exec: function(editor) {
       |            document.getElementById('addBelow' + id).click();
+      |            ne=nextEditor(doc,id);
+      |            if(typeof(ne)!='undefined') {
+      |              editor.getSelection().selectFileEnd();
+      |              var text = editor.getCopyText();
+      |              editor.remove('right');
+      |              console.log("splitting a cell!");
+      |              ne.focus();
+      |              ne.insert(text,1);
+      |              ne.navigateTo(0, 0);
+      |            }
       |        }
       |    })
       |    editor.commands.addCommand({
