@@ -305,7 +305,7 @@ trait ACEEditor {
       |    })
       |    editor.commands.addCommand({
       |        name: "modeWolfe",
-      |        bindKey: {win: "Ctrl-Y w", mac: "Cmd-Y w"},
+      |        bindKey: {win: "Ctrl-W", mac: "Ctrl-W"},
       |        exec: function(editor) {
       |            console.log("changing mode to wolfe");
       |            changeMode(id,'wolfe');
@@ -313,7 +313,7 @@ trait ACEEditor {
       |    })
       |    editor.commands.addCommand({
       |        name: "modeScala",
-      |        bindKey: {win: "Ctrl-Y s", mac: "Cmd-Y s"},
+      |        bindKey: {win: "Ctrl-S", mac: "Ctrl-S"},
       |        exec: function(editor) {
       |            console.log("changing mode to scala");
       |            changeMode(id,'scala');
@@ -321,7 +321,7 @@ trait ACEEditor {
       |    })
       |    editor.commands.addCommand({
       |        name: "modeMarkdown",
-      |        bindKey: {win: "Ctrl-Y m", mac: "Cmd-Y m"},
+      |        bindKey: {win: "Ctrl-M", mac: "Ctrl-M"},
       |        exec: function(editor) {
       |            console.log("changing mode to markdown");
       |            changeMode(id,'markdown');
