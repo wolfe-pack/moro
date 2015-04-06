@@ -248,6 +248,30 @@ trait ACEEditor {
       |            editor.navigateUp(1);
       |        }
       |    })
+      |    editor.commands.addCommand({
+      |        name: "modeWolfe",
+      |        bindKey: {win: "Ctrl-Y w", mac: "Cmd-Y w"},
+      |        exec: function(editor) {
+      |            console.log("changing mode to wolfe");
+      |            changeMode(id,'wolfe');
+      |        }
+      |    })
+      |    editor.commands.addCommand({
+      |        name: "modeScala",
+      |        bindKey: {win: "Ctrl-Y s", mac: "Cmd-Y s"},
+      |        exec: function(editor) {
+      |            console.log("changing mode to scala");
+      |            changeMode(id,'scala');
+      |        }
+      |    })
+      |    editor.commands.addCommand({
+      |        name: "modeWolfe",
+      |        bindKey: {win: "Ctrl-Y m", mac: "Cmd-Y m"},
+      |        exec: function(editor) {
+      |            console.log("changing mode to markdown");
+      |            changeMode(id,'markdown');
+      |        }
+      |    })
       |    //heightUpdateFunction(editor, '#editor'+id);
       |    return editor;
       |}
