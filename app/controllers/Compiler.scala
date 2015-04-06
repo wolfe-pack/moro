@@ -258,7 +258,6 @@ trait ACEEditor {
       |              if(typeof(pe)!='undefined') {
       |                console.log("merge with previous!");
       |                var text = editor.getSession().getDocument().getValue();
-      |                console.log(text);
       |                pe.focus();
       |                pe.gotoLine(pe.getSession().getDocument().getLength());
       |                pe.navigateLineEnd();
@@ -269,6 +268,28 @@ trait ACEEditor {
       |              }
       |            } else {
       |              editor.remove("left");
+      |            }
+      |        }
+      |    })
+      |    editor.commands.addCommand({
+      |        name: "mergeAfter",
+      |        bindKey: {win: "Delete", mac: "Delete|Ctrl-D|Shift-Delete"},
+      |        exec: function(editor) {
+      |            var eodRow = editor.getSession().getDocument().getLength()-1;
+      |            var eodCol = editor.session.getLine(eodRow).length;
+      |            var curPos = editor.getCursorPosition();
+      |            if(curPos.row == eodRow && curPos.column == eodCol) {
+      |              ne=nextEditor(doc,id);
+      |              if(typeof(ne)!='undefined') {
+      |                console.log("merge with after!");
+      |                var text = editor.getSession().getDocument().getValue();
+      |                ne.focus();
+      |                ne.navigateTo(0, 0);
+      |                ne.insert(text+'\n', 1);
+      |                document.getElementById('remove' + id).click();
+      |              }
+      |            } else {
+      |              editor.remove("right");
       |            }
       |        }
       |    })
