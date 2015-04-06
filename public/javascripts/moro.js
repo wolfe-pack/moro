@@ -221,6 +221,7 @@ function toggleEditor(doc,id) {
   if(doc.cells[id].showEditor) {
     // console.log("showing editor" + id);
     $('#editCell' + id + ' .input').show();
+    doc.cells[id].editor.focus();
   } else {
     // console.log("hiding editor" + id);
     $('#editCell' + id + ' .input').hide();
