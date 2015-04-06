@@ -320,7 +320,7 @@ trait ACEEditor {
       |        }
       |    })
       |    editor.commands.addCommand({
-      |        name: "modeWolfe",
+      |        name: "modeMarkdown",
       |        bindKey: {win: "Ctrl-Y m", mac: "Cmd-Y m"},
       |        exec: function(editor) {
       |            console.log("changing mode to markdown");
