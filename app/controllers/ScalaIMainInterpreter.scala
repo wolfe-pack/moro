@@ -117,9 +117,9 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     settings.usejavacp.value = false
     settings.nowarnings.value = true // warnings are exceptions, so disable
     val target = targetDir match {
-      case Some(dir) => AbstractFile.getDirectory(dir)
-      case None => new VirtualDirectory("(" + sessionId + ")", None)
-    }
+        case Some(dir) => AbstractFile.getDirectory(dir)
+        case None => new VirtualDirectory("(" + sessionId + ")", None)
+      }
     settings.outputDirs.setSingleOutput(target)
     val pathList = compilerPath ::: libPath ::: additionalPath
     settings.bootclasspath.value = pathList.mkString(File.pathSeparator)
@@ -129,6 +129,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     println(settings.classpath.value)
 
     val im = new IMain(settings, new NewLinePrintWriter(w, true))
+    im.isettings.maxPrintString = 0
     imports.foreach(i => im.interpret("import " + i + "\n"))
     im -> w
   })
@@ -144,7 +145,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
   }
 
   def interpret(im: IMain, w: StringWriter, code: String): Unit = {
-    //w.getBuffer.delete(0, w.getBuffer.length())
+    w.getBuffer.delete(0, w.getBuffer.length())
     val result = im.interpret(code)
     val log = w.getBuffer.toString
     //w.getBuffer.delete(0, w.getBuffer.length())
@@ -153,15 +154,18 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     if (result == Results.Success) {
       val anyVar = im.mostRecentVar
       val res = im.interpret("val " + cname + ": HTML = " + anyVar)
+      assert(res == Results.Success, "failed to set value for " + cname + ": " + res)
       //im.interpret(cname)
-      println(im.definedTerms.mkString(", "))
-      println(im.mostRecentVar)
-      println(im.valueOfTerm(im.mostRecentVar))
-      val llog = w.getBuffer.toString
+      //println(im.definedTerms.mkString(", "))
+      //println(im.mostRecentVar)
+      //println(im.valueOfTerm(im.mostRecentVar))
+      //val llog = w.getBuffer.toString
       //w.getBuffer.delete(0, w.getBuffer.length())
-      assert(im.valueOfTerm(cname).isDefined, s"Recent var: ${im.mostRecentVar}\n${cname}: ${im.valueOfTerm(cname)}\n$llog")
-      im.bind(cname + "Log", "String", log)
+      //assert(im.valueOfTerm(cname).isDefined, s"Recent var: ${im.mostRecentVar}\n${cname}: ${im.valueOfTerm(cname)}\n$llog")
+      val lres = im.bind(cname + "Log", "String", log)
+      assert(lres == Results.Success, "failed to set value for " + cname + "Log: " + lres)
       //assert(checkCodeCompiled(im, code), s"Code not compiled:\n$code")
+      //println("gv: " + getValue(im, w, code))
     } else {
       if (log.trim.isEmpty) throw new Exception("<pre class=\"error\">Could not compile</pre>")
       else {
@@ -172,15 +176,26 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     }
   }
 
-  def getValue(im: IMain, code: String): Result = {
+  def valueOfTerm(im: IMain, w: StringWriter, name: String): String = {
+    w.getBuffer.delete(0, w.getBuffer.length())
+    im.interpret(name)
+    val log = w.getBuffer.toString
+    log
+  }
+
+  def getValue(im: IMain, w: StringWriter, code: String): Result = {
     val cname = codeName(code)
-    val html = im.valueOfTerm(cname)
+    val html = valueOfTerm(im, w, cname + ".source").replaceFirst("res\\d+: String =", "").trim.replaceFirst("^\"", "").replaceFirst("\"$", "").trim
+    //println("---- HTML ----")
+    //println(html)
     //assert(html.isDefined)
-    val log = im.valueOfTerm(cname + "Log")
+    val log = valueOfTerm(im, w, cname + "Log").replaceFirst("res\\d+: String =", "").trim
+    //println("---- Log ----")
+    //println(log)
     //assert(log.isDefined, s"Cannot find value of " + cname + "Log")
-    if (html.isDefined)
-      Result(html.get.asInstanceOf[HTML].source, log.get.asInstanceOf[String])
-    else Result("<b>Compile Error!</b>", log.get.asInstanceOf[String])
+    //if (html.isDefined)
+    Result(html, log) //.get.asInstanceOf[HTML].source, .get.asInstanceOf[String]
+    //else Result("<b>Compile Error!</b>", log) //.get.asInstanceOf[String]
   }
 
   def execute(sessionId: String, snippets: Array[String]): Result = {
@@ -196,7 +211,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
         interpret(im, w, code)
       }
     }
-    getValue(im, snippets.last)
+    getValue(im, w, snippets.last)
   }
 
   override def autocomplete(sessionId: String, prefix: String): Seq[String] = {
