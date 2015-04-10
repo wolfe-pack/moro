@@ -1,0 +1,76 @@
+.sidebarCell {
+    position: absolute;
+    right: 40px;
+    /*width: 20%;*/
+    overflow: hidden;
+    float: right;
+    padding-right: 20px;
+    z-index:100;
+}
+.editor {
+  float:left;
+  width: calc(100% - 40px)
+}
+.mode-select {
+  width: 110px;
+  height: 25px;
+  line-height: 25px;
+}
+.runButton {
+  width:auto;
+  float:right;
+}
+.cell {
+  padding-left: 25px;
+}
+#cells>div:nth-child(even) .cell {
+  background-color: white;
+  //border-left: thick solid rgba(0,0,0,0.2);
+}
+#cells>div:nth-child(even) .input {
+  background-color: white;
+  //border-right: thick solid rgba(0,0,0,0.5);
+}
+#cells .runButton {
+  color: rgba(0,0,0,0.5);
+}
+#cells>div:nth-child(odd) .cell {
+  background-color: white;
+  //border-left: thick solid rgba(51,153,255,0.4);
+}
+#cells>div:nth-child(odd) .input {
+  background-color: white;
+  //border-right: thick solid rgb(51,153,255);
+}
+
+#cells h3 {
+  margin-top: 0px;
+}
+
+.editor {
+  border-width: 0px;
+}
+
+.ace_gutter {
+  background: none !important;
+  color: white !important;
+}
+
+.btn {
+  border: none;
+}
+
+blockquote {
+  border: none;
+}
+
+#cells>div {
+ border-bottom: thin solid #F0F0F0;
+ margin-top: 10px;
+}
+
+.cell {
+ margin-top: 3px;
+}
+
+
