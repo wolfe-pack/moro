@@ -7,10 +7,6 @@
     padding-right: 20px;
     z-index:100;
 }
-.editor {
-  float:left;
-  width: calc(100% - 80px)
-}
 .input {
   border-right: thick solid lightgray;
 }

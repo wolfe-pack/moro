@@ -65,12 +65,12 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
     editCellDiv.setAttribute('hidden' , 'true');
     var inputDiv = document.createElement('div');
     inputDiv.className = "input";
-    $(inputDiv).append('<a id="runCode'+id+'" type="button" class="runButton" onclick="runCode(doc, '+id+', compilers)"><i class="fa fa-play-circle-o fa-2x"></i></span></a>');
     var editorCellDiv = document.createElement('div');
     editorCellDiv.id = "editor" + id
-    editorCellDiv.className = 'cell light-border editor';
+    editorCellDiv.className = 'cell editor';
     $(editorCellDiv).html(input.code);
     $(inputDiv).append(editorCellDiv);
+    $(inputDiv).append('<a id="runCode'+id+'" type="button" class="runButton" onclick="runCode(doc, '+id+', compilers)"><i class="fa fa-play-circle-o fa-2x"></i></span></a>');
     $(editCellDiv).append(inputDiv);
     $(cellDiv).append(editCellDiv);
   }

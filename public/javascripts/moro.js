@@ -135,8 +135,9 @@ function newCellDiv(id) {
    '  <div class="input col-md-6">' +
    '    <div id="modeForm' + id + '" class="btn-group btn-group-xs" data-toggle="buttons">' + editorToolbar() +
    '    </div>' +
-   '    <div id="editor' + id + '" class="cell"></div>' +
-   '      <button id="runCode' + id + '" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, ' + id + ',compilers)"><span class="glyphicon glyphicon-play"></span></button>' +
+   '    <div id="editor' + id + '" class="editor light-border"></div>' +
+   '    <a id="runCode'+id+'" type="button" class="runButton" onclick="runCode(doc, '+id+', compilers)"><i class="fa fa-play-circle-o fa-2x"></i></span></a>' +
+   '    <!--button id="runCode' + id + '" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, ' + id + ',compilers)"><span class="glyphicon glyphicon-play"></span></button-->' +
    '  </div>' +
    '  <div id="renderDisplay' + id + '" class="cell col-md-6"  ondblclick="toggleEditor(doc,' + id + ')"></div>' +
    '</div>' +

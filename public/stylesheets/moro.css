@@ -55,7 +55,8 @@ textarea {
 img.displayed {
     display: block;
     margin-left: auto;
-    margin-right: auto
+    margin-right: auto;
+    max-width: 650px;
 }
 .editorBody {
     padding: 80px 15px;
@@ -75,6 +76,10 @@ img.displayed {
     border: 1px solid lightgray;
     padding: 25px;
 }
+.editor {
+  float:left;
+  width: calc(100% - 80px)
+}
 .runButton {
   width:50px;
   float:right;
@@ -85,6 +90,7 @@ img.displayed {
   font-family: Menlo, Consolas, "Courier New", Courier, "Liberation Mono", monospace;
   font-size: 13px;
   clear:left;
+  max-width: 650px;
 }
 
 .string-result .error {
