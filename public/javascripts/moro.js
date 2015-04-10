@@ -118,6 +118,10 @@ function changeMode(id, newMode) {
    doc.cells[id].editor.focus();
 }
 
+function nextCellId(id) {
+   return doc.ids[doc.ids.indexOf(id) + 1];
+}
+
 function currentMode(id) {
     return doc.cells[id].mode;
 }

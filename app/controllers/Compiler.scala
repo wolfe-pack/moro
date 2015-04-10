@@ -240,6 +240,8 @@ trait ACEEditor {
       |            }
       |            document.getElementById('addBelow' + id).click();
       |            ne=nextEditor(doc,id);
+      |            newId = nextCellId(id);
+      |            changeMode(newId,toggledMode(oldMode));
       |            if(typeof(ne)!='undefined') {
       |              ne.focus();
       |              ne.navigateTo(0, 0);
