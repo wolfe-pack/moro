@@ -118,6 +118,14 @@ function changeMode(id, newMode) {
    doc.cells[id].editor.focus();
 }
 
+function currentMode(id) {
+    return doc.cells[id].mode;
+}
+
+function toggledMode(mode) {
+    if (mode == 'markdown') {return 'scala'} else {return 'markdown'};
+}
+
 function newCellDiv(id) {
    return '<div id="cell' + id + '" onmouseover="document.getElementById(\'sidebarCell' + id + '\').style.display = \'block\';" onmouseout="document.getElementById(\'sidebarCell' + id + '\').style.display = \'none\';">' +
    '<div id="editCell' + id + '" class="row">' + //light-border
@@ -193,21 +201,21 @@ function addCellFromJson(doc,mode,content,compilers,config) {
 function addCell(doc,compilers) {
   $( "#cells" ).append(newCellDiv(doc.numCells));
   doc.ids.push(doc.numCells);
-  makeCellFunctional(doc,doc.numCells, "scala",compilers,"",{});
+  makeCellFunctional(doc,doc.numCells, "markdown",compilers,"",{});
   doc.numCells += 1;
 }
 
 function addCellAbove(doc,id,compilers) {
   $( "#cell"+id ).before(newCellDiv(doc.numCells));
   doc.ids.splice(doc.ids.indexOf(id),0,doc.numCells);
-  makeCellFunctional(doc,doc.numCells, "scala",compilers,"",{});
+  makeCellFunctional(doc,doc.numCells, "markdown",compilers,"",{});
   doc.numCells += 1;
 }
 
 function addCellBelow(doc,id,compilers) {
   $( "#cell"+id ).after(newCellDiv(doc.numCells));
   doc.ids.splice(doc.ids.indexOf(id)+1,0,doc.numCells);
-  makeCellFunctional(doc,doc.numCells, "scala",compilers,"",{});
+  makeCellFunctional(doc,doc.numCells, "markdown",compilers,"",{});
   doc.numCells += 1;
 }
 
@@ -215,7 +223,7 @@ function moveCellAbove(doc,id,compilers) {
   console.log("TODO: move cell up " + id);
   //$( "#cell"+id ).before(newCellDiv(doc.numCells));
   //doc.ids.splice(doc.ids.indexOf(id),0,doc.numCells);
-  //makeCellFunctional(doc,doc.numCells, "scala",compilers,{});
+  //makeCellFunctional(doc,doc.numCells, "markdown",compilers,{});
   //doc.numCells += 1;
 }
 
@@ -223,7 +231,7 @@ function moveCellBelow(doc,id,compilers) {
   console.log("TODO: move cell down " + id);
   //$( "#cell"+id ).after(newCellDiv(doc.numCells));
   //doc.ids.splice(doc.ids.indexOf(id)+1,0,doc.numCells);
-  //makeCellFunctional(doc,doc.numCells, "scala",compilers,{});
+  //makeCellFunctional(doc,doc.numCells, "markdown",compilers,{});
   //doc.numCells += 1;
 }
 

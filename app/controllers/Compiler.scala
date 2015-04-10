@@ -225,11 +225,12 @@ trait ACEEditor {
       |        }
       |    })
       |    editor.commands.addCommand({
-      |        name: "addEmptyCellBelow",
+      |        name: "injectEmptyCell",
       |        bindKey: {win: "Shift-Ctrl-Enter", mac: "Shift-Ctrl-Enter"},
       |        exec: function(editor) {
       |            document.getElementById('addBelow' + id).click();
       |            ne=nextEditor(doc,id);
+      |            oldMode=currentMode(id);
       |            if(typeof(ne)!='undefined') {
       |              editor.getSelection().selectFileEnd();
       |              var text = editor.getCopyText();
