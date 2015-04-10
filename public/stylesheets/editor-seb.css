@@ -32,7 +32,7 @@
   //border-right: thick solid rgba(0,0,0,0.5);
 }
 #cells .runButton {
-  color: rgba(0,0,0,0.5);
+  color: rgba(0,0,0,0.05);
 }
 #cells>div:nth-child(odd) .cell {
   background-color: white;
