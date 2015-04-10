@@ -34,6 +34,10 @@
 #cells .runButton {
   color: rgba(0,0,0,0.05);
 }
+
+#cells .runButton:hover{
+  color: rgba(0,0,0,0.5);
+}
 #cells>div:nth-child(odd) .cell {
   background-color: white;
   //border-left: thick solid rgba(51,153,255,0.4);
