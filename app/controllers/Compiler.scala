@@ -225,6 +225,27 @@ trait ACEEditor {
       |        }
       |    })
       |    editor.commands.addCommand({
+      |        name: "addEmptyCellBelow",
+      |        bindKey: {win: "Shift-Ctrl-Enter", mac: "Shift-Ctrl-Enter"},
+      |        exec: function(editor) {
+      |            document.getElementById('addBelow' + id).click();
+      |            ne=nextEditor(doc,id);
+      |            if(typeof(ne)!='undefined') {
+      |              editor.getSelection().selectFileEnd();
+      |              var text = editor.getCopyText();
+      |              editor.remove('right');
+      |              console.log("splitting a cell!");
+      |              ne.insert(text,1);
+      |            }
+      |            document.getElementById('addBelow' + id).click();
+      |            ne=nextEditor(doc,id);
+      |            if(typeof(ne)!='undefined') {
+      |              ne.focus();
+      |              ne.navigateTo(0, 0);
+      |            }
+      |        }
+      |    })
+      |    editor.commands.addCommand({
       |        name: "deleteCell",
       |        bindKey: {win: "Shift-Del", mac: "Shift-Del"},
       |        exec: function(editor) {
