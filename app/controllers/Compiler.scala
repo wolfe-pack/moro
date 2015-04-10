@@ -213,6 +213,7 @@ trait ACEEditor {
       |        exec: function(editor) {
       |            document.getElementById('addBelow' + id).click();
       |            ne=nextEditor(doc,id);
+      |            oldMode=currentMode(id);
       |            if(typeof(ne)!='undefined') {
       |              editor.getSelection().selectFileEnd();
       |              var text = editor.getCopyText();
@@ -222,6 +223,7 @@ trait ACEEditor {
       |              ne.insert(text,1);
       |              ne.navigateTo(0, 0);
       |            }
+      |            if (oldMode == 'markdown') document.getElementById('runCode' + id).click();
       |        }
       |    })
       |    editor.commands.addCommand({
@@ -238,6 +240,7 @@ trait ACEEditor {
       |              console.log("splitting a cell!");
       |              ne.insert(text,1);
       |            }
+      |            if (oldMode == 'markdown') document.getElementById('runCode' + id).click();
       |            document.getElementById('addBelow' + id).click();
       |            ne=nextEditor(doc,id);
       |            newId = nextCellId(id);
