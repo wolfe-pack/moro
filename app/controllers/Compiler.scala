@@ -192,7 +192,7 @@ trait ACEEditor {
       |    editor.setBehavioursEnabled(true);
       |    editor.setWrapBehavioursEnabled(true);
       |    editor.setShowFoldWidgets(true);
-      |    editor.setHighlightActiveLine(true);
+      |    editor.setHighlightActiveLine(false);
       |    editor.setShowPrintMargin(false);
       |    editor.setAutoScrollEditorIntoView(true);
       |

@@ -104,7 +104,7 @@ function runCode(doc, id, compilers, post) {
   compileCode(input,
       function(x) {
         outputResult(doc, id, x, compilers);
-        if(compilers[doc.cells[id].mode].hideAfterCompile) toggleEditor(doc, id);
+        //if(compilers[doc.cells[id].mode].hideAfterCompile) toggleEditor(doc, id);
       }, doc.cells[id].mode, post);
 }
 
@@ -118,9 +118,9 @@ function changeMode(id, newMode) {
 }
 
 function newCellDiv(id) {
-   return '<div id="cell' + id + '" class="cellWrapper" onmouseover="document.getElementById(\'sidebarCell' + id + '\').style.display = \'block\';" onmouseout="document.getElementById(\'sidebarCell' + id + '\').style.display = \'none\';">' +
-   '<div id="editCell' + id + '" class="light-border">' +
-   '  <div id="sidebarCell' + id + '" class="sidebarCell text-right" style="display: none;">' +
+   return '<div id="cell' + id + '" onmouseover="document.getElementById(\'sidebarCell' + id + '\').style.display = \'block\';" onmouseout="document.getElementById(\'sidebarCell' + id + '\').style.display = \'none\';">' +
+   '<div id="editCell' + id + '" class="row">' + //light-border
+   '  <div id="sidebarCell' + id + '" class="sidebarCell col-md-offset-6 col-md-6 text-right" style="display: none;">' +
    '    <div class="btn-group btn-group-xs">' +
    '      <!--button id="moveAbove' + id + '" type="button" class="btn btn-default" onclick="moveCellAbove(doc,' + id + ',compilers)"><i class="fa fa-chevron-up"></i></button-->' +
    '      <button id="addAbove' + id + '" type="button" class="btn btn-default" onclick="addCellAbove(doc,' + id + ',compilers)"><i class="fa fa-sort-up"></i><i class="fa fa-plus"></i></button>' +
@@ -132,13 +132,13 @@ function newCellDiv(id) {
    '    </div>' +
    '  </div>' +
    //'  cell ' + id + ' contents' +
-   '  <div class="input">' +
+   '  <div class="input col-md-6">' +
    '    <div id="modeForm' + id + '" class="btn-group btn-group-xs" data-toggle="buttons">' + editorToolbar() +
    '    </div>' +
-   '    <div id="editor' + id + '" class="cell light-border"></div>' +
+   '    <div id="editor' + id + '" class="cell"></div>' +
    '      <button id="runCode' + id + '" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, ' + id + ',compilers)"><span class="glyphicon glyphicon-play"></span></button>' +
    '  </div>' +
-   '  <div id="renderDisplay' + id + '" class="cell"  ondblclick="toggleEditor(doc,' + id + ')"></div>' +
+   '  <div id="renderDisplay' + id + '" class="cell col-md-6"  ondblclick="toggleEditor(doc,' + id + ')"></div>' +
    '</div>' +
    '</div>'
 }

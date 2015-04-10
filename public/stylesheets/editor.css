@@ -1,0 +1,16 @@
+.sidebarCell {
+    position: absolute;
+    right: 0px;
+    /*width: 20%;*/
+    overflow: hidden;
+    float: right;
+    padding-right: 20px;
+    z-index:100;
+}
+.editor {
+  float:left;
+  width: calc(100% - 80px)
+}
+.input {
+  border-right: thick solid lightgray;
+}

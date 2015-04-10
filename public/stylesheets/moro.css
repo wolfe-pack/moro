@@ -48,15 +48,6 @@
     width: 100%;
     overflow: hidden;
 }
-.sidebarCell {
-    position: absolute;
-    width: 20%;
-    left: 620px;
-    float: right;
-    overflow: hidden;
-    padding-right: 5px;
-    z-index:100;
-}
 textarea {
     font-size: 12pt;
     font-family: Lucida Console;
@@ -83,10 +74,6 @@ img.displayed {
 .dirCell {
     border: 1px solid lightgray;
     padding: 25px;
-}
-.editor {
-  float:left;
-  width: calc(100% - 80px)
 }
 .runButton {
   width:50px;
