@@ -85,12 +85,18 @@ img.displayed {
   float:right;
 }
 .string-result {
-  margin-left: 20px;
-  margin-bottom: 20px;
+  margin-left: 15px;
+  margin-bottom: 15px;
   font-family: Menlo, Consolas, "Courier New", Courier, "Liberation Mono", monospace;
   font-size: 13px;
   clear:left;
   max-width: 650px;
+}
+
+.string-result blockquote {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 0px;
 }
 
 .string-result .error {

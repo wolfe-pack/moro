@@ -112,6 +112,7 @@ function changeMode(id, newMode) {
    var currentCode = compilers[doc.cells[id].mode].editorToInput(doc, id).code;
    compilers[doc.cells[id].mode].removeEditor(id);
    doc.cells[id].mode = newMode;
+   $("#modeSelect" + id).val(newMode);
    //text = doc.cells[id].editor.getSession().getValue();
    doc.cells[id].editor = compilers[newMode].editor(id, currentCode);
    doc.cells[id].editor.focus();
@@ -120,7 +121,13 @@ function changeMode(id, newMode) {
 function newCellDiv(id) {
    return '<div id="cell' + id + '" onmouseover="document.getElementById(\'sidebarCell' + id + '\').style.display = \'block\';" onmouseout="document.getElementById(\'sidebarCell' + id + '\').style.display = \'none\';">' +
    '<div id="editCell' + id + '" class="row">' + //light-border
-   '  <div id="sidebarCell' + id + '" class="sidebarCell col-md-offset-6 col-md-6 text-right" style="display: none;">' +
+   //'  cell ' + id + ' contents' +
+   '  <div class="input col-md-6">' +
+   '    <!--div id="modeForm' + id + '" class="btn-group btn-group-xs" data-toggle="buttons">' + editorToolbar() +
+   '    </div-->' +
+   '  <div id="sidebarCell' + id + '" class="sidebarCell text-right" style="display: none;">' +
+   '    <select id="modeSelect' + id + '" class="input-sm" style="width: 110px; height: 25px;">' + editorSelect() +
+   '    </select>' +
    '    <div class="btn-group btn-group-xs">' +
    '      <!--button id="moveAbove' + id + '" type="button" class="btn btn-default" onclick="moveCellAbove(doc,' + id + ',compilers)"><i class="fa fa-chevron-up"></i></button-->' +
    '      <button id="addAbove' + id + '" type="button" class="btn btn-default" onclick="addCellAbove(doc,' + id + ',compilers)"><i class="fa fa-sort-up"></i><i class="fa fa-plus"></i></button>' +
@@ -131,10 +138,6 @@ function newCellDiv(id) {
    '      <!--button id="moveBelow' + id + '" type="button" class="btn btn-default" onclick="moveCellBelow(doc,' + id + ',compilers)"><i class="fa fa-chevron-down"></i></button-->' +
    '    </div>' +
    '  </div>' +
-   //'  cell ' + id + ' contents' +
-   '  <div class="input col-md-6">' +
-   '    <div id="modeForm' + id + '" class="btn-group btn-group-xs" data-toggle="buttons">' + editorToolbar() +
-   '    </div>' +
    '    <div id="editor' + id + '" class="editor light-border"></div>' +
    '    <a id="runCode'+id+'" type="button" class="runButton" onclick="runCode(doc, '+id+', compilers)"><i class="fa fa-play-circle-o fa-2x"></i></span></a>' +
    '    <!--button id="runCode' + id + '" type="button" class="btn btn-default btn-xs" onclick="runCode(doc, ' + id + ',compilers)"><span class="glyphicon glyphicon-play"></span></button-->' +
@@ -156,6 +159,7 @@ function makeCellFunctional(doc,id,compiler,compilers,initialContent,config) {
 
     $('.btn').button();
 
+    /*
     var sz = $('#modeForm'+id+' label');
     for (var i=0, len=sz.length; i<len; i++) {
         sz[i].onclick = function() {
@@ -166,6 +170,13 @@ function makeCellFunctional(doc,id,compiler,compilers,initialContent,config) {
             }
         };
     }
+    */
+    $('#modeSelect'+id).change(function() {
+      newMode = $("#modeSelect" + id).val();
+      if(doc.cells[id].mode != newMode) {
+        changeMode(id, newMode);
+      }
+    });
 }
 
 function addCellFromJson(doc,mode,content,compilers,config) {
@@ -173,7 +184,8 @@ function addCellFromJson(doc,mode,content,compilers,config) {
   doc.ids.push(doc.numCells);
   makeCellFunctional(doc,doc.numCells,mode,compilers,content, config);
   //doc.cells[doc.numCells].editor.getSession().setValue(content);
-  $('#modeForm'+ doc.numCells +' label input[value='+ mode +']').parent().click()
+  // $('#modeForm'+ doc.numCells +' label input[value='+ mode +']').parent().click()
+  $('#modeSelect'+ doc.numCells).val(mode).change();
   //runCode(doc, doc.numCells, compilers);
   doc.numCells += 1;
 }
@@ -186,7 +198,6 @@ function addCell(doc,compilers) {
 }
 
 function addCellAbove(doc,id,compilers) {
-  console.log("TODO: adding above " + id);
   $( "#cell"+id ).before(newCellDiv(doc.numCells));
   doc.ids.splice(doc.ids.indexOf(id),0,doc.numCells);
   makeCellFunctional(doc,doc.numCells, "scala",compilers,"",{});
@@ -194,7 +205,6 @@ function addCellAbove(doc,id,compilers) {
 }
 
 function addCellBelow(doc,id,compilers) {
-  console.log("TODO: adding below " + id);
   $( "#cell"+id ).after(newCellDiv(doc.numCells));
   doc.ids.splice(doc.ids.indexOf(id)+1,0,doc.numCells);
   makeCellFunctional(doc,doc.numCells, "scala",compilers,"",{});
@@ -278,7 +288,7 @@ function enableAceScalaCompletion() {
     var scalaCompleter = {
       getCompletions: function(editor, session, pos, prefix, callback) {
           var line = editor.session.getLine(pos.row).slice(0,pos.column);
-          console.log(line);
+          // console.log(line);
           if (prefix.length === 0) { callback(null, []); return }
           $.ajax({
              type: "POST",
@@ -287,7 +297,7 @@ function enableAceScalaCompletion() {
              data: JSON.stringify({ 'line': line, 'prefix': prefix }),
              dataType: "json",
              success: function(wordList) {
-                console.log(wordList);
+                // console.log(wordList);
                 callback(null, wordList.map(function(ea) {
                     return {name: ea, value: ea, score: 100, meta: "serverLine"}
                 }));

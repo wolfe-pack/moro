@@ -97,6 +97,13 @@
                     ''
             }
 
+            function editorSelect() {
+                return '' +
+                    @for(compiler <- compilers) {
+                      '      <option value="@{compiler.name}">@Html(compiler.name)</option>' +
+                    }
+                    ''
+            }
             bootstrap_alert = function(alertType, title, message, time, onClose) {
                     time = typeof time !== 'undefined' ? time : 2000;
                     onClose = typeof onClose !== 'undefined' ? onClose : function() {};
