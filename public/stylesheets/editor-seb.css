@@ -81,6 +81,21 @@ blockquote {
  //padding-top: 10px;
 }
 
+.mode_scala .editor {
+ //border: thin solid lightgray;
+ //border-radius: 5px;
+}
+
+.mode_scala .ace_gutter {
+ color: gray;
+}
+
+.mode_markdown .ace_gutter {
+ color: white;
+}
+
+
+
 .cell {
  margin-top: 3px;
 }
