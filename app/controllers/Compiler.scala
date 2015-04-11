@@ -222,6 +222,8 @@ trait ACEEditor {
       |              ne.focus();
       |              ne.insert(text,1);
       |              ne.navigateTo(0, 0);
+      |              newId = nextCellId(id);
+      |              changeMode(newId,oldMode)
       |            }
       |            if (oldMode == 'markdown') document.getElementById('runCode' + id).click();
       |        }
