@@ -204,14 +204,14 @@ function makeCellFunctional(doc,id,compiler,compilers,initialContent,config) {
 function showCellTools(doc,id) {
   $('#sidebarCell' + id).css('display','block');
   $('#cell' + id + ' .runButton').show();
-  $('#cell' + id + ' .ace_gutter').css('color','gray');
+  //$('#cell' + id + ' .ace_gutter').css('color','gray');
 
 }
 
 function hideCellTools(doc,id) {
   $('#sidebarCell' + id).css('display','none');
   $('#cell' + id + ' .runButton').hide();
-  $('#cell' + id + ' .ace_gutter').css('color','white');
+  //$('#cell' + id + ' .ace_gutter').css('color','white');
 }
 
 function addCellFromJson(doc,mode,content,compilers,config) {
