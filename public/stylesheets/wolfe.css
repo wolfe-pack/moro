@@ -67,8 +67,22 @@
 
 .editor {
   float:left;
-  width: calc(100% - 80px)
+  width: calc(100% - 80px);
+  background-color: #3d3d3d !important;
+  border: thin solid gray;
+  border-radius: 5px;
+
 }
+
+.ace_gutter {
+  background-color: #3d3d3d !important;
+  border-right-width: 0px !important;
+}
+
+.ace_gutter-cell {
+  background-color: #3d3d3d !important;
+}
+
 .runButton {
   width:50px;
   float:right;
