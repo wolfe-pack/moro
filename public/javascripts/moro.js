@@ -131,7 +131,7 @@ function toggledMode(mode) {
 }
 
 function newCellDiv(id) {
-   return '<div id="cell' + id + '" onmouseover="document.getElementById(\'sidebarCell' + id + '\').style.display = \'block\';" onmouseout="document.getElementById(\'sidebarCell' + id + '\').style.display = \'none\';">' +
+   return '<div id="cell' + id + '" onmouseover="showCellTools(doc,' + id + ');" onmouseout="hideCellTools(doc,' + id + ');">' +
    '<div id="editCell' + id + '" class="row">' + //light-border
    //'  cell ' + id + ' contents' +
    '  <div class="input col-md-6">' +
@@ -189,6 +189,22 @@ function makeCellFunctional(doc,id,compiler,compilers,initialContent,config) {
         changeMode(id, newMode);
       }
     });
+
+    hideCellTools(doc,id)
+
+}
+
+function showCellTools(doc,id) {
+  $('#sidebarCell' + id).css('display','block');
+  $('#cell' + id + ' .runButton').show();
+  $('#cell' + id + ' .ace_gutter').css('color','gray');
+
+}
+
+function hideCellTools(doc,id) {
+  $('#sidebarCell' + id).css('display','none');
+  $('#cell' + id + ' .runButton').hide();
+  $('#cell' + id + ' .ace_gutter').css('color','white');
 }
 
 function addCellFromJson(doc,mode,content,compilers,config) {

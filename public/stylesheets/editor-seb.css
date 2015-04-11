@@ -32,12 +32,14 @@
   //border-right: thick solid rgba(0,0,0,0.5);
 }
 #cells .runButton {
-  color: rgba(0,0,0,0.05);
+  //display: none;
+  color: rgba(0,0,0,0.3);
 }
 
 #cells .runButton:hover{
   color: rgba(0,0,0,0.5);
 }
+
 #cells>div:nth-child(odd) .cell {
   background-color: white;
   //border-left: thick solid rgba(51,153,255,0.4);
@@ -57,7 +59,7 @@
 
 .ace_gutter {
   background: none !important;
-  color: white !important;
+  //color: white !important;
 }
 
 .ace_gutter-cell {
@@ -76,6 +78,7 @@ blockquote {
 #cells>div {
  border-bottom: thin solid #F0F0F0;
  margin-top: 10px;
+ //padding-top: 10px;
 }
 
 .cell {
