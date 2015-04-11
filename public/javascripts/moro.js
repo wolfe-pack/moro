@@ -109,10 +109,13 @@ function runCode(doc, id, compilers, post) {
 }
 
 function changeMode(id, newMode) {
+   var currentMode = doc.cells[id].mode
    var currentCode = compilers[doc.cells[id].mode].editorToInput(doc, id).code;
    compilers[doc.cells[id].mode].removeEditor(id);
    doc.cells[id].mode = newMode;
    $("#modeSelect" + id).val(newMode);
+   $("#cell" + id).toggleClass("mode_" + currentMode);
+   $("#cell" + id).toggleClass("mode_" + newMode);
    //text = doc.cells[id].editor.getSession().getValue();
    doc.cells[id].editor = compilers[newMode].editor(id, currentCode);
    doc.cells[id].editor.focus();
@@ -189,6 +192,10 @@ function makeCellFunctional(doc,id,compiler,compilers,initialContent,config) {
         changeMode(id, newMode);
       }
     });
+//    console.log($(doc.cells[id]));
+//    doc.cells[id].className = "mode_" + compiler;
+    $("#cell" + id).toggleClass("mode_" + compiler);
+//    console.log($(doc.cells[id]).attr("class"));
 
     hideCellTools(doc,id)
 
