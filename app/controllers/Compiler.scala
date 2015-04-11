@@ -64,7 +64,7 @@ trait Compiler {
   def config: Option[Configuration] = None
 
   // code to construct the editor for a cell of this type
-  def editorJavascript: String
+  def editorJavascript(inEditorView:Boolean = true): String
 
   // code to construct the editor for a cell of this type
   def removeEditorJavascript: String
@@ -167,7 +167,7 @@ trait ACEEditor {
 
   def aceTheme: String = "tomorrow"
 
-  def editorJavascript: String =
+  def editorJavascript(inEditorView:Boolean = true): String =
     """
       |function(id,content) {
       |    $("#editor"+id).empty();
@@ -358,7 +358,7 @@ trait ACEEditor {
       |    //heightUpdateFunction(editor, '#editor'+id);
       |    return editor;
       |}
-    """.stripMargin format(aceTheme, editorMode, initialValue)
+    """.stripMargin format(if (inEditorView) "tomorrow" else aceTheme, editorMode, initialValue)
 
   // code to construct the editor for a cell of this type
   def removeEditorJavascript: String =
@@ -397,7 +397,7 @@ trait TextInputEditor {
 
   def initialValue: String = ""
 
-  def editorJavascript: String =
+  def editorJavascript(inEditorView:Boolean): String =
     """
       |function(id,content) {
       |    var contentToAdd = ""

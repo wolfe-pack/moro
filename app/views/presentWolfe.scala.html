@@ -91,7 +91,7 @@
     @for(c <- compilers) {
        compilers.@{c.name} = {};
        compilers.@{c.name}.hideAfterCompile = @{c.hideAfterCompile};
-       compilers.@{c.name}.editor = @Html(c.editorJavascript);
+       compilers.@{c.name}.editor = @Html(c.editorJavascript(false));
        compilers.@{c.name}.editorToInput = @Html(c.editorToInput);
        compilers.@{c.name}.aggregate = @{c.aggregatePrevious};
     }
