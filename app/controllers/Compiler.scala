@@ -224,6 +224,7 @@ trait ACEEditor {
       |              ne.navigateTo(0, 0);
       |              newId = nextCellId(id);
       |              changeMode(newId,oldMode)
+      |              console.log("changing " + newId + " to " + oldMode);
       |            }
       |            if (oldMode == 'markdown') document.getElementById('runCode' + id).click();
       |        }
@@ -243,7 +244,7 @@ trait ACEEditor {
       |              ne.insert(text,1);
       |            }
       |            if (oldMode == 'markdown') document.getElementById('runCode' + id).click();
-      |            document.getElementById('addBelow' + id).click();
+      |            if (!(ne.getValue().trim() === "")) document.getElementById('addBelow' + id).click();
       |            ne=nextEditor(doc,id);
       |            newId = nextCellId(id);
       |            changeMode(newId,toggledMode(oldMode));
