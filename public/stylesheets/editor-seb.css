@@ -22,6 +22,7 @@
 }
 .cell {
   padding-left: 25px;
+  //margin-bottom: 10px;
 }
 #cells>div:nth-child(even) .cell {
   background-color: white;
