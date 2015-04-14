@@ -1,4 +1,5 @@
 @(id: String, document: controllers.doc.Document, compilers: Compilers, docRoot: String, user: Option[MoroUser])
+@import controllers.util.MiscUtils.escapeTags
 
 <script>
     var divCells = $('#@id');
@@ -18,7 +19,7 @@
     /* add cells */
     @for(cell <- document.cells) {
         var mode = '@Html(cell.compiler)';
-        var input = @Html(cell.inputJson);
+        var input = @Html(escapeTags(cell.inputJson));
         var id = @{cell.id};
         createStaticCellHTML(id, divCells, doc, mode, input, compilers);
     }

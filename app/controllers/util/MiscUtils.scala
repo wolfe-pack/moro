@@ -37,4 +37,8 @@ object MiscUtils {
     if (!f.delete())
       throw new FileNotFoundException("Failed to delete file: " + f);
   }
+
+  def escapeTags(str:String) = {
+    str.replace("<", "\\<").replace(">", "\\>");
+  }
 }
