@@ -185,7 +185,8 @@ trait ACEEditor {
       |    var contentToAdd = ""
       |    if(content=="") contentToAdd = '%s';
       |    else contentToAdd = content;
-      |    //editor.renderer.setScrollMargin(10, 10, 10, 10);
+      |    editor.renderer.setScrollMargin(10, 10, 0, 0);
+      |    //editor.renderer.setPadding(20);
       |    editor.getSession().setValue(contentToAdd, 1);
       |    editor.focus();
       |    editor.navigateFileEnd();
