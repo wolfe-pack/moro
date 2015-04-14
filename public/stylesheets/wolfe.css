@@ -6,8 +6,16 @@
 
 /* d3 styles */
 svg text {
-  fill: #ddd;
+  fill: #ddd !important;
 }
+
+
+
+.tick line {
+  stroke: white;
+  opacity: 0.1;
+}
+
 
 
 /* Own hacks */
