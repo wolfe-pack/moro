@@ -185,7 +185,7 @@ trait ACEEditor {
       |    var contentToAdd = ""
       |    if(content=="") contentToAdd = '%s';
       |    else contentToAdd = content;
-      |    editor.renderer.setScrollMargin(10, 10, 10, 10)
+      |    //editor.renderer.setScrollMargin(10, 10, 10, 10);
       |    editor.getSession().setValue(contentToAdd, 1);
       |    editor.focus();
       |    editor.navigateFileEnd();
@@ -195,7 +195,7 @@ trait ACEEditor {
       |    editor.setHighlightActiveLine(false);
       |    editor.setShowPrintMargin(false);
       |    editor.setAutoScrollEditorIntoView(true);
-      |
+      |    editor.renderer.setShowGutter(true);
       |    editor.on('change', function () {
       |        //heightUpdateFunction(editor, '#editor'+id);
       |    });
