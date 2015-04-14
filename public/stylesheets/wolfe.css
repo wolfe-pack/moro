@@ -3,6 +3,13 @@
   color: #fc0 !important;
 }
 
+
+/* d3 styles */
+svg text {
+  fill: #ddd;
+}
+
+
 /* Own hacks */
 
 .doc-nav {
