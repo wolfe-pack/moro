@@ -152,9 +152,10 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     //assert(result == Results.Success, "Compilation Failed")
     val cname = codeName(code)
     if (result == Results.Success) {
+      w.getBuffer.delete(0, w.getBuffer.length())
       val anyVar = im.mostRecentVar
       val res = im.interpret("val " + cname + ": HTML = " + anyVar)
-      assert(res == Results.Success, "failed to set value for " + cname + ": " + res)
+      assert(res == Results.Success, "failed to set value for " + cname + ": " + res + "\n" + w.getBuffer.toString)
       //im.interpret(cname)
       //println(im.definedTerms.mkString(", "))
       //println(im.mostRecentVar)
@@ -163,7 +164,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
       //w.getBuffer.delete(0, w.getBuffer.length())
       //assert(im.valueOfTerm(cname).isDefined, s"Recent var: ${im.mostRecentVar}\n${cname}: ${im.valueOfTerm(cname)}\n$llog")
       val lres = im.bind(cname + "Log", "String", log)
-      assert(lres == Results.Success, "failed to set value for " + cname + "Log: " + lres)
+      assert(lres == Results.Success, "failed to set value for " + cname + "Log: " + lres + "\n" + w.getBuffer.toString)
       //assert(checkCodeCompiled(im, code), s"Code not compiled:\n$code")
       //println("gv: " + getValue(im, w, code))
     } else {
