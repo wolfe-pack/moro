@@ -5,13 +5,11 @@
 
 
 /* d3 styles */
-svg text {
+.wolfe-nvd3 svg text {
   fill: #ddd !important;
 }
 
-
-
-.tick line {
+.wolfe-nvd3 .tick line {
   stroke: white;
   opacity: 0.1;
 }
