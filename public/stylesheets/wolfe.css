@@ -1303,70 +1303,8 @@ code.option, code.flag, code.filter, code.output {
 
 
 
-/* D3 Factor Graphs */
 
-.factorgraph {
-    /* background-color: #2c2c2c; */
-    position:relative;
-}
-
-.factorgraph .fgnode {
-	fill: #fc0;
-}
-
-.factorgraph .fgnode_observed {
-    fill: #652;
-}
-
-.factorgraph .fgfactor {
-	stroke: #fc0;
-	stroke-width: 3px;
-}
-
-.factorgraph .fgfixed {
-    fill: #f70;
-}
-
-.factorgraph .label {
-	font-size: 15px;
-	font-family: 'sans-serif';
-	text-transform: none;
-	text-shadow: none;
-	fill: #333;
-}
-
-.factorgraph .tooltip {
-	font-family: 'sans-serif';
-}
-
-
-.factorgraph .tooltipinner {
-	background:#333;
-	border:1.5px solid;
-	border-radius:10px;
-	padding:5px;
-}
-
-.factorgraph .tooltipheader {
-	background-color:white;
-    color:#333;
-	border-bottom:gray 1.5px solid;
-	padding:5px;
-	margin:-5px -5px 0 -5px;
-	font-style:italic;
-}
-
-.factorgraph .potentialtable {
-	border-spacing: 0px;
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.factorgraph .potentialtable td {
-	padding-top:3px;
-	padding-left:15px;
-}
+/* Bar Chart */
 
 svg.barchart {
     overflow:visible;
@@ -1380,21 +1318,47 @@ svg.barchart {
     fill: #982;
 }
 
-.playbtn{
-  float: left;
-  background: #f70;
-  color: #000;
-  font-family: sans-serif;
-  padding: 5px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 1px 5px rgba(0,0,0,.5);
-  text-shadow: 0 1px 0 rgba(255,255,255,.3);
-  border-radius: 5px;
-  -webkit-user-select: none;
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-  cursor: pointer;
+/* D3 Factor Graphs */
+
+.factorgraph .fgnode {
+  fill: #fc0;
+}
+
+.factorgraph .fgnode_observed {
+    fill: #652;
+}
+
+.factorgraph .fgfactor {
+  stroke: #fc0;
+  stroke-width: 3px;
+}
+
+.factorgraph .fgfixed {
+    fill: #f70;
+}
+
+.factorgraph .label {
+  font-size: 15px;
+  font-family: 'sans-serif';
+  text-transform: none;
+  text-shadow: none;
+  fill: #333;
+}
+
+.factorgraph .tooltip {
+  font-family: 'sans-serif';
+}
+
+.factorgraph .potentialtable {
+  border-spacing: 0px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.factorgraph .potentialtable td {
+  padding-top:3px;
+  padding-left:15px;
 }
 
 /* D3 Graphs */

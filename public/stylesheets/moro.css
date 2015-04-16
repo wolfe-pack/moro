@@ -149,74 +149,6 @@ body {
   background-color: #f5f5f5;
 }
 
-/* D3 Factor Graphs */
-
-.factorgraph {
-    /* background-color: #2c2c2c; */
-    position:relative;
-}
-
-.factorgraph .fgnode {
-	fill: #99cc99;
-}
-
-.factorgraph .fgnode_observed {
-    fill: #652;
-}
-
-.factorgraph .fgfactor {
-	stroke: #99cc99;
-	stroke-width: 3px;
-}
-
-.factorgraph .fgfixed {
-    fill: #f70;
-}
-
-.factorgraph .label {
-	font-size: 15px;
-	font-family: 'sans-serif';
-	text-transform: none;
-	text-shadow: none;
-	fill: #333;
-}
-
-.factorgraph .tooltip {
-	font-family: 'sans-serif';
-}
-
-
-.factorgraph .tooltipinner {
-		/*background:#333;
-		border:1.5px solid;
-    	border-radius:10px;
-    	padding:5px;
-
-*/
-}
-
-.factorgraph .tooltipheader {
-	margin:-5px -5px 0 -5px;
-	padding:5px;
-	margin-left: 120px;
-	/*background-color:white;
-    color:#333;
-	border-bottom:gray 1.5px solid;
-	font-style:italic;*/
-}
-
-.factorgraph .potentialtable {
-	border-spacing: 0px;
-	text-align: center;
-	margin-left: 120px;
-	background-color: #fcfcfc;
-}
-
-.factorgraph .potentialtable td {
-	padding-top:3px;
-	padding-left:15px;
-}
-
 svg.barchart {
     overflow:visible;
 }
@@ -227,21 +159,4 @@ svg.barchart {
 
 .barchart .barlabel {
     fill: #982;
-}
-
-.playbtn{
-  float: left;
-  background: #f70;
-  color: #000;
-  font-family: sans-serif;
-  padding: 5px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 1px 5px rgba(0,0,0,.5);
-  text-shadow: 0 1px 0 rgba(255,255,255,.3);
-  border-radius: 5px;
-  -webkit-user-select: none;
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-  cursor: pointer;
 }
