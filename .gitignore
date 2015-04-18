@@ -16,3 +16,6 @@ dist
 
 # application-specific config
 conf/application.conf
+
+# OSX files
+.DS_Store
