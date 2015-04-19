@@ -105,7 +105,6 @@ blockquote {
 }
 
 
-
 .cell {
  margin-top: 3px;
 }
@@ -115,4 +114,7 @@ blockquote {
   padding-left: 40px;
 }
 
-
+/* Brat */
+.brat-text {
+  fill: black;
+}
