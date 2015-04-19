@@ -1,26 +1,58 @@
-        .background0 {
-          fill: none;
-        }
-        .background1 {
-          fill: none;
-        }
-        svg {
-          border: 0px solid #7fa2ff;
-          fill: #ddd;
-        }
 
-        .highlight {
-          fill: #fc0;
-        }
+.background0 {
+  fill: none;
+}
+.background1 {
+  fill: none;
+}
+svg {
+  border: 0px solid #7fa2ff;
+  //fill: #ddd;
+}
 
-        path {
-          /*fill: #ddd;*/
-          /*stroke-width: 5px;*/
-        }
+.highlight rect {
+  fill: none !important;
+}
 
-        tspan {
-        }
+path {
+  /*fill: #ddd;*/
+  /*stroke-width: 5px;*/
+}
 
-        svg * {
-          text-shadow: none;
-        }
+tspan {
+}
+
+svg * {
+  text-shadow: none;
+}
+
+.brat-text {
+  fill: #ddd;
+}
+
+.brat-arc {
+  fill: white !important;
+}
+
+.span rect {
+  fill: #fc0 !important;
+  stroke: #fc0;
+}
+
+.span text {
+  fill: black !important;
+}
+
+.brat_arrow {
+  fill: #ddd !important;
+}
+
+.brat-arc-label {
+  fill: #ddd !important;
+}
+
+.brat-arc-path {
+  stroke: #ddd !important;
+  //fill: #ddd !important;
+
+}

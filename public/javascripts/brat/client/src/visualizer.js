@@ -1264,6 +1264,7 @@ var Visualizer = (function($, window, undefined) {
             {
               markerUnits: 'strokeWidth',
               'fill': color,
+              'class': 'brat_arrow'
             });
           svg.polyline(arrow, [[0, 0], [width, height / 2], [0, height], [width / 12, height / 2]]);
         }
@@ -2309,6 +2310,7 @@ Util.profileStart('arcs');
                 markerStart: labelArrowDecl,
                 style: 'stroke: ' + color,
                 'strokeDashArray': dashArray,
+                'class': 'brat-arc-path'
             });
             if (arc.marked) {
               svg.path(shadowGroup, path, {
