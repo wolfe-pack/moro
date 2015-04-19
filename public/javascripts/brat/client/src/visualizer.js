@@ -2039,7 +2039,8 @@ Util.profileStart('arcs');
             row.hasAnnotations = true;
             var arcGroup = svg.group(row.arcs, {
                 'data-from': arc.origin,
-                'data-to': arc.target
+                'data-to': arc.target,
+                'class': 'brat-arc brat-arc-' + arc.type
             });
             var from, to;
 
@@ -2084,6 +2085,7 @@ Util.profileStart('arcs');
               // TODO: confirm this is unused and remove.
               //'data-arc-id': arc.id,
               'data-arc-ed': arc.eventDescId,
+              'class': 'brat-arc-label brat-arc-label-' + arc.type
             };
 
             // construct SVG text, showing possible trailing index
@@ -2230,6 +2232,7 @@ Util.profileStart('arcs');
                 markerStart: labelArrowDecl,
                 style: 'stroke: ' + color,
                 'strokeDashArray': dashArray,
+                class: 'brat-arc-path'
             });
             if (arc.marked) {
               svg.path(shadowGroup, path, {
@@ -2502,7 +2505,8 @@ Util.profileStart('chunkFinish');
           sentenceText.span(chunk.text + nextSpace, {
             x: chunk.textX,
             y: chunk.row.textY,
-            'data-chunk-id': chunk.index
+            'data-chunk-id': chunk.index,
+            'class': 'brat-text'
           });
 
           // chunk backgrounds
