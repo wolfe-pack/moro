@@ -44,7 +44,7 @@ svg * {
 }
 
 .brat_arrow {
-  fill: #ddd !important;
+  fill: #999999 !important;
 }
 
 .brat-arc-label {
@@ -52,7 +52,6 @@ svg * {
 }
 
 .brat-arc-path {
-  stroke: #ddd !important;
-  //fill: #ddd !important;
+  stroke: #999999 !important;
 
 }
