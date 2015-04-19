@@ -22,8 +22,25 @@
   stroke: #fc0;
 }
 
+/* Brat */
 
+.brat-text {
+  fill: white;
+}
 
+.brat-arc {
+  fill: white !important;
+}
+
+/*
+.brat-arc-label {
+  fill: white !important;
+}
+
+.brat-arc-path {
+  stroke: white !important;
+}
+*/
 
 /* Own hacks */
 
