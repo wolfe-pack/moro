@@ -22,6 +22,56 @@
   stroke: #fc0;
 }
 
+/* Brat */
+
+
+.highlight rect {
+  fill: none !important;
+}
+
+path {
+  /*fill: #ddd;*/
+  /*stroke-width: 5px;*/
+}
+
+tspan {
+}
+
+svg * {
+  text-shadow: none;
+}
+
+.brat-text {
+  fill: #ddd;
+}
+
+.brat-arc {
+  fill: white !important;
+}
+
+.span rect {
+  fill: #fc0 !important;
+  stroke: #fc0;
+}
+
+.span text {
+  fill: black !important;
+}
+
+.brat_arrow {
+  fill: #999999 !important;
+}
+
+.brat-arc-label {
+  fill: #ddd !important;
+}
+
+.brat-arc-path {
+  stroke: #999999 !important;
+
+}
+
+
 /* Own hacks */
 
 .doc-nav {
