@@ -65,7 +65,7 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
         Result("Compile Error!!")
     }
     //println("result: " + result)
-    Result("<div class=\"string-result\">" + "<blockquote>" + result.result + "</blockquote>" + "</div>", result.log)
+    Result("<div class=\"string-result\">" + result.result + "</div>", result.log)
   }
 }
 
