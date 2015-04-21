@@ -130,6 +130,7 @@
 
             /* DOCUMENT OBJECT */
             var doc = newDoc("@(document.name)");
+            doc.aceTheme = 'tomorrow';
             doc.config = @Html(document.configJson)
             doc.configEntries = @Html(controllers.doc.Document.configEntriesJson)
             document.getElementById ("docNameInput").value = doc.name;

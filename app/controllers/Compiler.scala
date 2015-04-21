@@ -165,8 +165,6 @@ trait ACEEditor {
 
   def initialValue: String = ""
 
-  def aceTheme: String = "tomorrow"
-
   def editorJavascript(inEditorView:Boolean = true): String =
     """
       |function(id,content) {
@@ -178,7 +176,7 @@ trait ACEEditor {
       |      enableSnippets: true,
       |      enableLiveAutocompletion: true
       |    });
-      |    editor.setTheme("ace/theme/%s");
+      |    editor.setTheme("ace/theme/" + doc.aceTheme);
       |    editor.getSession().setMode("ace/mode/%s");
       |    editor.getSession().setUseWrapMode(true);
       |    editor.getSession().setWrapLimitRange(null, null);
@@ -362,7 +360,7 @@ trait ACEEditor {
       |    //heightUpdateFunction(editor, '#editor'+id);
       |    return editor;
       |}
-    """.stripMargin format(if (inEditorView) "tomorrow" else aceTheme, editorMode, initialValue)
+    """.stripMargin format(editorMode, initialValue)
 
   // code to construct the editor for a cell of this type
   def removeEditorJavascript: String =
@@ -374,10 +372,10 @@ trait ACEEditor {
       |  var oldDiv = editor.container
       |  var newDiv = oldDiv.cloneNode(false)
       |  newDiv.textContent = value
-      |  newDiv.classList.remove("ace-%s");
+      |  newDiv.classList.remove("ace-" + doc.aceTheme);
       |  oldDiv.parentNode.replaceChild(newDiv, oldDiv)
       |}
-    """.stripMargin.format(aceTheme)
+    """.stripMargin
 
   // javascript that extracts the code from the editor and creates a default input
   def editorToInput: String =
