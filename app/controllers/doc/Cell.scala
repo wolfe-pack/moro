@@ -7,8 +7,8 @@ import controllers.util.JacksonWrapper
  * @author sameer
  */
 case class Cell(id: Int, compiler: String, input: Input) {
-  def escapedContent: String = input.code.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t").replaceAll("'", "\\\\'")
-  def inputJson: String = JacksonWrapper.serialize(input)
+  def escapedContent: String = input.code.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t").replaceAll("'", "\\\\'").replaceAll("</script>", "<\\\\/script>")
+  def inputJson: String = JacksonWrapper.serialize(input).replaceAll("</script>", "<\\\\/script>")
 }
 
 /*
