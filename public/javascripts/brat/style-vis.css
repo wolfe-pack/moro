@@ -45,19 +45,19 @@ text {
   display: none;
 }
 
-svg {
+.bratsvg svg {
   width: 100%;
   height: 1px;
   border: 1px solid #7fa2ff;
   font-size: 15px;
   /* font-size: 14px; */
 }
-svg.reselect {
+.bratsvg svg.reselect {
   border: 1px solid #ff3333;
 }
 
 /* "basic" font */
-text {
+.bratsvg text {
   font-size: 13px;
   font-family: 'Liberation Sans', Verdana, Arial, Helvetica, sans-serif;
 }
@@ -68,12 +68,12 @@ text {
   100% { color: #9999ff; margin-top: 0; }
 }
 
-path {
+.bratsvg path {
   pointer-events: none;
 }
 
 /* "basic" font */
-.span text {
+.bratsvg .span text {
   /*  font-size: 10.5px; */
   font-size: 10px;
   text-anchor: middle;
@@ -82,39 +82,39 @@ path {
 }
 
 /* this should likely match span font */
-.span_type_label {
+.bratsvg .span_type_label {
   font-size: 11px;
   font-family: 'PT Sans Caption', sans-serif;
 }
 /* this should likely match arc font */
-.arc_type_label {
+.bratsvg .arc_type_label {
   font-size: 11px;
   font-family: 'PT Sans Caption', sans-serif;
 }
-.attribute_type_label .ui-button-text {
+.bratsvg .attribute_type_label .ui-button-text {
   font-size: 11px;
   font-family: 'PT Sans Caption', sans-serif;
 }
 
-.span rect {
+.bratsvg .span rect {
   stroke-width: 0.75;
 }
 
-.glyph {
+.bratsvg .glyph {
   fill: #444444;
   font-family: sans-serif;
   font-weight: bold;
 }
-.attribute_warning {
+.bratsvg .attribute_warning {
   stroke: red;
 }
 
-.span rect.False_positive {
+.bratsvg .span rect.False_positive {
   stroke: #ff4141;
   stroke-width: 2;
 }
 
-.shadow_True_positive {
+.bratsvg .shadow_True_positive {
   fill: #00ff00;
 }
 
@@ -126,17 +126,17 @@ path {
   background-color: #ff4141;
 }
 
-.span rect.False_negative {
+.bratsvg .span rect.False_negative {
   stroke: #c20000;
   fill: #ffffff;
   stroke-width: 2;
 }
 
-.shadow_False_negative {
+.bratsvg .shadow_False_negative {
   fill: #c20000;
 }
 
-#commentpopup.comment_False_negative {
+.bratsvg #commentpopup.comment_False_negative {
   background-color: #c20000;
 }
 
