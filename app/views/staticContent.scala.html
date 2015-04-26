@@ -19,6 +19,7 @@
     /* add cells */
     @for(cell <- document.cells) {
         var mode = '@Html(cell.compiler)';
+        if(mode == 'wolfe') mode = 'scala';
         var input = @Html(cell.inputJson);
         var id = @{cell.id};
         createStaticCellHTML(id, divCells, doc, mode, input, compilers);

@@ -137,6 +137,7 @@
 
             @for(cell <- document.cells) {
                var format = '@Html(cell.compiler)';
+               if (format == 'wolfe') format = 'scala';
                var content = '@Html(cell.escapedContent)';
                var config = @Html(cell.input.configJson);
                addCellFromJson(doc, format, content, compilers, config);
