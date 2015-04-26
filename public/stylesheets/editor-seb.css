@@ -69,7 +69,7 @@
 
 .ace_gutter {
   background: none !important;
-  //color: white !important;
+  opacity: 0.0;
 }
 
 .ace_gutter-cell {
@@ -97,11 +97,12 @@ blockquote {
 }
 
 .mode_scala .ace_gutter {
+ opacity: 1.0;
  color: gray;
 }
 
 .mode_markdown .ace_gutter {
- color: white;
+// color: white;
 }
 
 
