@@ -461,10 +461,14 @@ class HTMLCompiler extends Compiler with ACEEditor {
   }
 }
 
-class HeadingCompiler(val level: Int) extends Compiler with TextInputEditor {
+class HeadingCompiler(val level: Int) extends Compiler with ACEEditor {
   def name: String = "heading" + level
 
   def fieldLabel: String = "Heading"
+
+  override def editorMode: String = "text"
+
+  override def initialValue: String = fieldLabel
 
   // icon that is used in the toolbar
   override def toolbarIcon: String = "<span class=\"glyphicon glyphicon-header\">%d</span>" format (level)
@@ -475,10 +479,14 @@ class HeadingCompiler(val level: Int) extends Compiler with TextInputEditor {
   }
 }
 
-class SectionCompiler extends Compiler with TextInputEditor {
+class SectionCompiler extends Compiler with ACEEditor {
   def name: String = "section"
 
   def fieldLabel: String = "Section Name"
+
+  override def editorMode: String = "text"
+
+  override def initialValue: String = fieldLabel
 
   // icon that is used in the toolbar
   override def toolbarIcon: String = "&lt;#&gt;"
@@ -489,10 +497,14 @@ class SectionCompiler extends Compiler with TextInputEditor {
   }
 }
 
-class ImageURLCompiler extends Compiler with TextInputEditor {
+class ImageURLCompiler extends Compiler with ACEEditor {
   def name: String = "imageurl"
 
-  def fieldLabel: String = "url"
+  def fieldLabel: String = "URL"
+
+  override def editorMode: String = "text"
+
+  override def initialValue: String = fieldLabel
 
   // icon that is used in the toolbar
   override def toolbarIcon: String = "<i class=\"fa fa-picture-o\"></i>"
@@ -589,11 +601,15 @@ trait Caching extends Compiler {
   }
 }
 
-class GoogleDocsViewer extends Compiler with TextInputEditor {
+class GoogleDocsViewer extends Compiler with ACEEditor {
   // name of the compiler that should be unique in a collection of compilers
   def name: String = "google_viewer"
 
-  def fieldLabel: String = "url"
+  def fieldLabel: String = "URL"
+
+  override def editorMode: String = "text"
+
+  override def initialValue: String = fieldLabel
 
   // icon that is used in the toolbar
   override def toolbarIcon: String = "<i class=\"fa fa-eye\"></i>"
