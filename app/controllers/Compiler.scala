@@ -334,16 +334,15 @@ trait ACEEditor {
       |        }
       |    })
       |    editor.commands.addCommand({
-      |        name: "modeWolfe",
-      |        bindKey: {win: "Ctrl-W", mac: "Ctrl-W"},
+      |        name: "saveDoc",
+      |        bindKey: {win: "Ctrl-S", mac: "Cmd-S"},
       |        exec: function(editor) {
-      |            console.log("changing mode to wolfe");
-      |            changeMode(id,'wolfe');
+      |            saveDoc(doc, compilers);
       |        }
       |    })
       |    editor.commands.addCommand({
       |        name: "modeScala",
-      |        bindKey: {win: "Ctrl-S", mac: "Ctrl-S"},
+      |        bindKey: {win: "Ctrl-Alt-S", mac: "Ctrl-Alt-S"},
       |        exec: function(editor) {
       |            console.log("changing mode to scala");
       |            changeMode(id,'scala');
@@ -351,10 +350,19 @@ trait ACEEditor {
       |    })
       |    editor.commands.addCommand({
       |        name: "modeMarkdown",
-      |        bindKey: {win: "Ctrl-M", mac: "Ctrl-M"},
+      |        bindKey: {win: "Ctrl-Alt-M", mac: "Ctrl-Alt-M"},
       |        exec: function(editor) {
       |            console.log("changing mode to markdown");
       |            changeMode(id,'markdown');
+      |        }
+      |    })
+      |    editor.commands.addCommand({
+      |        name: "toggleMode",
+      |        bindKey: {win: "Ctrl-M", mac: "Ctrl-M"},
+      |        exec: function(editor) {
+      |            mode = currentMode(id);
+      |            console.log("changing mode to " + toggledMode(mode));
+      |            changeMode(id, toggledMode(mode));
       |        }
       |    })
       |    //heightUpdateFunction(editor, '#editor'+id);
