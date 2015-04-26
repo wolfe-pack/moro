@@ -119,6 +119,7 @@ function changeMode(id, newMode) {
    //text = doc.cells[id].editor.getSession().getValue();
    doc.cells[id].editor = compilers[newMode].editor(id, currentCode);
    doc.cells[id].editor.focus();
+   showCellTools(doc, id);
 }
 
 function nextCellId(id) {
@@ -134,7 +135,7 @@ function toggledMode(mode) {
 }
 
 function newCellDiv(id) {
-   return '<div id="cell' + id + '" onmouseover="showCellTools(doc,' + id + ');" onmouseout="hideCellTools(doc,' + id + ');">' +
+   return '<div id="cell' + id + '>" onmouseover="showCellTools(doc,' + id + ');"  onmousemove="showCellTools(doc,' + id + ');" onmouseout="hideCellTools(doc,' + id + ');">' +
    '<div id="editCell' + id + '" class="row">' + //light-border
    //'  cell ' + id + ' contents' +
    '  <div class="input col-md-6">' +
@@ -196,21 +197,26 @@ function makeCellFunctional(doc,id,compiler,compilers,initialContent,config) {
 //    doc.cells[id].className = "mode_" + compiler;
     $("#cell" + id).toggleClass("mode_" + compiler);
 //    console.log($(doc.cells[id]).attr("class"));
+    doc.cells[id].sideBarTimer = '';
 
-    hideCellTools(doc,id)
-
+    $('#sidebarCell' + id).css('display','none');
+    $('#runCode' + id).hide();
 }
 
 function showCellTools(doc,id) {
   $('#sidebarCell' + id).css('display','block');
-  $('#cell' + id + ' .runButton').show();
-  //$('#cell' + id + ' .ace_gutter').css('color','gray');
-
+  $('#runCode' + id).show();
+  clearTimeout(doc.cells[id].sideBarTimer);
+  doc.cells[id].sideBarTimer = setTimeout(function(){
+    $('#sidebarCell' + id).fadeOut('fast', function() { $('#sidebarCell' + id).css('display','none'); });
+    $('#runCode' + id).fadeOut('fast', function() { $('#runCode' + id).hide(); });
+  },1000)
 }
 
 function hideCellTools(doc,id) {
+  clearTimeout(doc.cells[id].sideBarTimer);
   $('#sidebarCell' + id).css('display','none');
-  $('#cell' + id + ' .runButton').hide();
+  $('#runCode' + id).hide();
   //$('#cell' + id + ' .ace_gutter').css('color','white');
 }
 
