@@ -3,6 +3,11 @@
   color: #fc0 !important;
 }
 
+.ace_comment {
+  color: gray !important;
+
+}
+
 
 /* d3 styles */
 .wolfe-nvd3 svg text {
@@ -193,6 +198,8 @@ svg * {
   padding:0px 0px;
   word-spacing: normal;
 }
+
+
 
 .ace_gutter {
   padding:0px 0px;
