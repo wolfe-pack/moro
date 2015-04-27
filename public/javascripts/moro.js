@@ -135,7 +135,7 @@ function toggledMode(mode) {
 }
 
 function newCellDiv(id) {
-   return '<div id="cell' + id + '>" onmouseover="showCellTools(doc,' + id + ');"  onmousemove="showCellTools(doc,' + id + ');" onmouseout="hideCellTools(doc,' + id + ');">' +
+   return '<div id="cell' + id + '" onmouseover="showCellTools(doc,' + id + ');"  onmousemove="showCellTools(doc,' + id + ');" onmouseout="hideCellTools(doc,' + id + ');">' +
    '<div id="editCell' + id + '" class="row">' + //light-border
    //'  cell ' + id + ' contents' +
    '  <div class="input col-md-6">' +
@@ -206,15 +206,17 @@ function makeCellFunctional(doc,id,compiler,compilers,initialContent,config) {
 function showCellTools(doc,id) {
   $('#sidebarCell' + id).css('display','block');
   $('#runCode' + id).show();
-  clearTimeout(doc.cells[id].sideBarTimer);
-  doc.cells[id].sideBarTimer = setTimeout(function(){
-    $('#sidebarCell' + id).fadeOut('fast', function() { $('#sidebarCell' + id).css('display','none'); });
-    $('#runCode' + id).fadeOut('fast', function() { $('#runCode' + id).hide(); });
-  },1000)
+  if(typeof doc.cells[id] !== "undefined") {
+    clearTimeout(doc.cells[id].sideBarTimer);
+    doc.cells[id].sideBarTimer = setTimeout(function(){
+      $('#sidebarCell' + id).fadeOut('fast', function() { $('#sidebarCell' + id).css('display','none'); });
+      $('#runCode' + id).fadeOut('fast', function() { $('#runCode' + id).hide(); });
+    },1000)
+  }
 }
 
 function hideCellTools(doc,id) {
-  clearTimeout(doc.cells[id].sideBarTimer);
+  if(typeof doc.cells[id] !== "undefined") clearTimeout(doc.cells[id].sideBarTimer);
   $('#sidebarCell' + id).css('display','none');
   $('#runCode' + id).hide();
   //$('#cell' + id + ' .ace_gutter').css('color','white');
