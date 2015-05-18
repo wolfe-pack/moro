@@ -25,6 +25,7 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
   val classPath = config.map(c => c.getStringList("classPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
   val classesForJarPath = config.map(c => c.getStringList("classesForJarPath")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
   val imports = config.map(c => c.getStringList("imports")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
+  val plugins = config.map(c => c.getStringList("plugins")).getOrElse(None).map(l => l.asScala.toList).getOrElse(List.empty)
 
   // aggregate all the previous cells as well?
   override val aggregatePrevious: Boolean = config.map(c => c.getBoolean("aggregate").getOrElse(false)).getOrElse(false)
@@ -38,7 +39,7 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
 
   val interpreter: ScalaInterpreter =
     //new Evaluator(None, classPath, imports, classesForJarPath, false) //Some(new File("runtime-classes")
-    new ScalaIMainInterpreter(None, classPath, imports, classesForJarPath)
+    new ScalaIMainInterpreter(None, classPath, imports, classesForJarPath, plugins)
 
   def compile(input: Input) = {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)

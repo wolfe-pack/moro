@@ -70,7 +70,8 @@ object ScalaIMainInterpreter {
 
 class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[String] = List.empty,
                             imports: List[String] = List.empty,
-                            classesForJarPath: List[String] = List.empty) extends ScalaInterpreter {
+                            classesForJarPath: List[String] = List.empty,
+                            plugins: List[String] = List.empty) extends ScalaInterpreter {
 
   import ScalaIMainInterpreter._
 
@@ -124,7 +125,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     val pathList = compilerPath ::: libPath ::: additionalPath
     settings.bootclasspath.value = pathList.mkString(File.pathSeparator)
     settings.classpath.value = (pathList ::: impliedClassPath).mkString(File.pathSeparator)
-    settings.plugin.value = List("/Users/riedel/.ivy2/cache/org.scalamacros/paradise_2.11.4/jars/paradise_2.11.4-2.1.0-M5.jar")
+    settings.plugin.value = plugins
     println("Provided cp: " + classPath)
     println(settings.classpath.value)
 
