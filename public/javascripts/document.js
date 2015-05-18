@@ -4,6 +4,7 @@ function cellToJson(cell, compilers) {
   json.compiler = cell.mode;
   json.input = compilers[cell.mode].editorToInput(doc, cell.id);
   json.input.extraFields = cell.config;
+  json.input.outputFormat = doc.cells[cell.id].renderDisplay.html();
   /*
   json.extra = new Object();
   switch(cell.mode) {

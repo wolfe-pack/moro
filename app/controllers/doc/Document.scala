@@ -1,6 +1,6 @@
 package controllers.doc
 
-import controllers.{ConfigEntry, OutputFormats, Input}
+import controllers.{ConfigEntry, Input}
 import play.api.libs.json.Json
 
 import scala.collection.mutable.ArrayBuffer

@@ -44,7 +44,6 @@ function compileStaticCell(id,doc,mode,input,compilers,post) {
 
 function createStaticCellHTML(id,section,doc,mode,input,compilers) {
   input.sessionId = doc.guid;
-  delete input['outputFormat'];
   if(input.extraFields == null)
     input.extraFields = {}
   var cellDiv = document.createElement('div');
@@ -92,13 +91,17 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
     doc.cells[id].editor = compilers[mode].editor(id, input.code);
     doc.cells[id].showEditor = true;
   }
-  if(!compilers[mode].aggregate) compileStaticCell(id, doc, mode, input, compilers);
+  if(mode == 'scala' && input.outputFormat != null) {
+    doc.cells[id].renderDisplay.html(input.outputFormat);
+  } else {
+    if(!compilers[mode].aggregate) compileStaticCell(id, doc, mode, input, compilers);
+  }
 }
 
 function compileAll(doc,compilers) {
   var ids = doc.ids.filter(function(id) {
     var cell = doc.cells[id];
-    return compilers[cell.mode].aggregate;
+    return (cell.mode != 'scala' || cell.input.outputFormat == null) && compilers[cell.mode].aggregate;
   });
   console.log(ids);
   seqCall(ids,function(id, post) {

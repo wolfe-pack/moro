@@ -15,7 +15,7 @@ function drawGraph(graph, divId) {
       .on("dragstart", dragstarted)
       .on("drag", dragged)
       .on("dragend", dragended);
-
+  $("#"+divId).empty();
   var svg = d3.select("#"+divId).append("svg")
     .attr("width", width)
     .attr("height", height);
@@ -149,7 +149,7 @@ function drawVectors(vectors, divId) {
       .on("dragstart", dragstarted)
       .on("drag", dragged)
       .on("dragend", dragended);
-
+  $("#"+divId).empty();
   var svg = d3.select("#"+divId).append("svg")
     .attr("width", width)
     .attr("height", height);

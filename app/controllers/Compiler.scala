@@ -15,16 +15,6 @@ import controllers.util.{Cache, MoroConfig}
  * @author sameer
  */
 
-object OutputFormats extends Enumeration {
-  val string, html, javascript = Value
-
-  implicit def outputFormatToString(f: Value): String = f.toString
-
-  implicit def stringToOutputFormat(s: String): Value = withName(s)
-}
-
-import OutputFormats._
-
 case class Input(sessionId: String, code: String, extraFields: Map[String, String] = Map.empty, outputFormat: Option[String] = None) {
   def config: Map[String, String] = if (extraFields == null) Map.empty else extraFields
 
@@ -686,7 +676,7 @@ class PdflatexCompiler extends Compiler with TextInputEditor {
       Result(
         s"""
            |<img src="${moroPathToPDF.dropRight(4) + ".png"}">
-        """.stripMargin, OutputFormats.html)
+        """.stripMargin)
     }
   }
 
