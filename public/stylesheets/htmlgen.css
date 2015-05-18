@@ -12,7 +12,8 @@ table, th, td
 
 th, td
 {
-    padding:5px;
+  padding:5px;
+  text-align: center;
 }
 
 pre {
@@ -68,7 +69,7 @@ pre {
   width: 100%;
 }
 
-div.matrix {
+table.matrix {
   background-color: white;
   border: 2px solid black;
   padding: 3px;
@@ -78,24 +79,20 @@ div.matrix {
   margin-right: auto;
 }
 
-div.matrixRow {
-  clear: both;
-}
-
-div.matrixCellContainer {
-  float:left;
-  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-  box-sizing: border-box;         /* Opera/IE 8+ */
-  border: 1px solid black;
-}
-
-div.matrixCell {
-  width: 100%;
-  height: 100%;
+.matrixCell {
   background-color: black;
 }
 
 .hide {
   display: none;
+}
+
+thead th {
+   -moz-transform: rotate(-90deg);  /* FF3.5+ */
+   -o-transform: rotate(-90deg);  /* Opera 10.5 */
+   -webkit-transform: rotate(-90deg);  /* Saf3.1+, Chrome */
+   filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=3);  /* IE6,IE7 */
+   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)"; /* IE8 */
+   vertical-align: top;
+   padding: 15px 0;
 }
