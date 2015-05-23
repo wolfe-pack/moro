@@ -70,13 +70,16 @@ pre {
 }
 
 table.matrix {
-  background-color: white;
-  border: 2px solid black;
+  border: 0px;
   padding: 3px;
   width:250px;
   height:250px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.matrixRow {
+  background-color: yellow;
 }
 
 .matrixCell {
@@ -87,12 +90,7 @@ table.matrix {
   display: none;
 }
 
-thead th {
-   -moz-transform: rotate(-90deg);  /* FF3.5+ */
-   -o-transform: rotate(-90deg);  /* Opera 10.5 */
-   -webkit-transform: rotate(-90deg);  /* Saf3.1+, Chrome */
-   filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=3);  /* IE6,IE7 */
-   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)"; /* IE8 */
-   vertical-align: top;
-   padding: 15px 0;
+.matrix > thead, th {
+  border: 0px;
+  background-color: white;
 }
