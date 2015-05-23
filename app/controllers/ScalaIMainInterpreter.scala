@@ -127,6 +127,7 @@ class ScalaIMainInterpreter(targetDir: Option[File] = None, classPath: List[Stri
     settings.classpath.value = (pathList ::: impliedClassPath).mkString(File.pathSeparator)
     settings.plugin.value = plugins
     println("Provided cp: " + classPath)
+    println("Provided plugin: " + plugins.mkString(", "))
     println(settings.classpath.value)
 
     val im = new IMain(settings, new NewLinePrintWriter(w, true))
