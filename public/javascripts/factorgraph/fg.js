@@ -1,7 +1,6 @@
 function FG(){}
 FG.create = function(id, data) {
-	
-
+	$("#" + id).empty()
 	var force = d3.layout.force()
 		.size([data.width, data.height])
 		.charge(-200)
@@ -128,10 +127,99 @@ FG.create = function(id, data) {
 
 	var moveTooltip = function() {
 		if(tooltipNode != null) {
-			tooltip.attr("transform", "translate(" + (tooltipNode.x-150) + "," + (tooltipNode.y+15) + ")" );
+			var newX = tooltipNode.x-150;
+			newX = Math.min(data.width - 350, Math.max(0, newX));
+			var newY = tooltipNode.y+15;
+			newY = Math.min(data.height - $(tooltip[0]).children(0).height(), Math.max(0, newY));
+			tooltip.attr("transform", "translate(" + newX + "," + newY + ")" );
 		}
 	}
 
 	force.on("tick", tick);
 	tick();
+
+
+
+
+	foo = data;
+
+
+	if("schedule" in data) {
+		var transitionIndex = 0;
+		var playing = false;
+		var playTransition = function(){
+		 if(transitionIndex >= data.schedule.length) {
+		   transitionIndex = 0;
+		   playing = false;
+		   playbtn.text("Play");
+		   //playTransition();
+		 } else {
+		   var es = data.schedule[transitionIndex];
+		   link.attr("marker-end", "none");
+		   var finCount = 0;
+		   es.forEach(function(e) {
+		     var l = link[0][e.edge];
+		     var dx = l.getAttribute("x1") - l.getAttribute("x2");
+		     var dy = l.getAttribute("y1") - l.getAttribute("y2");
+		     var len = Math.sqrt(dx * dx + dy * dy) / 2
+
+		     d3.select(link[0][e.edge])
+		       .attr("marker-end", "url(#markerArrow" + e.edge + ")");
+
+		     d3.select("#markerArrow" + e.edge)
+		         .attr("refX", (e.direction == 'N2F' ? len : 0))
+		         .select("path")
+		           .attr("transform", "rotate(" + (e.direction == 'N2F' ? 90 : -90) + ")");
+
+		     d3.select("#markerArrow" + e.edge)
+		         .transition()
+		         .attr("refX", (e.direction == 'N2F' ? 0 : len))
+		         .duration(1000)
+		         .ease("linear");
+
+		     d3.select(link[0][e.edge]).each(function(d) {
+		           var t = d3.select(this).transition().duration(1000).each("end", function() {
+		             d.msgVisited = !d.msgVisited;
+		             if(++finCount == es.length) {
+		               transitionIndex++;
+		               playTransition();
+		             }
+		           });
+		           //t.style("stroke", d.msgVisited ? "black" : "white");
+		     }).on("mouseover", function(d) {
+		   		  setTooltip(e.msg);
+		   		  tooltip.transition()
+		   			  .duration(300)
+		   			  .style("opacity", .9);
+		   		  tooltipNode = d.source;
+		   		  moveTooltip();
+		     })
+		     .on("mouseout", function(d) {
+			      tooltip.transition()
+		           .duration(300)
+		           .style("opacity", 0)
+		     });
+		   });
+
+		   }
+
+		}
+
+	 	var playbtn = d3.select("#" + id)
+		   .insert("div", "svg")
+		   .attr("class", "playbtn")
+		   .text("Play")
+		   .on('click', function() {
+		      if(playing == false) {
+		        d3.select(this).text("Pause");
+		        playing = true;
+		        playTransition();
+		      } else {
+		        playing = false;
+		        d3.select(this).text("Play");
+		        svg.selectAll(".markerArrow").transition();
+		        link.transition();
+		      }
+		   });
+	}
 }
