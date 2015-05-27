@@ -73,6 +73,7 @@
 
 .factorgraph .playbtn{
   float: left;
+  position:absolute;
   background: #f70;
   color: #000;
   font-family: sans-serif;
@@ -112,6 +113,7 @@
 
 .playbtn{
   float: left;
+  position:absolute;
   background: #f70;
   color: #000;
   font-family: sans-serif;
