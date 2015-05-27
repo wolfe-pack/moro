@@ -114,6 +114,7 @@
 .playbtn{
   float: left;
   position:absolute;
+  z-index:1;
   background: #f70;
   color: #000;
   font-family: sans-serif;
