@@ -167,13 +167,13 @@ FG.create = function(id, data) {
 		       .attr("marker-end", "url(#markerArrow" + e.edge + ")");
 
 		     d3.select("#markerArrow" + e.edge)
-		         .attr("refX", (e.direction == 'N2F' ? len : 0))
+		         .attr("refX", (e.direction == 'F2N' ? len : 0))
 		         .select("path")
-		           .attr("transform", "rotate(" + (e.direction == 'N2F' ? 90 : -90) + ")");
+		           .attr("transform", "rotate(" + (e.direction == 'F2N' ? 90 : -90) + ")");
 
 		     d3.select("#markerArrow" + e.edge)
 		         .transition()
-		         .attr("refX", (e.direction == 'N2F' ? 0 : len))
+		         .attr("refX", (e.direction == 'F2N' ? 0 : len))
 		         .duration(1000)
 		         .ease("linear");
 
