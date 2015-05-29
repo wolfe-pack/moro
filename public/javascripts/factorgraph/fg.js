@@ -6,7 +6,8 @@ FG.create = function(id, data) {
 		.charge(-200)
 		.gravity(0.03)
 		.linkStrength(0.5)
-		.linkDistance(50)
+		.linkDistance(40)
+		.chargeDistance(150)
 
 	var drag = force.drag()
 	var svg = d3.select("#" + id).append("svg")
