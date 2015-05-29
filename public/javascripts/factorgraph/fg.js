@@ -13,6 +13,8 @@ FG.create = function(id, data) {
 	 .attr("class", "factorgraph")
 	 .attr("width", data.width)
 	 .attr("height", data.height)
+	 .style("width", data.width)
+	 .style("height", data.height)
 	 .style("overflow", "visible");
 	var link = svg.selectAll(".link")
 	var node = svg.selectAll(".fgshape")
@@ -128,9 +130,9 @@ FG.create = function(id, data) {
 	var moveTooltip = function() {
 		if(tooltipNode != null) {
 			var newX = tooltipNode.x-150;
-			newX = Math.min(data.width - 350, Math.max(0, newX));
+			newX = Math.max(0, Math.min(data.width - 350, newX));
 			var newY = tooltipNode.y+15;
-			newY = Math.min(data.height - $(tooltip[0]).children(0).height(), Math.max(0, newY));
+			newY = Math.max(0, Math.min(data.height - $(tooltip[0]).children(0).height(), newY));
 			tooltip.attr("transform", "translate(" + newX + "," + newY + ")" );
 		}
 	}
