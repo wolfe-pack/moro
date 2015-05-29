@@ -107,17 +107,14 @@ object Application extends Controller {
         None)) // request.user.map(_.asInstanceOf[MoroUser])
   }
 
-  def save(file: String) = UserAwareAction {
+  def save(file: String) = UserAwareAction(parse.json(maxLength = 1024 * 500)) {
     implicit request =>
-      request.body.asJson.map {
-        json => val d = Document.loadJson(json.toString())
-          println(d + " --> " + file)
-          println(routes.Assets.at(config.docRoot + file + ".json"))
-          Document.save(d, config.docRoot + file + ".json")
-          Ok("Save successful: " + d)
-      }.getOrElse {
-        BadRequest("Expecting Json data")
-      }
+      val json = request.body
+      val d = Document.loadJson(json.toString())
+      println(d + " --> " + file)
+      println(routes.Assets.at(config.docRoot + file + ".json"))
+      Document.save(d, config.docRoot + file + ".json")
+      Ok("Save successful: " + d)
   }
 
   def dir(path: String) = UserAwareAction {
