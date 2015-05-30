@@ -19,12 +19,32 @@
   opacity: 0.1;
 }
 
+/* Alignment rendering */
+
 .aligner svg text {
   fill: #ddd !important;
 }
 
 .aligner line {
   stroke: #fc0;
+}
+
+/* Term rendering */
+.term .node circle {
+  fill: #333;
+  stroke: #fc0;
+  stroke-width: 3px;
+}
+
+.term .node text {
+  font: 12px sans-serif;
+  fill: #ddd;
+}
+
+.term .link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
 }
 
 /* Brat */

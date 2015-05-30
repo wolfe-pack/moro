@@ -160,3 +160,18 @@ svg.barchart {
 .barchart .barlabel {
     fill: #982;
 }
+
+/* Term rendering */
+.term .node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 3px;
+}
+
+.term .node text { font: 12px sans-serif; }
+
+.term .link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
+}
