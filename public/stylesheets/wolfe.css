@@ -212,6 +212,7 @@ svg * {
   font-size: 13px;
   clear:left;
   text-shadow: none;
+  max-width: 960px;
 }
 
 .ace_content {
