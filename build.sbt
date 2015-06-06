@@ -79,7 +79,8 @@ libraryDependencies ++= Seq(
   "org.pegdown" % "pegdown" % "1.4.2",
   //"ws.securesocial" %% "securesocial" % "3.0-M3" exclude("org.slf4j", "slf4j-simple"),
   "com.typesafe.play.plugins" %% "play-plugins-mailer" % "2.3.1",
-  "jline" % "jline" % "2.12.1"
+  "jline" % "jline" % "2.12.1",
+  "org.scalamacros" % "paradise_2.11.4" % "2.1.0-M1"
 )
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
