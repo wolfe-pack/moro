@@ -308,6 +308,32 @@ function saveDoc(doc, compilers) {
     });
 }
 
+function getCode(doc, compilers) {
+  var mode="scala"
+  var compiler = compilers[mode];
+  text = ""
+  for (var idx in doc.ids){
+    var id = doc.ids[idx];
+    if (doc.cells.hasOwnProperty(id)) {
+      var cell = doc.cells[id];
+      if(cell.mode == mode) {
+        text = text + "\n\n"
+        //text = text + "// cell " + id + "\n"
+        text = text + compiler.editorToInput(doc, id).code + "\n";
+      }
+    }
+  }
+  filename = "Code.txt"
+  var pom = document.createElement('a');
+  pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  //pom.setAttribute('download', filename);
+
+  pom.style.display = 'none';
+  document.body.appendChild(pom);
+  pom.click();
+  document.body.removeChild(pom);
+}
+
 function runAll(doc, compilers) {
   var ids = [];
   for (var idx in doc.ids){
