@@ -2,10 +2,6 @@
  * Utility functions for craeting input groups and getting values from them
  ***/
 function drawFormGroup(ce, currentValue, inputId) {
-    console.log(inputId);
-    console.log(ce);
-    console.log(currentValue);
-
     var bodyDiv = '<div class="form-group">';
     switch(ce.inputType) {
       case "checkbox":

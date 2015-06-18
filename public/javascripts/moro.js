@@ -149,6 +149,7 @@ function newCellDiv(id) {
    '      <button id="addAbove' + id + '" type="button" class="btn btn-default" onclick="addCellAbove(doc,' + id + ',compilers)"><i class="fa fa-sort-up"></i><i class="fa fa-plus"></i></button>' +
    '      <button id="toggleCellConfig' + id + '" type="button" class="btn btn-default edit-btn" onclick="cellConfigClicked(' + id + ', doc, compilers)"><i class="fa fa-cog fa-fw"></i></button>' +
    '      <button id="toggleEditor' + id + '" type="button" class="btn btn-default edit-btn" onclick="toggleEditor(doc,' + id + ')"><i class="fa fa-pencil fa-fw"></i></button>' +
+   '      <button id="toggleOutput' + id + '" type="button" class="btn btn-default edit-btn" onclick="toggleOutput(doc,' + id + ')"><i class="fa fa-eye fa-fw"></i></button>' +
    '      <button id="remove' + id + '" type="button" class="btn btn-default" onclick="removeCell(doc,' + id + ')"><span class="fa fa-trash-o"></span></button>' +
    '      <button id="addBelow' + id + '" type="button" class="btn btn-default" onclick="addCellBelow(doc,' + id + ',compilers)"><i class="fa fa-plus"></i><i class="fa fa-sort-down"></i></button>' +
    '      <!--button id="moveBelow' + id + '" type="button" class="btn btn-default" onclick="moveCellBelow(doc,' + id + ',compilers)"><i class="fa fa-chevron-down"></i></button-->' +
@@ -279,6 +280,36 @@ function toggleEditor(doc,id) {
   } else {
     // console.log("hiding editor" + id);
     $('#editCell' + id + ' .input').hide();
+  }
+}
+
+function stringToBoolean(string){
+	switch(string.toLowerCase()){
+		case "true": case "yes": case "1": return true;
+		case "false": case "no": case "0": case null: return false;
+		default: return Boolean(string);
+	}
+}
+
+function toggleOutput(doc,id) {
+  if(doc.cells[id].config != null) {
+    if(doc.cells[id].config.hasOwnProperty('hide_output')) {
+      console.log("hiding output " + id + ", was set to " + doc.cells[id].config.hide_output)
+      if(stringToBoolean(doc.cells[id].config.hide_output)) {
+        doc.cells[id].config.hide_output = 'false';
+        doc.cells[id].renderDisplay.show();
+      } else {
+        doc.cells[id].config.hide_output = 'true';
+        doc.cells[id].renderDisplay.hide();
+      }
+    } else {
+      doc.cells[id].config.hide_output = 'true';
+      doc.cells[id].renderDisplay.hide();
+    }
+  } else {
+    doc.cells[id].config = {};
+    doc.cells[id].config.hide_output = 'true';
+    doc.cells[id].renderDisplay.hide();
   }
 }
 
