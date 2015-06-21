@@ -74,7 +74,7 @@ libraryDependencies ++= Seq(
   "ml.wolfe" %% "wolfe-examples" % "0.6.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
   "ml.wolfe" %% "wolfe-nlp" % "0.6.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
   "ml.wolfe" %% "wolfe-ui" % "0.6.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
-  "edu.arizona.sista" % "processors" % "3.3",
+//m  "edu.arizona.sista" % "processors" % "3.3",
   "org.scala-lang" % "scala-library" % "2.11.4",
   "org.pegdown" % "pegdown" % "1.4.2",
   //"ws.securesocial" %% "securesocial" % "3.0-M3" exclude("org.slf4j", "slf4j-simple"),
