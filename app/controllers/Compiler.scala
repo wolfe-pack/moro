@@ -42,6 +42,7 @@ object CompilerConfigKeys {
   val Aggregate = "aggregate"
   val Scope = "scope"
   val Fragment = "fragment"
+  val RevealParams = "reveal_params"
 }
 
 /**
@@ -88,7 +89,8 @@ trait Compiler {
     ConfigEntry(CacheResults, "Cached", "Use cached results, uncheck if running again should produce different results.", "checkbox", "true"),
     ConfigEntry(Aggregate, "Aggregate", "If compiler allows, aggregate inputs across cells of the same type (and scope).", "checkbox", "true"),
     ConfigEntry(Scope, "Scope", "Scope use when aggregating cells (not used otherwise).", "text", "_default"),
-    ConfigEntry(Fragment, "Fragment", "If checked, the presentation mode pauses before displaying this cell.", "checkbox", "false")
+    ConfigEntry(Fragment, "Fragment", "If checked, the presentation mode pauses before displaying this cell.", "checkbox", "false"),
+    ConfigEntry(RevealParams, "Reveal Parameteres", "Parameters that are used by reveal.js in the presentation mode.", "text", "")
   )
 
   implicit val ceWrites = Json.writes[ConfigEntry]
