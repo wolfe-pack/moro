@@ -1,7 +1,7 @@
 package controllers
 
 import controllers.doc.Document
-import play.api.libs.json.Json
+import play.api.libs.json._
 
 import scala.StringBuilder
 import scala.collection.mutable
@@ -21,7 +21,32 @@ case class Input(sessionId: String, code: String, extraFields: Map[String, Strin
   def configJson = Json.stringify(Json.toJson(config))
 }
 
+object Input {
+  implicit val inpWrt = Json.writes[Input]
+  implicit val inpRds = new Reads[Input] {
+    override def reads(json: JsValue): JsResult[Input] = {
+      json match {
+        case obj: JsObject => {
+          JsSuccess(Input(obj.value.get("sessionId").map(_ match {
+            case str:JsString => str.value
+            case JsNull => null
+          }).orNull,
+            obj.value.get("code").map(_.asInstanceOf[JsString]).map(_.value).orNull,
+            obj.value.get("extraFields").map(_.asInstanceOf[JsObject].value).map(_.map(v => v._1 -> v._2.asInstanceOf[JsString].value).toMap).getOrElse(Map.empty),
+            obj.value.get("outputFormat").map(_.asInstanceOf[JsString]).map(_.value)))
+        }
+        case _ => JsError("not an object")
+      }
+    }
+  }
+}
+
 case class Result(result: String, log: String = "")
+
+object Result {
+  implicit val resWrt = Json.writes[Result]
+  implicit val resRds = Json.reads[Result]
+}
 
 /**
  * A Description of a configuration element
@@ -33,6 +58,11 @@ case class Result(result: String, log: String = "")
  * @param defaultValue default value that the configuration should have
  */
 case class ConfigEntry(key: String, label: String, description: String, inputType: String, defaultValue: String)
+
+object ConfigEntry {
+  implicit val ceWrt = Json.writes[ConfigEntry]
+  implicit val ceRds = Json.reads[ConfigEntry]
+}
 
 object CompilerConfigKeys {
   val Hide = "hide"

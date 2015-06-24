@@ -3,7 +3,7 @@ package controllers
 import play.api._
 import play.api.mvc._
 import controllers.doc._
-import controllers.util.{MoroConfig, MiscUtils, JacksonWrapper}
+import controllers.util.{MoroConfig, MiscUtils, JsonWrapper}
 import java.io.File
 
 object Application extends Controller {
@@ -25,8 +25,8 @@ object Application extends Controller {
         compiler =>
           request.body.asJson.map {
             json =>
-              val input = JacksonWrapper.deserialize[Input](json.toString())
-              Ok(JacksonWrapper.serialize(compiler.process(input)))
+              val input = JsonWrapper.deserialize[Input](json.toString())
+              Ok(JsonWrapper.serialize(compiler.process(input)))
           }.getOrElse {
             BadRequest("Expecting Json data")
           })
@@ -37,8 +37,8 @@ object Application extends Controller {
       implicit request =>
         if (config.editorEnabled) {
           import Document._
-          println(config.docRoot + file + ".json")
-          Ok(views.html.editor(toDData(load(config.docRoot + file + ".json")), file, allCompilers, config,
+          println("/editor: " + config.docRoot + file + ".json")
+          Ok(views.html.editor(toDData(loadDoc(config.docRoot + file + ".json")), file, allCompilers, config,
             None)) //request.user.map(_.asInstanceOf[MoroUser])
         } else BadRequest("Editing not allowed")
     }
@@ -63,7 +63,7 @@ object Application extends Controller {
       try {
         val clazz: Class[_] = Play.current.classloader.loadClass(viewClazz)
         val render = clazz.getDeclaredMethod("apply", classOf[Document], classOf[Compilers], classOf[String], classOf[Option[MoroUser]])
-        val view = render.invoke(clazz, Document.load(config.docRoot + file + ".json"), allCompilers, config.docRoot, user).asInstanceOf[play.twirl.api.Html]
+        val view = render.invoke(clazz, Document.loadDocWithCache(config.docRoot + file + ".json"), allCompilers, config.docRoot, user).asInstanceOf[play.twirl.api.Html]
         return Some(view)
       } catch {
         case ex: ClassNotFoundException => Logger.error("Html.renderDynamic() : could not find view " + viewClazz, ex)
@@ -75,7 +75,7 @@ object Application extends Controller {
 
   def template(name: String, file: String) = UserAwareAction {
     implicit request =>
-      println("%s: %s" format(name, file))
+      println("/template: %s: %s" format(name, file))
       Dynamic.render(name, file, None) match {
         //request.user.map(_.asInstanceOf[MoroUser])
         case Some(i) => Ok(i)
@@ -86,24 +86,24 @@ object Application extends Controller {
   def staticDoc(file: String) = UserAwareAction {
     implicit request =>
       import Document._
-      println(config.docRoot + file + ".json")
-      Ok(views.html.static(load(config.docRoot + file + ".json"), allCompilers, config.docRoot,
+      println("/static: " + config.docRoot + file + ".json")
+      Ok(views.html.static(loadDocWithCache(config.docRoot + file + ".json"), allCompilers, config.docRoot,
         None)) //request.user.map(_.asInstanceOf[MoroUser])
   }
 
   def presentDoc(file: String) = UserAwareAction {
     implicit request =>
       import Document._
-      println(config.docRoot + file + ".json")
-      Ok(views.html.present(load(config.docRoot + file + ".json"), allCompilers, config.docRoot,
+      println("/present: " + config.docRoot + file + ".json")
+      Ok(views.html.present(loadDocWithCache(config.docRoot + file + ".json"), allCompilers, config.docRoot,
         None)) //request.user.map(_.asInstanceOf[MoroUser])
   }
 
   def wolfeStaticDoc(file: String) = UserAwareAction {
     implicit request =>
       import Document._
-      println("wolfe: %s (%s%s.json)" format(file, config.docRoot, file))
-      Ok(views.html.wolfe(load(config.docRoot + file + ".json"), allCompilers, config.docRoot,
+      println("/wolfe: %s (%s%s.json)" format(file, config.docRoot, file))
+      Ok(views.html.wolfe(loadDocWithCache(config.docRoot + file + ".json"), allCompilers, config.docRoot,
         None)) // request.user.map(_.asInstanceOf[MoroUser])
   }
 
@@ -111,15 +111,14 @@ object Application extends Controller {
     implicit request =>
       val json = request.body
       val d = Document.loadJson(json.toString())
-      println(d + " --> " + file)
-      println(routes.Assets.at(config.docRoot + file + ".json"))
+      println("/save: " + d + " --> " + file)
       Document.save(d, config.docRoot + file + ".json")
       Ok("Save successful: " + d)
   }
 
   def dir(path: String) = UserAwareAction {
     implicit request =>
-      println("path: " + path)
+      println("/dir: " + path)
       val dir = new Directory(path, config.docRoot)
       println(dir)
       Ok(views.html.dir(dir, config, None)) //request.user.map(_.asInstanceOf[MoroUser])
@@ -135,7 +134,7 @@ object Application extends Controller {
             val fname = if (path == "") config.docRoot + name + ".json" else config.docRoot + path + "/" + name + ".json"
             val d = new Document(title)
             Document.save(d, fname)
-            println("fname: %s, title: %s, name: %s, doc: %s" format(fname, title, name, d))
+            println("/dirAdd: " + "fname: %s, title: %s, name: %s, doc: %s" format(fname, title, name, d))
             Ok("success")
           } catch {
             case e: Exception => BadRequest("Exception: " + e.getStackTrace.mkString("\n\t"))
@@ -154,7 +153,7 @@ object Application extends Controller {
             val name = (json \ "name").as[String]
             val fname = if (path == "") config.docRoot + name + ".json" else config.docRoot + path + "/" + name + ".json"
             val f = new File(fname)
-            println("fname: %s, name: %s" format(fname, name))
+            println("/dirRemove: " + "fname: %s, name: %s" format(fname, name))
             f.delete()
             Ok("success")
           } catch {
@@ -174,7 +173,7 @@ object Application extends Controller {
             val name = (json \ "name").as[String]
             val fname = if (path == "") config.docRoot + name else config.docRoot + path + "/" + name
             val f = new File(fname)
-            println("fname: %s, name: %s" format(fname, name))
+            println("/dirAddFolder: " + "fname: %s, name: %s" format(fname, name))
             f.mkdir()
             Ok("success")
           } catch {
@@ -194,7 +193,7 @@ object Application extends Controller {
             val name = (json \ "name").as[String]
             val fname = if (path == "") config.docRoot + name else config.docRoot + path + "/" + name
             val f = new File(fname)
-            println("fname: %s, name: %s" format(fname, name))
+            println("/dirRemoveFolder: " + "fname: %s, name: %s" format(fname, name))
             MiscUtils.delete(f)
             Ok("success")
           } catch {
@@ -209,13 +208,13 @@ object Application extends Controller {
   def autocompleteScala(sessionId: String) = Action {
     request =>
       request.body.asJson.map {
-        json => Ok(JacksonWrapper.serialize(
+        json => Ok(JsonWrapper.serialize(
           allCompilers.get("scala").fold(Seq.empty[String])(
             compiler => {
               val line = (json \ "line").as[String]
               val prefix = (json \ "prefix").as[String]
               val intp = compiler.asInstanceOf[ScalaServer].interpreter
-              println("Trying to autocomplete, line: " + line + ", prefix: " + prefix)
+              println("/autoComp: " + "Trying to autocomplete, line: " + line + ", prefix: " + prefix)
               intp.autocompleteLine(sessionId, line) ++ intp.autocomplete(sessionId, prefix)
             })))
       }.getOrElse {
