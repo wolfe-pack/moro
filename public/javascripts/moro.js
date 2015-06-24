@@ -44,7 +44,7 @@ function outputResult(doc, id, result, compilers) {
   // if(result.log && result.log != '')
   //  output += '<pre>' + result.log + '</pre>'
   output += result.result;
-  if(doc.cells[id].config != null && doc.cells[id].config.hasOwnProperty('hide_output') && doc.cells[id].config.hide_output) {
+  if(doc.cells[id].config != null && doc.cells[id].config.hasOwnProperty('hide_output') && stringToBoolean(doc.cells[id].config.hide_output)) {
     console.log("hiding output " + id)
     doc.cells[id].renderDisplay.hide();
   } else {
