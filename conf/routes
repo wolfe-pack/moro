@@ -23,6 +23,7 @@ GET /template/:name/*file                       controllers.Application.template
 # Document editing
 GET /doc/editor                                 controllers.Application.editor(file = "test")
 GET /doc/editor/*file                           controllers.Application.editor(file)
+GET /doc/gen_cache/*file                       controllers.Application.genCache(file)
 POST /doc/save/*file                            controllers.Application.save(file)
 
 # Document navigating

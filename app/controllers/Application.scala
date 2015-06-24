@@ -111,7 +111,7 @@ object Application extends Controller {
     implicit request =>
       val json = request.body
       val d = Document.loadJson(json.toString())
-      println("/save: " + d + " --> " + file)
+      println("/save: " + d.name + " --> " + file)
       Document.save(d, config.docRoot + file + ".json")
       Ok("Save successful: " + d)
   }
@@ -203,6 +203,18 @@ object Application extends Controller {
       }.getOrElse {
         BadRequest("Expecting Json data")
       }
+  }
+
+  def genCache(file: String) = UserAwareAction {
+    implicit request =>
+      val d = Document.loadDocWithCache(config.docRoot + file + ".json")
+      println("/cache: " + d.name + " --> " + file)
+      val cache = (d.cells map { c =>
+        val compiler = allCompilers.get(c.compiler).get
+        c.id -> compiler.process(c.input).result
+      }).toMap
+      Document.saveCache(OutputCache(cache), config.docRoot + file + ".json.cache")
+      Ok(JsonWrapper.serializePretty(OutputCache(cache)))
   }
 
   def autocompleteScala(sessionId: String) = Action {
