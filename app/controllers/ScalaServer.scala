@@ -46,7 +46,7 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
 
   def compile(input: Input) = {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)
-    val aggregatedCells = Json.fromJson[Array[String]](Json.parse(input.extraFields("aggregatedCells"))).get
+    val aggregatedCells = input.extraFields.get("aggregatedCells").map(v => Json.fromJson[Array[String]](Json.parse(v)).get).getOrElse(Array.empty)
     //println(aggregatedCells.mkString("{", "}, {", "}"))
     val code = input.code
     //println(classPath.mkString("\t"))

@@ -32,7 +32,10 @@ object Input {
             case JsNull => null
           }).orNull,
             obj.value.get("code").map(_.asInstanceOf[JsString]).map(_.value).orNull,
-            obj.value.get("extraFields").map(_.asInstanceOf[JsObject].value).map(_.map(v => v._1 -> v._2.asInstanceOf[JsString].value).toMap).getOrElse(Map.empty),
+            obj.value.get("extraFields").map(_ match {
+              case mapObj: JsObject => mapObj.value.map(v => v._1 -> v._2.asInstanceOf[JsString].value).toMap
+              case JsNull => Map.empty[String, String]
+            }).getOrElse(Map.empty),
             obj.value.get("outputFormat").map(_.asInstanceOf[JsString]).map(_.value)))
         }
         case _ => JsError("not an object")

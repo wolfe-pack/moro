@@ -50,6 +50,7 @@ object OutputCache {
   implicit val cellsRds = new Reads[Map[Int,String]] {
     override def reads(json: JsValue): JsResult[Map[Int, String]] = json match {
       case obj: JsObject => JsSuccess(obj.value.map(o => o._1.toInt -> o._2.asInstanceOf[JsString].value).toMap)
+      case JsNull => JsSuccess(Map.empty[Int, String])
       case _ => JsError("not an object for map[int,string]")
     }
   }
@@ -62,7 +63,28 @@ object Document {
 
   type DocumentData = Document
   implicit val docWrt = Json.writes[Document]
-  implicit val docRds = Json.reads[Document]
+  implicit val docRds = new Reads[Document] {
+    override def reads(json: JsValue): JsResult[Document] = {
+      json match {
+        case obj: JsObject => {
+          JsSuccess(Document(
+            obj.value.get("name").map(_ match {
+            case str:JsString => str.value
+            case JsNull => null
+          }).orNull,
+            obj.value.get("cells").map(_ match {
+              case arr: JsArray => arr.value.map(v => Json.fromJson[Cell](v).get)
+              case JsNull => Seq.empty[Cell]
+            }).getOrElse(Seq.empty[Cell]),
+            obj.value.get("config").map(_ match {
+              case mapObj: JsObject => mapObj.value.map(v => v._1 -> v._2.asInstanceOf[JsString].value).toMap
+              case JsNull => Map.empty[String, String]
+            }).getOrElse(Map.empty)))
+        }
+        case _ => JsError("not an object")
+      }
+    }
+  }
 
   def toDData(doc: Document) = new DocumentData(doc.name, doc.cells, doc.config)
 
@@ -73,7 +95,11 @@ object Document {
     writer.println(JsonWrapper.serializePretty(dd))
     writer.flush()
     writer.close()
-    val cacheWriter = new PrintWriter(filepath + ".cache")
+    saveCache(cache, filepath + ".cache")
+  }
+
+  def saveCache(cache: OutputCache, filepath: String): Unit ={
+    val cacheWriter = new PrintWriter(filepath)
     cacheWriter.println(JsonWrapper.serializePretty(cache))
     cacheWriter.flush()
     cacheWriter.close()
