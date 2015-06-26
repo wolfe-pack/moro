@@ -175,3 +175,8 @@ svg.barchart {
   stroke: #ccc;
   stroke-width: 2px;
 }
+
+/* Matrix rendering */
+.matrix .hruler {
+    stroke: black;
+}
