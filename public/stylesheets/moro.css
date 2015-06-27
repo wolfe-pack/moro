@@ -177,6 +177,23 @@ svg.barchart {
 }
 
 /* Matrix rendering */
+
 .matrix .hruler {
     stroke: black;
 }
+
+.matrix text {
+    font-size: 15px;
+    alignment-baseline: middle;
+
+}
+
+.matrix .cell {
+    text-anchor: middle;
+}
+
+.matrix .box {
+    fill: none;
+    stroke: black;
+}
+
