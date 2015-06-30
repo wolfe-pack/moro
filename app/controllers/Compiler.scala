@@ -223,6 +223,7 @@ trait ACEEditor {
       |    editor.on('change', function () {
       |        //heightUpdateFunction(editor, '#editor'+id);
       |    });
+      |    if(!doc.allowExecution) editor.setReadOnly(true);
       |
       |    editor.commands.addCommand({
       |        name: "runCode",

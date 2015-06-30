@@ -62,8 +62,8 @@ object Application extends Controller {
     def renderDynamic(viewClazz: String, file: String, user: Option[MoroUser]): Option[play.twirl.api.Html] = {
       try {
         val clazz: Class[_] = Play.current.classloader.loadClass(viewClazz)
-        val render = clazz.getDeclaredMethod("apply", classOf[Document], classOf[Compilers], classOf[String], classOf[Option[MoroUser]])
-        val view = render.invoke(clazz, Document.loadDocWithCache(config.docRoot + file + ".json"), allCompilers, config.docRoot, user).asInstanceOf[play.twirl.api.Html]
+        val render = clazz.getDeclaredMethod("apply", classOf[Document], classOf[Compilers], classOf[String], classOf[MoroConfig], classOf[Option[MoroUser]])
+        val view = render.invoke(clazz, Document.loadDocWithCache(config.docRoot + file + ".json"), allCompilers, config.docRoot, config, user).asInstanceOf[play.twirl.api.Html]
         return Some(view)
       } catch {
         case ex: ClassNotFoundException => Logger.error("Html.renderDynamic() : could not find view " + viewClazz, ex)
@@ -87,7 +87,7 @@ object Application extends Controller {
     implicit request =>
       import Document._
       println("/static: " + config.docRoot + file + ".json")
-      Ok(views.html.static(loadDocWithCache(config.docRoot + file + ".json"), allCompilers, config.docRoot,
+      Ok(views.html.static(loadDocWithCache(config.docRoot + file + ".json"), allCompilers, config.docRoot, config,
         None)) //request.user.map(_.asInstanceOf[MoroUser])
   }
 
@@ -95,7 +95,7 @@ object Application extends Controller {
     implicit request =>
       import Document._
       println("/present: " + config.docRoot + file + ".json")
-      Ok(views.html.present(loadDocWithCache(config.docRoot + file + ".json"), allCompilers, config.docRoot,
+      Ok(views.html.present(loadDocWithCache(config.docRoot + file + ".json"), allCompilers, config.docRoot, config,
         None)) //request.user.map(_.asInstanceOf[MoroUser])
   }
 
@@ -103,7 +103,7 @@ object Application extends Controller {
     implicit request =>
       import Document._
       println("/wolfe: %s (%s%s.json)" format(file, config.docRoot, file))
-      Ok(views.html.wolfe(loadDocWithCache(config.docRoot + file + ".json"), allCompilers, config.docRoot,
+      Ok(views.html.wolfe(loadDocWithCache(config.docRoot + file + ".json"), allCompilers, config.docRoot, config,
         None)) // request.user.map(_.asInstanceOf[MoroUser])
   }
 

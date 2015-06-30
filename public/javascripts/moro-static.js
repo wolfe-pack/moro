@@ -71,7 +71,12 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
     editorCellDiv.className = 'cell editor';
     $(editorCellDiv).html(input.code);
     $(inputDiv).append(editorCellDiv);
-    $(inputDiv).append('<a id="runCode'+id+'" type="button" class="runButton" onclick="runCode(doc, '+id+', compilers)"><i class="fa fa-play-circle-o fa-2x"></i></span></a>');
+    var buttonCode = "";
+    if(doc.allowExecution)
+      buttonCode = 'class="runButton btn" onclick="runCode(doc, '+id+', compilers)';
+    else
+      buttonCode = 'class="runButton btn disabled" disabled="disabled"';
+    $(inputDiv).append('<a id="runCode'+id+'" role="button" '+buttonCode+'"><i class="fa fa-play-circle-o fa-2x"></i></span></a>');
     $(editCellDiv).append(inputDiv);
     $(cellDiv).append(editCellDiv);
   }
