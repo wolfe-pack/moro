@@ -224,12 +224,13 @@ function hideCellTools(doc,id) {
 }
 
 function addCellFromJson(doc,mode,content,compilers,config) {
-  $( "#cells" ).append(newCellDiv(doc.numCells));
-  doc.ids.push(doc.numCells);
-  makeCellFunctional(doc,doc.numCells,mode,compilers,content, config);
+  var cellId = doc.numCells;
+  $( "#cells" ).append(newCellDiv(cellId));
+  doc.ids.push(cellId);
+  makeCellFunctional(doc,cellId,mode,compilers,content, config);
   //doc.cells[doc.numCells].editor.getSession().setValue(content);
   // $('#modeForm'+ doc.numCells +' label input[value='+ mode +']').parent().click()
-  $('#modeSelect'+ doc.numCells).val(mode).change();
+  $('#modeSelect'+ cellId).val(mode).change();
   //runCode(doc, doc.numCells, compilers);
   doc.numCells += 1;
 }
