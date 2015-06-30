@@ -54,8 +54,10 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
   if(input.extraFields.hasOwnProperty('hide'))
     cellDiv.setAttribute('hidden', input.extraFields.hide)
   var createEditor = !compilers[mode].hideAfterCompile;
-  if(input.extraFields.hasOwnProperty('showEditor') && input.extraFields.showEditor === 'true')
-    createEditor = true
+  if(input.extraFields.hasOwnProperty('showEditor')) {
+    if(input.extraFields.showEditor === 'true') createEditor = true
+    if(input.extraFields.showEditor === 'false') createEditor = false
+  }
   if(createEditor) {
     // edit cell
     var editCellDiv = document.createElement('div');
