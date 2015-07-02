@@ -183,7 +183,7 @@ svg.barchart {
 }
 
 .matrix text {
-    font-size: 16px;
+    font-size: 26px;
     alignment-baseline: middle;
 
 }
@@ -195,5 +195,9 @@ svg.barchart {
 .matrix .box {
     fill: none;
     stroke: black;
+}
+
+svg.matrix {
+    //width: 10px;
 }
 
