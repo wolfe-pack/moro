@@ -63,6 +63,7 @@
     /* DOCUMENT OBJECT */
     var doc = newDoc("@(document.name)");
     doc.aceTheme = 'tomorrow';
+    doc.allowExecution = @{config.allowExecution("present")};
 
     /* add sections */
     /* Figure out which sections need to be marked "markdown only" */
