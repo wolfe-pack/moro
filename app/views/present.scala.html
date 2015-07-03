@@ -35,6 +35,19 @@
         document.getElementsByTagName( 'head' )[0].appendChild( link );
     }
 </script>
+    <script>
+    setTimeout(function() {
+      for (i = 0; i < 13; i++) {
+        $(".fragment" + i).attr("data-fragment-index", i);
+        $(".fragment" + i).addClass("fragment");
+      }
+      //$(".fragment1").attr("data-fragment-index","1");
+      //$(".fragment2").attr("data-fragment-index","2");
+      //$(".fragment3").attr("data-fragment-index","3");
+      //console.log($(".fragment"));
+      //console.log($(".fragment1"));
+    },1000)
+</script>
 <!-- end of reveal.js example -->
 <div class="reveal">
   <div id="slides" class="slides">

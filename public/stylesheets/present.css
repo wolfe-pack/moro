@@ -35,5 +35,9 @@
 }
 
 .string-result {
-    margin:auto;
+    margin:auto !important;
+}
+
+.MathJax {
+    font-size: 40px;
 }
