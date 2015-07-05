@@ -90,7 +90,8 @@
        @cell.compiler match {
          case "section" => {
            if(lastSectionIsMdOnly) {
-             divSlides.append('<section id="' +  lastSectionId + '" data-markdown />');
+             divSlides.append('<section id="' +  lastSectionId + '" />');
+             //divSlides.append('<section id="' +  lastSectionId + '" data-markdown />');
            } else {
              divSlides.append('<section id="' +  lastSectionId + '" />');
            }
@@ -156,13 +157,14 @@
 
                 center: Reveal.getQueryHash().center || true,
 
+            // MathJax
+            math: {
+                mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                config: 'TeX-AMS-MML_HTMLorMML'  // See http://docs.mathjax.org/en/latest/config-files.html
+            },
             dependencies: [
                 // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
                 { src: '@routes.Assets.at("javascripts/reveal.js/lib/js/classList.js")', condition: function() { return !document.body.classList; } },
-
-                // Interpret Markdown in <section> elements
-                { src: '@routes.Assets.at("javascripts/reveal.js/plugin/markdown/marked.js")', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-                { src: '@routes.Assets.at("javascripts/reveal.js/plugin/markdown/markdown.js")', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 
                 // Syntax highlight for <code> elements
                 { src: '@routes.Assets.at("javascripts/reveal.js/plugin/highlight/highlight.js")', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
@@ -170,15 +172,28 @@
                 // MathJax
                 { src: '@routes.Assets.at("javascripts/reveal.js/plugin/math/math.js")', async: true },
 
-                    // Zoom
-					{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/zoom-js/zoom.js")', async: true, condition: function() { return !!document.body.classList; } },
+                // Zoom
+          		{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/zoom-js/zoom.js")', async: true, condition: function() { return !!document.body.classList; } },
 
-					// Notes
-					{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/notes/notes.js")', async: true, condition: function() { return !!document.body.classList; } }
-                ]
+				// Notes
+				{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/notes/notes.js")', async: true, condition: function() { return !!document.body.classList; } },
+
+                // Interpret Markdown in <section> elements
+                //{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/markdown/marked.js")', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                //{ src: '@routes.Assets.at("javascripts/reveal.js/plugin/markdown/markdown.js")', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
+
+              ]
             }); }
             , 50);
     });
+</script>
+<script>
+Reveal.addEventListener( 'fragmentshown', function( event ) {
+setTimeout(
+   function() {
+     MathJax.Hub.Rerender(document.querySelector(".slides .present"))
+   }, 100);
+} );
 </script>
 @together(user)
 <script src="https://togetherjs.com/togetherjs-min.js"></script>
