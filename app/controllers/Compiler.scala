@@ -287,17 +287,35 @@ trait ACEEditor {
       |        }
       |    })
       |    editor.commands.addCommand({
-      |        name: "moveCursorDown",
-      |        bindKey: {win: 'Down', mac: 'Down'},
+      |        name: "moveCursorRight",
+      |        bindKey: {win: 'Right', mac: 'Right'},
       |        exec: function(editor) {
-      |            if(editor.getCursorPosition().row + 1 == editor.getSession().getDocument().getLength()) {
+      |            var eodRow = editor.getSession().getDocument().getLength()-1;
+      |            var eodCol = editor.session.getLine(eodRow).length;
+      |            if(editor.getCursorPosition().row == eodRow &&
+      |               editor.getCursorPosition().column == eodCol) {
       |              ne=nextEditor(doc,id);
       |              if(typeof(ne)!='undefined') {
-      |                ne.navigateTo(0, editor.getCursorPosition().column);
+      |                ne.navigateFileStart();
       |                ne.focus();
       |              }
       |            }
-      |            editor.navigateDown(1);
+      |            editor.navigateRight(1);
+      |        }
+      |    })
+      |    editor.commands.addCommand({
+      |        name: "moveCursorLeft",
+      |        bindKey: {win: 'Left', mac: 'Left'},
+      |        exec: function(editor) {
+      |            if(editor.getCursorPosition().row == 0 &&
+      |               editor.getCursorPosition().column == 0) {
+      |              pe=prevEditor(doc,id);
+      |              if(typeof(pe)!='undefined') {
+      |                pe.navigateFileEnd();
+      |                pe.focus();
+      |              }
+      |            }
+      |            editor.navigateLeft(1);
       |        }
       |    })
       |    editor.commands.addCommand({
@@ -312,6 +330,20 @@ trait ACEEditor {
       |              }
       |            }
       |            editor.navigateUp(1);
+      |        }
+      |    })
+      |    editor.commands.addCommand({
+      |        name: "moveCursorDown",
+      |        bindKey: {win: 'Down', mac: 'Down'},
+      |        exec: function(editor) {
+      |            if(editor.getCursorPosition().row + 1 == editor.getSession().getDocument().getLength()) {
+      |              ne=nextEditor(doc,id);
+      |              if(typeof(ne)!='undefined') {
+      |                ne.navigateTo(0, editor.getCursorPosition().column);
+      |                ne.focus();
+      |              }
+      |            }
+      |            editor.navigateDown(1);
       |        }
       |    })
       |    editor.commands.addCommand({
