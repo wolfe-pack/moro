@@ -188,14 +188,6 @@
             , 50);
     });
 </script>
-<script>
-Reveal.addEventListener( 'fragmentshown', function( event ) {
-setTimeout(
-   function() {
-     MathJax.Hub.Rerender(document.querySelector(".slides .present"))
-   }, 100);
-} );
-</script>
 @together(user)
 <script src="https://togetherjs.com/togetherjs-min.js"></script>
 </body>
