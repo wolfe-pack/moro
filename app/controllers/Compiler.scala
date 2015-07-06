@@ -232,6 +232,12 @@ trait ACEEditor {
       |            document.getElementById("runCode"+id).click();
       |        }
       |    })
+      |    editor.getSession().on('change', function() {
+      |      var mode = currentMode(id);
+      |      if(mode=='markdown' || mode=='html') {
+      |        document.getElementById("runCode"+id).click();
+      |      }
+      |    });
       |    editor.commands.addCommand({
       |        name: "addCellBelow",
       |        bindKey: {win: "Shift-Enter", mac: "Shift-Enter"},
