@@ -106,7 +106,8 @@
        }
     }
     if(lastSectionIsMdOnly) {
-      divSlides.append('<section id="' +  lastSectionId + '" data-markdown />');
+      divSlides.append('<section id="' +  lastSectionId + '" />');
+      //divSlides.append('<section id="' +  lastSectionId + '" data-markdown />');
     } else {
       divSlides.append('<section id="' +  lastSectionId + '" />');
     }
