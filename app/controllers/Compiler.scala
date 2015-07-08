@@ -76,6 +76,7 @@ object CompilerConfigKeys {
   val Scope = "scope"
   val Fragment = "fragment"
   val RevealParams = "reveal_params"
+  val RevealClasses = "reveal_class"
 }
 
 /**
@@ -122,8 +123,7 @@ trait Compiler {
     ConfigEntry(CacheResults, "Cached", "Use cached results, uncheck if running again should produce different results.", "checkbox", "true"),
     ConfigEntry(Aggregate, "Aggregate", "If compiler allows, aggregate inputs across cells of the same type (and scope).", "checkbox", "true"),
     ConfigEntry(Scope, "Scope", "Scope use when aggregating cells (not used otherwise).", "text", "_default"),
-    ConfigEntry(Fragment, "Fragment", "If checked, the presentation mode pauses before displaying this cell.", "checkbox", "false"),
-    ConfigEntry(RevealParams, "Reveal Parameteres", "Parameters that are used by reveal.js in the presentation mode.", "text", "")
+    ConfigEntry(Fragment, "Fragment", "If checked, the presentation mode pauses before displaying this cell.", "checkbox", "false")
   )
 
   implicit val ceWrites = Json.writes[ConfigEntry]
@@ -559,6 +559,14 @@ class SectionCompiler extends Compiler with ACEEditor {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)
     Result("<h5 id=\"%s\" class=\"section\"><a href=\"#%s\" class=\"muted\"><small>#%s</small></a></h5>\n<hr/>" format(input.code, input.code, input.code))
   }
+
+  import CompilerConfigKeys._
+
+  override def configEntries: Seq[ConfigEntry] = super.configEntries ++ Seq(
+    ConfigEntry(RevealParams, "Reveal Parameters", "Parameters that are used by reveal.js in the presentation mode.", "text", ""),
+    ConfigEntry(RevealClasses, "Reveal Classes", "Class names for the section in reveal.js.", "text", "")
+  )
+
 }
 
 class ImageURLCompiler extends Compiler with ACEEditor {
