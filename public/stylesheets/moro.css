@@ -182,6 +182,10 @@ svg.barchart {
     stroke: black;
 }
 
+.matrix .vruler {
+    stroke: black;
+}
+
 .matrix text {
     font-size: 26px;
     alignment-baseline: middle;
