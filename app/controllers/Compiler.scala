@@ -36,7 +36,10 @@ object Input {
               case mapObj: JsObject => mapObj.value.map(v => v._1 -> v._2.asInstanceOf[JsString].value).toMap
               case JsNull => Map.empty[String, String]
             }).getOrElse(Map.empty),
-            obj.value.get("outputFormat").map(_.asInstanceOf[JsString]).map(_.value)))
+            obj.value.get("outputFormat").map(_ match {
+              case str:JsString => str.value
+              case JsNull => ""
+            })))
         }
         case _ => JsError("not an object")
       }
