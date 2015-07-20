@@ -563,8 +563,8 @@ class SectionCompiler extends Compiler with ACEEditor {
   import CompilerConfigKeys._
 
   override def configEntries: Seq[ConfigEntry] = super.configEntries ++ Seq(
-    ConfigEntry(RevealParams, "Reveal Parameters", "Parameters that are used by reveal.js in the presentation mode.", "text", ""),
-    ConfigEntry(RevealClasses, "Reveal Classes", "Class names for the section in reveal.js.", "text", "")
+    ConfigEntry(RevealParams, "Reveal Parameters", "Parameters that are used in the presentation mode.", "text", ""),
+    ConfigEntry(RevealClasses, "Reveal Classes", "Class names for the section in the presentation mode.", "text", "")
   )
 
 }
