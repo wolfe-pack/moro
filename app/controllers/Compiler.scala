@@ -36,7 +36,10 @@ object Input {
               case mapObj: JsObject => mapObj.value.map(v => v._1 -> v._2.asInstanceOf[JsString].value).toMap
               case JsNull => Map.empty[String, String]
             }).getOrElse(Map.empty),
-            obj.value.get("outputFormat").map(_.asInstanceOf[JsString]).map(_.value)))
+            obj.value.get("outputFormat").map(_ match {
+              case str:JsString => str.value
+              case JsNull => ""
+            })))
         }
         case _ => JsError("not an object")
       }
@@ -563,8 +566,8 @@ class SectionCompiler extends Compiler with ACEEditor {
   import CompilerConfigKeys._
 
   override def configEntries: Seq[ConfigEntry] = super.configEntries ++ Seq(
-    ConfigEntry(RevealParams, "Reveal Parameters", "Parameters that are used by reveal.js in the presentation mode.", "text", ""),
-    ConfigEntry(RevealClasses, "Reveal Classes", "Class names for the section in reveal.js.", "text", "")
+    ConfigEntry(RevealParams, "Reveal Parameters", "Parameters that are used in the presentation mode.", "text", ""),
+    ConfigEntry(RevealClasses, "Reveal Classes", "Class names for the section in the presentation mode.", "text", "")
   )
 
 }

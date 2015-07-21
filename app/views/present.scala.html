@@ -83,6 +83,7 @@
     var divSlides = $('#slides');
     var lastSectionId = 'init';
     var lastSectionClass = '';
+    var lastSectionParams = '';
     var lastSectionIsMdOnly = false;
     @for(cell <- document.cells) {
        var mode = '@Html(cell.compiler)';
@@ -91,14 +92,14 @@
        @cell.compiler match {
          case "section" => {
            if(lastSectionIsMdOnly) {
-             divSlides.append('<section id="' +  lastSectionId + '" class="' +  lastSectionClass + '" />');
+             divSlides.append('<section id="' +  lastSectionId + '" class="' +  lastSectionClass + '" ' +  lastSectionParams + '/>');
              //divSlides.append('<section id="' +  lastSectionId + '" data-markdown />');
            } else {
-             divSlides.append('<section id="' +  lastSectionId + '" class="' +  lastSectionClass + '" />');
+             divSlides.append('<section id="' +  lastSectionId + '" class="' +  lastSectionClass + '" ' +  lastSectionParams + '/>');
            }
            lastSectionId = "@{cell.input.code}";
            lastSectionClass = "@{cell.input.config.getOrElse("reveal_class", "")}";
-           console.log(lastSectionClass);
+           lastSectionParams = '@Html(cell.input.config.getOrElse("reveal_params", ""))';
            lastSectionIsMdOnly = true;
          }
          case "markdown" => {
@@ -109,10 +110,10 @@
        }
     }
     if(lastSectionIsMdOnly) {
-      divSlides.append('<section id="' +  lastSectionId + '" class="' +  lastSectionClass + '" />');
+      divSlides.append('<section id="' +  lastSectionId + '" class="' +  lastSectionClass + '" ' +  lastSectionParams + '/>');
       //divSlides.append('<section id="' +  lastSectionId + '" data-markdown />');
     } else {
-      divSlides.append('<section id="' +  lastSectionId + '" class="' +  lastSectionClass + '" />');
+      divSlides.append('<section id="' +  lastSectionId + '" class="' +  lastSectionClass + '" ' +  lastSectionParams + '/>');
     }
 
     /* Now add cells */
