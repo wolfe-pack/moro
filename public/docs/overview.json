@@ -6,7 +6,9 @@
     "input" : {
       "sessionId" : null,
       "code" : "headings",
-      "extraFields" : { }
+      "extraFields" : {
+        "reveal_params" : "data-background=#00ffff"
+      }
     }
   }, {
     "id" : 1,
