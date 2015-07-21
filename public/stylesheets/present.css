@@ -42,3 +42,12 @@
 .MathJax {
     font-size: 40px;
 }
+
+.cell .red-box {
+    stroke-width: 6px;
+    stroke: red;
+}
+
+.cell .red-text {
+    fill: red;
+}
