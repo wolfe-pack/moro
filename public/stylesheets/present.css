@@ -11,7 +11,7 @@
     text-align: left;
     font-family: monospace !important;
     line-height: normal;
-    font-size: 25px;
+    font-size: 21px;
     border: 1px solid lightgray;
 }
 
@@ -36,6 +36,7 @@
 
 .string-result {
     margin:auto !important;
+    max-width: 100%;
 }
 
 .MathJax {
