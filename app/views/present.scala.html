@@ -99,7 +99,7 @@
            }
            lastSectionId = "@{cell.input.code}";
            lastSectionClass = "@{cell.input.config.getOrElse("reveal_class", "")}";
-           lastSectionParams = "@{cell.input.config.getOrElse("reveal_params", "")}";
+           lastSectionParams = '@Html(cell.input.config.getOrElse("reveal_params", ""))';
            lastSectionIsMdOnly = true;
          }
          case "markdown" => {
