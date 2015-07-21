@@ -11,7 +11,7 @@
     text-align: left;
     font-family: monospace !important;
     line-height: normal;
-    font-size: 32px;
+    font-size: 21px;
     border: 1px solid lightgray;
 }
 
@@ -36,8 +36,18 @@
 
 .string-result {
     margin:auto !important;
+    max-width: 100%;
 }
 
 .MathJax {
     font-size: 40px;
+}
+
+.cell .red-box {
+    stroke-width: 6px;
+    stroke: red;
+}
+
+.cell .red-text {
+    fill: red;
 }
