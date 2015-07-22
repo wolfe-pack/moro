@@ -1,4 +1,4 @@
-@(document: controllers.doc.Document, compilers: Compilers, docRoot: String, user: Option[MoroUser])
+@(document: controllers.doc.Document, compilers: Compilers, docRoot: String, config: util.MoroConfig, user: Option[MoroUser])
 
 @import helper._
 
@@ -36,7 +36,7 @@
             <div id="static_content" class="unit center-on-mobiles">
                 <h1>@Html(document.name)</h1>
             </div>
-            @staticContent("static_content", document, compilers, docRoot, user, "chaos")
+            @staticContent("static_content", document, compilers, docRoot, user, "chaos", config.allowExecution("demo"))
         </div>
     </section>
 </body>

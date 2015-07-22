@@ -1,4 +1,4 @@
-@(id: String, document: controllers.doc.Document, compilers: Compilers, docRoot: String, user: Option[MoroUser], aceTheme: String)
+@(id: String, document: controllers.doc.Document, compilers: Compilers, docRoot: String, user: Option[MoroUser], aceTheme: String, allowExecution: Boolean)
 
 <script>
     var divCells = $('#@id');
@@ -15,6 +15,7 @@
     /* DOCUMENT OBJECT */
     var doc = newDoc("@(document.name)");
     doc.aceTheme = '@aceTheme';
+    doc.allowExecution = @allowExecution;
 
     /* add cells */
     @for(cell <- document.cells) {

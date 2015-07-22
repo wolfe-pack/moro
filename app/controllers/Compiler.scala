@@ -1,7 +1,7 @@
 package controllers
 
 import controllers.doc.Document
-import play.api.libs.json.Json
+import play.api.libs.json._
 
 import scala.StringBuilder
 import scala.collection.mutable
@@ -21,7 +21,38 @@ case class Input(sessionId: String, code: String, extraFields: Map[String, Strin
   def configJson = Json.stringify(Json.toJson(config))
 }
 
+object Input {
+  implicit val inpWrt = Json.writes[Input]
+  implicit val inpRds = new Reads[Input] {
+    override def reads(json: JsValue): JsResult[Input] = {
+      json match {
+        case obj: JsObject => {
+          JsSuccess(Input(obj.value.get("sessionId").map(_ match {
+            case str:JsString => str.value
+            case JsNull => null
+          }).orNull,
+            obj.value.get("code").map(_.asInstanceOf[JsString]).map(_.value).orNull,
+            obj.value.get("extraFields").map(_ match {
+              case mapObj: JsObject => mapObj.value.map(v => v._1 -> v._2.asInstanceOf[JsString].value).toMap
+              case JsNull => Map.empty[String, String]
+            }).getOrElse(Map.empty),
+            obj.value.get("outputFormat").map(_ match {
+              case str:JsString => str.value
+              case JsNull => ""
+            })))
+        }
+        case _ => JsError("not an object")
+      }
+    }
+  }
+}
+
 case class Result(result: String, log: String = "")
+
+object Result {
+  implicit val resWrt = Json.writes[Result]
+  implicit val resRds = Json.reads[Result]
+}
 
 /**
  * A Description of a configuration element
@@ -34,6 +65,11 @@ case class Result(result: String, log: String = "")
  */
 case class ConfigEntry(key: String, label: String, description: String, inputType: String, defaultValue: String)
 
+object ConfigEntry {
+  implicit val ceWrt = Json.writes[ConfigEntry]
+  implicit val ceRds = Json.reads[ConfigEntry]
+}
+
 object CompilerConfigKeys {
   val Hide = "hide"
   val HideOutput = "hide_output"
@@ -42,6 +78,8 @@ object CompilerConfigKeys {
   val Aggregate = "aggregate"
   val Scope = "scope"
   val Fragment = "fragment"
+  val RevealParams = "reveal_params"
+  val RevealClasses = "reveal_class"
 }
 
 /**
@@ -84,7 +122,7 @@ trait Compiler {
   def configEntries: Seq[ConfigEntry] = Seq(
     ConfigEntry(Hide, "Hide Cell?", "Hide this cell in static/presentation views.", "checkbox", "false"),
     ConfigEntry(HideOutput, "Hide Cell Output?", "Hide this cell's output.", "checkbox", "false"),
-    ConfigEntry(ShowEditor, "Show Editor?", "Whether to show the editor of this cell around in static/presentation views.", "checkbox", "false"),
+    ConfigEntry(ShowEditor, "Show Editor?", "Whether to show the editor of this cell around in static/presentation views.", "checkbox", if(name=="scala") "true" else "false"),
     ConfigEntry(CacheResults, "Cached", "Use cached results, uncheck if running again should produce different results.", "checkbox", "true"),
     ConfigEntry(Aggregate, "Aggregate", "If compiler allows, aggregate inputs across cells of the same type (and scope).", "checkbox", "true"),
     ConfigEntry(Scope, "Scope", "Scope use when aggregating cells (not used otherwise).", "text", "_default"),
@@ -188,6 +226,7 @@ trait ACEEditor {
       |    editor.on('change', function () {
       |        //heightUpdateFunction(editor, '#editor'+id);
       |    });
+      |    if(!doc.allowExecution) editor.setReadOnly(true);
       |
       |    editor.commands.addCommand({
       |        name: "runCode",
@@ -196,6 +235,12 @@ trait ACEEditor {
       |            document.getElementById("runCode"+id).click();
       |        }
       |    })
+      |    editor.getSession().on('change', function() {
+      |      var mode = currentMode(id);
+      |      if(mode=='markdown' || mode=='html') {
+      |        document.getElementById("runCode"+id).click();
+      |      }
+      |    });
       |    editor.commands.addCommand({
       |        name: "addCellBelow",
       |        bindKey: {win: "Shift-Enter", mac: "Shift-Enter"},
@@ -251,17 +296,35 @@ trait ACEEditor {
       |        }
       |    })
       |    editor.commands.addCommand({
-      |        name: "moveCursorDown",
-      |        bindKey: {win: 'Down', mac: 'Down'},
+      |        name: "moveCursorRight",
+      |        bindKey: {win: 'Right', mac: 'Right'},
       |        exec: function(editor) {
-      |            if(editor.getCursorPosition().row + 1 == editor.getSession().getDocument().getLength()) {
+      |            var eodRow = editor.getSession().getDocument().getLength()-1;
+      |            var eodCol = editor.session.getLine(eodRow).length;
+      |            if(editor.getCursorPosition().row == eodRow &&
+      |               editor.getCursorPosition().column == eodCol) {
       |              ne=nextEditor(doc,id);
       |              if(typeof(ne)!='undefined') {
-      |                ne.navigateTo(0, editor.getCursorPosition().column);
+      |                ne.navigateFileStart();
       |                ne.focus();
       |              }
       |            }
-      |            editor.navigateDown(1);
+      |            editor.navigateRight(1);
+      |        }
+      |    })
+      |    editor.commands.addCommand({
+      |        name: "moveCursorLeft",
+      |        bindKey: {win: 'Left', mac: 'Left'},
+      |        exec: function(editor) {
+      |            if(editor.getCursorPosition().row == 0 &&
+      |               editor.getCursorPosition().column == 0) {
+      |              pe=prevEditor(doc,id);
+      |              if(typeof(pe)!='undefined') {
+      |                pe.navigateFileEnd();
+      |                pe.focus();
+      |              }
+      |            }
+      |            editor.navigateLeft(1);
       |        }
       |    })
       |    editor.commands.addCommand({
@@ -276,6 +339,20 @@ trait ACEEditor {
       |              }
       |            }
       |            editor.navigateUp(1);
+      |        }
+      |    })
+      |    editor.commands.addCommand({
+      |        name: "moveCursorDown",
+      |        bindKey: {win: 'Down', mac: 'Down'},
+      |        exec: function(editor) {
+      |            if(editor.getCursorPosition().row + 1 == editor.getSession().getDocument().getLength()) {
+      |              ne=nextEditor(doc,id);
+      |              if(typeof(ne)!='undefined') {
+      |                ne.navigateTo(0, editor.getCursorPosition().column);
+      |                ne.focus();
+      |              }
+      |            }
+      |            editor.navigateDown(1);
       |        }
       |    })
       |    editor.commands.addCommand({
@@ -485,6 +562,14 @@ class SectionCompiler extends Compiler with ACEEditor {
     //assert(input.outputFormat equalsIgnoreCase outputFormat)
     Result("<h5 id=\"%s\" class=\"section\"><a href=\"#%s\" class=\"muted\"><small>#%s</small></a></h5>\n<hr/>" format(input.code, input.code, input.code))
   }
+
+  import CompilerConfigKeys._
+
+  override def configEntries: Seq[ConfigEntry] = super.configEntries ++ Seq(
+    ConfigEntry(RevealParams, "Reveal Parameters", "Parameters that are used in the presentation mode.", "text", ""),
+    ConfigEntry(RevealClasses, "Reveal Classes", "Class names for the section in the presentation mode.", "text", "")
+  )
+
 }
 
 class ImageURLCompiler extends Compiler with ACEEditor {

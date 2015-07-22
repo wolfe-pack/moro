@@ -6,7 +6,7 @@ organizationHomepage := Some(url("http://www.wolfe.ml/"))
 
 version := "1.0-SNAPSHOT"
 
-scalaVersion := "2.11.4"
+scalaVersion := "2.11.6"
 
 licenses := Seq("The Apache Software License, Version 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 
@@ -66,7 +66,7 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.5.1",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.5.1",
   "eu.henkelmann" % "actuarius_2.10.0" % "0.2.6",
-  "org.scala-lang" % "scala-compiler" % "2.11.4",
+  "org.scala-lang" % "scala-compiler" % scalaVersion.value,
   "org.sameersingh.htmlgen" % "htmlgen" % "0.3",
   "org.sameersingh.scalaplot" % "scalaplot" % "0.1",
 //  "ml.wolfe" %% "wolfe-core" % "0.6.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
@@ -74,13 +74,13 @@ libraryDependencies ++= Seq(
   "ml.wolfe" %% "wolfe-examples" % "0.6.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
   "ml.wolfe" %% "wolfe-nlp" % "0.6.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
   "ml.wolfe" %% "wolfe-ui" % "0.6.0-SNAPSHOT" exclude("org.slf4j", "slf4j-simple"),
-  "edu.arizona.sista" % "processors" % "3.3",
-  "org.scala-lang" % "scala-library" % "2.11.4",
+//m  "edu.arizona.sista" % "processors" % "3.3",
+  "org.scala-lang" % "scala-library" % scalaVersion.value,
   "org.pegdown" % "pegdown" % "1.4.2",
   //"ws.securesocial" %% "securesocial" % "3.0-M3" exclude("org.slf4j", "slf4j-simple"),
   "com.typesafe.play.plugins" %% "play-plugins-mailer" % "2.3.1",
   "jline" % "jline" % "2.12.1",
-  "org.scalamacros" % "paradise_2.11.4" % "2.1.0-M1"
+  "org.scalamacros" % ("paradise_"+scalaVersion.value) % "2.1.0-M5"
 )
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)

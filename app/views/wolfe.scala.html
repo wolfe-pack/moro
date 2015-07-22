@@ -1,4 +1,4 @@
-@(document: controllers.doc.Document, compilers: Compilers, docRoot: String, user: Option[MoroUser])
+@(document: controllers.doc.Document, compilers: Compilers, docRoot: String, config: util.MoroConfig, user: Option[MoroUser])
 
 @import helper._
 @import java.io.File
@@ -81,13 +81,13 @@ new Directory(path, docRoot)
                     @dirNav("wolfe-docs/gettingstarted")
                     <h4>Concepts</h4>
                     @dirNav("wolfe-docs/concepts")
-                    <!--<h4>Examples</h4>-->
-                    <!--@dirNav("wolfe-docs/examples")-->
+                    <h4>Examples</h4>
+                    @dirNav("wolfe-docs/examples")
 
                 </div>
                 <!--</aside>-->
             </div>
-            @staticContent("static_content", document, compilers, docRoot, user, "chaos")
+            @staticContent("static_content", document, compilers, docRoot, user, "chaos", config.allowExecution("wolfe"))
         </div>
     </section>
 </body>

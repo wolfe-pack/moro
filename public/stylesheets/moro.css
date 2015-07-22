@@ -175,3 +175,33 @@ svg.barchart {
   stroke: #ccc;
   stroke-width: 2px;
 }
+
+/* Matrix rendering */
+
+.matrix .hruler {
+    stroke: black;
+}
+
+.matrix .vruler {
+    stroke: black;
+}
+
+.matrix text {
+    font-size: 26px;
+    alignment-baseline: middle;
+
+}
+
+.matrix .cell {
+    text-anchor: middle;
+}
+
+.matrix .box {
+    fill: none;
+    stroke: black;
+}
+
+svg.matrix {
+    //width: 10px;
+}
+

@@ -1,16 +1,21 @@
 package controllers.doc
 
 import controllers.{Result, Input}
-import controllers.util.JacksonWrapper
+import controllers.util.JsonWrapper
+import play.api.libs.json.Json
 
 /**
  * @author sameer
  */
 case class Cell(id: Int, compiler: String, input: Input) {
   def escapedContent: String = input.code.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t").replaceAll("'", "\\\\'").replaceAll("</script>", "<\\\\/script>")
-  def inputJson: String = JacksonWrapper.serialize(input).replaceAll("</script>", "<\\\\/script>")
+  def inputJson: String = JsonWrapper.serialize(input).replaceAll("</script>", "<\\\\/script>")
 }
 
+object Cell {
+  implicit val cellWrt = Json.writes[Cell]
+  implicit val cellRds = Json.reads[Cell]
+}
 /*
 case class Scala(id: Int, code: String, output: String) extends Cell {
   def staticHTML =

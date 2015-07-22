@@ -54,25 +54,30 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
   if(input.extraFields.hasOwnProperty('hide'))
     cellDiv.setAttribute('hidden', input.extraFields.hide)
   var createEditor = !compilers[mode].hideAfterCompile;
-  if(input.extraFields.hasOwnProperty('showEditor') && input.extraFields.showEditor === 'true')
-    createEditor = true
-  if(createEditor) {
-    // edit cell
-    var editCellDiv = document.createElement('div');
-    editCellDiv.id = 'editCell'+id;
-    editCellDiv.className = 'cell';
-    editCellDiv.setAttribute('hidden' , 'true');
-    var inputDiv = document.createElement('div');
-    inputDiv.className = "input";
-    var editorCellDiv = document.createElement('div');
-    editorCellDiv.id = "editor" + id
-    editorCellDiv.className = 'cell editor';
-    $(editorCellDiv).html(input.code);
-    $(inputDiv).append(editorCellDiv);
-    $(inputDiv).append('<a id="runCode'+id+'" type="button" class="runButton" onclick="runCode(doc, '+id+', compilers)"><i class="fa fa-play-circle-o fa-2x"></i></span></a>');
-    $(editCellDiv).append(inputDiv);
-    $(cellDiv).append(editCellDiv);
+  if(input.extraFields.hasOwnProperty('showEditor')) {
+    if(input.extraFields.showEditor === 'true') createEditor = true
+    if(input.extraFields.showEditor === 'false') createEditor = false
   }
+  // edit cell
+  var editCellDiv = document.createElement('div');
+  editCellDiv.id = 'editCell'+id;
+  editCellDiv.className = 'cell';
+  editCellDiv.setAttribute('hidden' , 'true');
+  var inputDiv = document.createElement('div');
+  inputDiv.className = "input";
+  var editorCellDiv = document.createElement('div');
+  editorCellDiv.id = "editor" + id
+  editorCellDiv.className = 'cell editor';
+  $(editorCellDiv).html(input.code);
+  $(inputDiv).append(editorCellDiv);
+  var buttonCode = "";
+  if(doc.allowExecution)
+    buttonCode = 'class="runButton btn" onclick="runCode(doc, '+id+', compilers)';
+  else
+    buttonCode = 'class="runButton btn disabled" disabled="disabled"';
+  $(inputDiv).append('<a id="runCode'+id+'" role="button" '+buttonCode+'"><i class="fa fa-play-circle-o fa-2x"></i></span></a>');
+  $(editCellDiv).append(inputDiv);
+  $(cellDiv).append(editCellDiv);
   $(cellDiv).append('<div id="renderDisplay'+id+'" class="cell"><div class="text-center"><i class="fa fa-refresh fa-spin fa-lg"></i></div></div>');
   section.append(cellDiv);
 
@@ -85,11 +90,13 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
   doc.cells[id].input = input;
   doc.cells[id].config = input.extraFields;
   doc.cells[id].showEditor = false;
+  doc.cells[id].editor = compilers[mode].editor(id, input.code);
   if(createEditor) {
     $('.btn').button();
     $('#editCell' + id).show();
-    doc.cells[id].editor = compilers[mode].editor(id, input.code);
     doc.cells[id].showEditor = true;
+  } else {
+    $('#editCell' + id).hide();
   }
   if(mode == 'scala' && input.outputFormat != null) {
     doc.cells[id].renderDisplay.html(input.outputFormat);
