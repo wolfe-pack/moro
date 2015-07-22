@@ -51,3 +51,7 @@
 .cell .red-text {
     fill: red;
 }
+
+.reveal p {
+  text-align: left;
+}
