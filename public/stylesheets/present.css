@@ -52,12 +52,25 @@
     fill: red;
 }
 
-.reveal p {
+.reveal * {
   text-align: left;
+}
+
+.reveal p {
+  margin-top: 20px;
+}
+
+.reveal h3 {
+  margin-bottom: 40px;
+  font-size: 60px;
 }
 
 .reveal img {
   display: block;
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+.reveal li {
+  margin-left: 15px;
 }
