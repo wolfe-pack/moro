@@ -238,7 +238,7 @@ trait ACEEditor {
       |    editor.getSession().on('change', function() {
       |      var mode = currentMode(id);
       |      if(mode=='markdown' || mode=='html') {
-      |        document.getElementById("runCode"+id).click();
+      |        //document.getElementById("runCode"+id).click();
       |      }
       |    });
       |    editor.commands.addCommand({
