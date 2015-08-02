@@ -204,6 +204,20 @@ svg * {
   border-color: #f90;
 }
 
+.btn {
+  //text-shadow: none;
+  color: #fc0;
+  //background-color: #333;
+  //border-color: #fc0;
+}
+
+.btn:hover, .btn:focus, .btn:active {
+  color: #f90;
+  //text-shadow: none;
+  //background-color: #333;
+  //border-color: #f90;
+}
+
 .string-result {
   margin-top: 20px;
   margin-left: 40px;
