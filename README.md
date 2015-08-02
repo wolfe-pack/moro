@@ -8,15 +8,11 @@ Installation
 ---
 
 ```
-git clone https://github.com/sameersingh/htmlgen.git
-cd htmlgen
-mvn clean install  -Dgpg.skip=true
-cd ../wolfe
-sbt publishLocal
-cd ../moro
-sbt clean run
+git clone https://github.com/wolfe-pack/moro.git
+cd moro; sbt clean run
 ```
 
+For more details, see the [following Wiki](https://github.com/wolfe-pack/moro/wiki/Setting-up-on-new-machines).
 
 Open Source Projects
 ---
@@ -31,3 +27,4 @@ Moro is built using the following awesome open-source projects:
 * [SecureSocial](http://securesocial.ws/): user authentication for Play!
 * [Pegdown](http://pegdown.org): markdown processor in Java
 * [ScalaKata](http://scalakata.com): In-browser Scala REPL
+* [MathJax](http://www.mathjax.org/)
