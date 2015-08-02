@@ -27,4 +27,4 @@ Moro is built using the following awesome open-source projects:
 * [SecureSocial](http://securesocial.ws/): user authentication for Play!
 * [Pegdown](http://pegdown.org): markdown processor in Java
 * [ScalaKata](http://scalakata.com): In-browser Scala REPL
-* [MathJax](http://www.mathjax.org/)
+* [MathJax](http://www.mathjax.org/): Latex math to HTML rendering
