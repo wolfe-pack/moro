@@ -4,33 +4,51 @@
     "id" : 0,
     "compiler" : "scala",
     "input" : {
-      "code" : "import uwxerox.logicmf.matrix._\nimport uwxerox.logicmf._\nimport uwxerox.logicmf.Data.RelationType\nimport uwxerox.logicmf.SGDConfig\n\nimplicit val rand = new scala.util.Random(0)\nval K = 2\nval N = 20\nval logistic = false\nval ents = (0 until N).toList\nval rel = RelDefinition(\"Sequential\", List(\"P\", \"P\"), RelationType.query,\n  // true values, defined for all cells\n  es => {\n    val oi = es(0).drop(1).toInt\n    val oj = es(1).drop(1).toInt\n    oi == oj || oi + 1 == oj || oi + 2 == oj\n  },\n  // isTrain: training if Some(true), test if Some(false), missing if None\n  es => {\n    val oi = es(0).drop(1).toInt\n    val oj = es(1).drop(1).toInt\n    Some(!Set(2 -> 3, 5 -> 6, 8 -> 9, 11 -> 12, 14 -> 15, 17 -> 18,\n      2 -> 6, 5 -> 9, 8 -> 12, 11 -> 15, 14 -> 18,\n      5 -> 3, 8 -> 6, 11 -> 9, 14 -> 12, 17 -> 15).contains(oi -> oj))\n  })\nrel\nval exp = new MatrixExperiment(K, Seq(rel), Map(\"P\" -> ents.map(\"p\" + _)), logistic)\nexp.initMap\nexp.initData\nHTML.data(rel.r, exp.trainingData, exp.map, false)",
-      "outputFormat" : "html",
-      "extraFields" : { }
+      "sessionId" : null,
+      "code" : "import ml.wolfe._\nimport ml.wolfe.term.TermImplicits._\nimport ml.wolfe.term._\nimport ml.wolfe.util.Math._\n\nimplicit val rand = new scala.util.Random(0)\nval K = 2\nval N = 3\nval M = 4\nval epochs = 100\nval alpha = 0.1\nval lambda = 0.1\n\n// set up data\n@domain case class Rating(pid: Int, mid: Int, score: Double)\nimplicit val Ratings = Rating.Values(Ints(0 until N), Ints(0 until M), Doubles)\n\n//the set of possible parameters\n@domain case class Theta(persons: IndexedSeq[Vect], movies: IndexedSeq[Vect])\nimplicit val Thetas = Theta.Values(Seqs(Vectors(K), N), Seqs(Vectors(K), M))\nThetas.zero.toConst\n",
+      "extraFields" : {
+        "aggregatedCells" : "[]"
+      }
     }
   }, {
     "id" : 1,
     "compiler" : "scala",
     "input" : {
-      "code" : "exp.train(SGDConfig(10000, lambda = 0.1, observedRelWeight = 1.0, learningRate = 0.1))",
-      "outputFormat" : "html",
-      "extraFields" : { }
+      "sessionId" : null,
+      "code" : "val positive = Set(0->0, 1->1, 0->1)\nval data = for(i <- 0 until N; j <- 0 until M) yield Rating(i, j, if(positive(i -> j)) 1.0 else 0.0)\nlazy val dataTerm = data.toConst\ndata.size\n",
+      "extraFields" : {
+        "aggregatedCells" : "[\"import ml.wolfe._\\nimport ml.wolfe.term.TermImplicits._\\nimport ml.wolfe.term._\\nimport ml.wolfe.util.Math._\\n\\nimplicit val rand = new scala.util.Random(0)\\nval K = 2\\nval N = 3\\nval M = 4\\nval epochs = 100\\nval alpha = 0.1\\nval lambda = 0.1\\n\\n// set up data\\n@domain case class Rating(pid: Int, mid: Int, score: Double)\\nimplicit val Ratings = Rating.Values(Ints(0 until N), Ints(0 until M), Doubles)\\n\\n//the set of possible parameters\\n@domain case class Theta(persons: IndexedSeq[Vect], movies: IndexedSeq[Vect])\\nimplicit val Thetas = Theta.Values(Seqs(Vectors(K), N), Seqs(Vectors(K), M))\\nThetas.zero.toConst\\n\"]"
+      }
     }
   }, {
     "id" : 2,
     "compiler" : "scala",
     "input" : {
-      "code" : "val data = new Data\ndata.addCells(exp.trainingData.cells)\ndata.addCells(exp.testData.cells)\ndata\nval pred = exp.emb.predict(data, true)\nHTML.data(rel.r, pred, exp.map, false)",
-      "outputFormat" : "html",
-      "extraFields" : { }
+      "sessionId" : null,
+      "code" : "\ndef score(theta: Thetas.Term)(r: Ratings.Term) = theta.persons(r.pid) dot theta.movies(r.mid)\n\ndef regularize(theta: Thetas.Term)(r: Ratings.Term) = theta.persons(r.pid).l2() + theta.movies(r.mid).l2()\n\ndef pref(theta: Thetas.Term) = (theta.persons(0) dot theta.persons(2))\n\nRating(1,1, 0.0).toConst// set up learning\ndef loss(t: Thetas.Term) = sum(dataTerm) {\n    r => -sq(r.score - score(t)(r)) - lambda*regularize(t)(r)\n} + pref(t)\n\n1000",
+      "extraFields" : {
+        "aggregatedCells" : "[\"import ml.wolfe._\\nimport ml.wolfe.term.TermImplicits._\\nimport ml.wolfe.term._\\nimport ml.wolfe.util.Math._\\n\\nimplicit val rand = new scala.util.Random(0)\\nval K = 2\\nval N = 3\\nval M = 4\\nval epochs = 100\\nval alpha = 0.1\\nval lambda = 0.1\\n\\n// set up data\\n@domain case class Rating(pid: Int, mid: Int, score: Double)\\nimplicit val Ratings = Rating.Values(Ints(0 until N), Ints(0 until M), Doubles)\\n\\n//the set of possible parameters\\n@domain case class Theta(persons: IndexedSeq[Vect], movies: IndexedSeq[Vect])\\nimplicit val Thetas = Theta.Values(Seqs(Vectors(K), N), Seqs(Vectors(K), M))\\nThetas.zero.toConst\\n\",\"val positive = Set(0->0, 1->1, 0->1)\\nval data = for(i <- 0 until N; j <- 0 until M) yield Rating(i, j, if(positive(i -> j)) 1.0 else 0.0)\\nlazy val dataTerm = data.toConst\\ndata.size\\n\"]"
+      }
     }
   }, {
     "id" : 3,
     "compiler" : "scala",
     "input" : {
-      "code" : "HTML.embedding(\"P\", exp.emb)",
-      "outputFormat" : "html",
-      "extraFields" : { }
+      "sessionId" : null,
+      "code" : "// visualize results\nval init = Settings(Thetas.createRandomSetting(random.nextGaussian() * 0.1))\nval adaParams = AdaGradParameters(epochs = epochs, learningRate = alpha, initParams = init)\n\n//do the training (argmax is a term, so it needs to be evaluated to do the optimization)\nval thetaStar = argmax(Thetas)(t => loss(t).argmaxBy(Argmaxer.adaGrad(adaParams)))\nthetaStar.eval()",
+      "extraFields" : {
+        "aggregatedCells" : "[\"import ml.wolfe._\\nimport ml.wolfe.term.TermImplicits._\\nimport ml.wolfe.term._\\nimport ml.wolfe.util.Math._\\n\\nimplicit val rand = new scala.util.Random(0)\\nval K = 2\\nval N = 3\\nval M = 4\\nval epochs = 100\\nval alpha = 0.1\\nval lambda = 0.1\\n\\n// set up data\\n@domain case class Rating(pid: Int, mid: Int, score: Double)\\nimplicit val Ratings = Rating.Values(Ints(0 until N), Ints(0 until M), Doubles)\\n\\n//the set of possible parameters\\n@domain case class Theta(persons: IndexedSeq[Vect], movies: IndexedSeq[Vect])\\nimplicit val Thetas = Theta.Values(Seqs(Vectors(K), N), Seqs(Vectors(K), M))\\nThetas.zero.toConst\\n\",\"val positive = Set(0->0, 1->1, 0->1)\\nval data = for(i <- 0 until N; j <- 0 until M) yield Rating(i, j, if(positive(i -> j)) 1.0 else 0.0)\\nlazy val dataTerm = data.toConst\\ndata.size\\n\",\"\\ndef score(theta: Thetas.Term)(r: Ratings.Term) = theta.persons(r.pid) dot theta.movies(r.mid)\\n\\ndef regularize(theta: Thetas.Term)(r: Ratings.Term) = theta.persons(r.pid).l2() + theta.movies(r.mid).l2()\\n\\nRating(1,1, 0.0).toConst// set up learning\\ndef loss(t: Thetas.Term) = sum(dataTerm) {\\n    r => -sq(r.score - score(t)(r)) - lambda*regularize(t)(r)\\n}\\n\\n1000\"]"
+      }
+    }
+  }, {
+    "id" : 4,
+    "compiler" : "scala",
+    "input" : {
+      "sessionId" : null,
+      "code" : "// predict\ndef predict(person: Int, movie: Int) = score(thetaStar.eval().toConst)(Rating(person, movie, 0.0).toConst).eval()\nMatrix((0 until N).map(i => (0 until M).map(j => predict(i, j))))",
+      "extraFields" : {
+        "aggregatedCells" : "[\"import ml.wolfe._\\nimport ml.wolfe.term.TermImplicits._\\nimport ml.wolfe.term._\\nimport ml.wolfe.util.Math._\\n\\nimplicit val rand = new scala.util.Random(0)\\nval K = 2\\nval N = 3\\nval M = 4\\nval epochs = 100\\nval alpha = 0.1\\nval lambda = 0.1\\n\\n// set up data\\n@domain case class Rating(pid: Int, mid: Int, score: Double)\\nimplicit val Ratings = Rating.Values(Ints(0 until N), Ints(0 until M), Doubles)\\n\\n//the set of possible parameters\\n@domain case class Theta(persons: IndexedSeq[Vect], movies: IndexedSeq[Vect])\\nimplicit val Thetas = Theta.Values(Seqs(Vectors(K), N), Seqs(Vectors(K), M))\\nThetas.zero.toConst\\n\",\"val positive = Set(0->0, 1->1, 0->1)\\nval data = for(i <- 0 until N; j <- 0 until M) yield Rating(i, j, if(positive(i -> j)) 1.0 else 0.0)\\nlazy val dataTerm = data.toConst\\ndata.size\\n\",\"\\ndef score(theta: Thetas.Term)(r: Ratings.Term) = theta.persons(r.pid) dot theta.movies(r.mid)\\n\\ndef regularize(theta: Thetas.Term)(r: Ratings.Term) = theta.persons(r.pid).l2() + theta.movies(r.mid).l2()\\n\\ndef pref(theta: Thetas.Term) = (theta.persons(0) dot theta.persons(2))\\n\\nRating(1,1, 0.0).toConst// set up learning\\ndef loss(t: Thetas.Term) = sum(dataTerm) {\\n    r => -sq(r.score - score(t)(r)) - lambda*regularize(t)(r)\\n} + pref(t)\\n\\n1000\",\"// visualize results\\nval init = Settings(Thetas.createRandomSetting(random.nextGaussian() * 0.1))\\nval adaParams = AdaGradParameters(epochs = epochs, learningRate = alpha, initParams = init)\\n\\n//do the training (argmax is a term, so it needs to be evaluated to do the optimization)\\nval thetaStar = argmax(Thetas)(t => loss(t).argmaxBy(Argmaxer.adaGrad(adaParams)))\\nthetaStar.eval()\"]"
+      }
     }
   } ],
   "config" : { }

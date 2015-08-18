@@ -14,6 +14,17 @@ cd moro; sbt clean run
 
 For more details, see the [following Wiki](https://github.com/wolfe-pack/moro/wiki/Setting-up-on-new-machines).
 
+Wolfe Documentation
+---
+
+To run the wolfe documentation locally, afer cloning Moro, do the following:
+
+1. `cd public/docs`
+1. `git clone https://github.com/wolfe-pack/wolfe-docs.git`
+1. `cd ../..; sbt clean run`
+1. Go to [http://localhost:9000/template/wolfe/wolfe-docs/gettingstarted/01_welcome](http://localhost:9000/template/wolfe/wolfe-docs/gettingstarted/01_welcome)
+1. Enjoy!
+
 Open Source Projects
 ---
 Moro is built using the following awesome open-source projects:
