@@ -30,6 +30,22 @@
   //margin-bottom: 5%;
 }
 
+p,li,code {
+  font-size: 45px;
+}
+
+.MathJax {
+   //font-size: 10px !important;;
+}
+
+h3 {
+  font-size: 300%;
+}
+
+section h1 {
+  font-size: 500%;
+}
+
 body {
     //-moz-transform: scale(2.0, 2.0); /* Moz-browsers */
     //zoom: 2.0; /* Other non-webkit browsers */
@@ -47,4 +63,8 @@ body {
   //border: 1px;
   //background-color: yellow;
   overflow: scroll;
+}
+
+.ace_editor{
+    font-size: 19px;
 }
