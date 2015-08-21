@@ -2,3 +2,45 @@
     font-weight: bold;
     font-size: 120%;
  }
+
+.dontpresent {
+  opacity: 0.05;
+  //visibility: hidden;
+}
+
+.dontpresent:hover {
+  opacity: 0.8;
+  //visibility: hidden;
+}
+
+.summary {
+  display: block;
+  //margin-bottom: 50%;
+}
+
+.newslide {
+  margin-bottom: 90%;
+}
+
+.slideStart {
+  padding-top: 5%;
+  //height:5%;
+  //width:100%;
+  //clear:both;
+  //margin-bottom: 5%;
+}
+
+p, li, h3{
+  //font-size: 100%;
+}
+
+#viewport {
+  width: 100%;
+  height: 60%;
+  position: fixed;
+  top: 20%;
+  left: 0;
+  //border: 1px;
+  //background-color: yellow;
+  overflow: scroll;
+}
