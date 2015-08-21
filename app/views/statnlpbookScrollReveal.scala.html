@@ -6,7 +6,7 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=120">
     <title>@{document.name}</title>
     @staticImports()
     @wolfeImports()
@@ -68,14 +68,19 @@
 
         //function to return the closest slideStart element to current scrollTop
         function closestSlideStartIndex() {
-          var top = $(document).scrollTop();
+          var top = $(document).scrollTop() ;
           //if top is before first slide return -1
-          console.log(top);
-          console.log($(anchors[0]).offset().top);
+          //console.log(top);
+          //console.log(window.scrollY);
+          //console.log("===");
+          //console.log($(anchors[0]).offset().top);
+          //console.log(anchors[0].offsetTop);
           if ($(anchors[0]).offset().top - 2> top) return -1;
           for (var i = 0; i < anchors.length; i++) {
             var current = $(anchors[i]).offset().top;
-            console.log(current);
+            //console.log("---");
+            //console.log(current);
+            //console.log(anchors[i].offsetTop);
             if (current >= top) return i;
           }
           return anchors.length-1;
@@ -88,7 +93,7 @@
                 console.log(index);
                 if (index + 1 < anchors.length) {
                     var top = $(anchors[index + 1]).offset().top;
-                    $("html, body").animate({scrollTop: top}, 500);
+                    $("html, body").animate({scrollTop: top }, 500);
                 }
             }
             if (e.keyCode == 37) {

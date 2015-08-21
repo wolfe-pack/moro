@@ -30,8 +30,12 @@
   //margin-bottom: 5%;
 }
 
-p, li, h3{
-  //font-size: 100%;
+body {
+    //-moz-transform: scale(2.0, 2.0); /* Moz-browsers */
+    //zoom: 2.0; /* Other non-webkit browsers */
+    //zoom: 100%; /* Webkit browsers */
+    //transform: scale(1.5);
+    //transform-origin: top;
 }
 
 #viewport {
