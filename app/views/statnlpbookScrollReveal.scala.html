@@ -48,6 +48,9 @@
         $(".cellWrapper").each(function (){
           $(this).attr('data-sr','')
         });
+        $(".srdiv").each(function() {
+            $(this).replaceWith($('<div data-sr>' + this.innerHTML + '</div>'));
+        });
 
         var config = {
           enter:  'top',
