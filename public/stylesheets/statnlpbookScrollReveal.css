@@ -38,6 +38,15 @@ p,li,code {
    //font-size: 10px !important;;
 }
 
+.String {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 250%;
+}
+
+
 h3 {
   font-size: 300%;
 }
