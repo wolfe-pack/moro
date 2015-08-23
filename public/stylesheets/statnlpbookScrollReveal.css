@@ -77,3 +77,7 @@ body {
 .ace_editor{
     font-size: 19px;
 }
+
+.grid {
+  max-width: 1200px !important;
+}
