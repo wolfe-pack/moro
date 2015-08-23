@@ -923,12 +923,14 @@ article h2:first-child {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9e2812', endColorstr='#6f0d0d',GradientType=0 );
 }
 
+/*
 .label {
   float: left;
   text-transform: uppercase;
   font-weight: 700;
   text-shadow: 0 -1px 0 rgba(0,0,0,.5);
 }
+*/
 
 @media (max-width: 568px){
   .post-category {

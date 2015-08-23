@@ -206,13 +206,13 @@ svg.matrix {
 }
 
 /* This sets the color for "TK" nodes to a light blue green. */
-g.type-TK > rect {
+g.terminal > rect {
   fill: #00ffd0;
 }
 
 text {
   font-weight: 300;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+  //font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
   font-size: 14px;
 }
 
