@@ -11,3 +11,14 @@
   font-weight: bold;
 }
 
+.summary {
+  display: none
+}
+
+.edgePath path {
+  stroke: white;
+}
+
+.parseTree .node text {
+  //font-size: 30px;
+}

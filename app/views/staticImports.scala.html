@@ -27,7 +27,7 @@
 
 <!-- MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });
+  MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} }, "HTML-CSS": { linebreaks: {automatic: true} } });
 </script>
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <!--script type="text/javascript" src="@routes.Assets.at("javascripts/MathJax-2.5-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML")"></script-->
@@ -42,6 +42,8 @@
 <script type="text/javascript" src="@routes.Assets.at("javascripts/nv.d3.min.js")"></script>
 <script src="@routes.Assets.at("javascripts/htmlgen/d3utils.js")" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="@routes.Assets.at("javascripts/brat/client/lib/head.load.min.js")"></script>
+
+<script type="text/javascript" src="@routes.Assets.at("javascripts/dagre-d3.js")"></script>
 
 <link href="@routes.Assets.at("stylesheets/nv.d3.css")" rel="stylesheet">
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/htmlgen.css")">

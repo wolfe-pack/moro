@@ -6,7 +6,7 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=120">
     <title>@{document.name}</title>
     @staticImports()
     @wolfeImports()
@@ -45,20 +45,81 @@
 
       window.setTimeout(function() {
         //get all cell wrappers and add data-sr fields
+        /*
         $(".cellWrapper").each(function (){
           $(this).attr('data-sr','')
         });
+        $(".srdiv").each(function() {
+            $(this).replaceWith($('<div data-sr>' + this.innerHTML + '</div>'));
+        });
+        */
 
+        //in paragraphs with summary elements, remove everything else
+        $("p").has('.summary').contents().filter(function(){return(this.nodeType === 3)}).remove()
+        $("p").has('.summary').children().not('.summary').remove()
+
+        //create divs at the start of each slide
+        $(".newslide").after("<div class='slideStart'></div>");
+        var anchors = $(".slideStart")
+
+        //add anchors for slides
+        var i = 0;
+        anchors.each(function(){ $(this).attr("id","slide" + i); i++; });
+
+        //function to return the closest slideStart element to current scrollTop
+        function closestSlideStartIndex() {
+          var top = $(document).scrollTop() ;
+          //if top is before first slide return -1
+          //console.log(top);
+          //console.log(window.scrollY);
+          //console.log("===");
+          //console.log($(anchors[0]).offset().top);
+          //console.log(anchors[0].offsetTop);
+          if ($(anchors[0]).offset().top - 2> top) return -1;
+          for (var i = 0; i < anchors.length; i++) {
+            var current = $(anchors[i]).offset().top;
+            //console.log("---");
+            //console.log(current);
+            //console.log(anchors[i].offsetTop);
+            if (current >= top) return i;
+          }
+          return anchors.length-1;
+        }
+
+        //scroll to slides
+        $(document).keydown(function(e){
+            if (e.keyCode == 39) {
+                var index = closestSlideStartIndex()
+                console.log(index);
+                if (index + 1 < anchors.length) {
+                    var top = $(anchors[index + 1]).offset().top;
+                    $("html, body").animate({scrollTop: top }, 500);
+                }
+            }
+            if (e.keyCode == 37) {
+                var index = closestSlideStartIndex()
+                console.log(index);
+                if (index > 0) {
+                    var top = $(anchors[index - 1]).offset().top;
+                    $("html, body").animate({scrollTop: top}, 500);
+                } else $("html, body").animate({scrollTop: 0}, 500);
+            }
+        });
+
+        /*
         var config = {
           enter:  'top',
           move:   '0px',
           flip:   '0deg',
           spin:   '0deg',
           roll:   '0deg',
-          reset:  true
+          reset:  true,
+          vFactor:  0.01,
+          //viewport: document.getElementById('viewport')
         }
 
         window.sr = new scrollReveal(config);
+        */
         console.log("Test");
       }, 1000);
 
