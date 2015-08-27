@@ -29,7 +29,7 @@ object ScalaIMainInterpreter {
   /*
    * For a given FQ classname, trick the resource finder into telling us the containing jar.
    */
-  private def jarPathOfClass(className: String) = try {
+  def jarPathOfClass(className: String) = try {
     val resource = className.split('.').mkString("/", "/", ".class")
     val path = getClass.getResource(resource).getPath
     val indexOfFile = path.indexOf("file:") + 5

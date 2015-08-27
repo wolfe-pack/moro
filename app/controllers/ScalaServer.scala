@@ -41,7 +41,7 @@ class ScalaServer(c: MoroConfig) extends Compiler with ACEEditor {
   val compiledMap = new mutable.HashMap[String,Any]
 
   val interpreter: ScalaInterpreter =
-    //new Evaluator(None, classPath, imports, classesForJarPath, false) //Some(new File("runtime-classes")
+    //new Evaluator(None, classPath, imports, classesForJarPath, plugins, classesForPlugins, false) //Some(new File("runtime-classes")
     new ScalaIMainInterpreter(None, classPath, imports, classesForJarPath, plugins, classesForPlugins)
 
   def compile(input: Input) = {

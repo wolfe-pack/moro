@@ -64,23 +64,12 @@ object Evaluator {
 class Evaluator(target: Option[File] = None, classPath: List[String] = List.empty,
                 imports: List[String] = List.empty,
                 classesForJarPath: List[String] = List.empty,
+                plugins: List[String] = List.empty,
+                classesForPlugins: List[String] = List.empty,
                 multipleObjs: Boolean = true) extends ScalaInterpreter {
 
   import Evaluator.jvmId
-
-  private lazy val compilerPath = try {
-    jarPathOfClass("scala.tools.nsc.Interpreter")
-  } catch {
-    case e: Throwable =>
-      throw new RuntimeException("Unable lo load scala interpreter from classpath (scala-compiler jar is missing?)", e)
-  }
-
-  private lazy val libPath = try {
-    jarPathOfClass("scala.Any")
-  } catch {
-    case e: Throwable =>
-      throw new RuntimeException("Unable to load scala base object from classpath (scala-library jar is missing?)", e)
-  }
+  import ScalaIMainInterpreter._
 
   private lazy val additionalPath =
     classesForJarPath.map(c =>
@@ -89,6 +78,16 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
       } catch {
         case e: Throwable =>
           throw new RuntimeException("Unable to load custom class from classpath (relevant jar for " + c + " missing?)", e)
+      }
+    ).flatten.toList
+
+  private lazy val additionalPlugins =
+    classesForPlugins.map(c =>
+      try {
+        jarPathOfClass(c)
+      } catch {
+        case e: Throwable =>
+          throw new RuntimeException("Unable to load custom plugin from classpath (relevant jar for " + c + " missing?)", e)
       }
     ).flatten.toList
 
@@ -188,17 +187,6 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
   }
 
   /*
-   * For a given FQ classname, trick the resource finder into telling us the containing jar.
-   */
-  private def jarPathOfClass(className: String) = try {
-    val resource = className.split('.').mkString("/", "/", ".class")
-    val path = getClass.getResource(resource).getPath
-    val indexOfFile = path.indexOf("file:") + 5
-    val indexOfSeparator = path.lastIndexOf('!')
-    List(path.substring(indexOfFile, indexOfSeparator))
-  }
-
-  /*
    * Try to guess our app's classpath.
    * This is probably fragile.
    */
@@ -240,12 +228,15 @@ class Evaluator(target: Option[File] = None, classPath: List[String] = List.empt
     val cache = new mutable.HashMap[String, Class[_]]()
 
     val settings = new Settings
+    settings.usejavacp.value = false
     settings.nowarnings.value = true // warnings are exceptions, so disable
     settings.outputDirs.setSingleOutput(target)
     val pathList = compilerPath ::: libPath ::: additionalPath
     settings.bootclasspath.value = pathList.mkString(File.pathSeparator)
     settings.classpath.value = (pathList ::: impliedClassPath).mkString(File.pathSeparator)
-    println(settings.classpath.value)
+    settings.plugin.value = plugins ++ additionalPlugins
+    println("Provided cp: " + classPath)
+    println("Provided plugin: " + plugins.mkString(", "))
 
     val reporter = new AbstractReporter {
 
