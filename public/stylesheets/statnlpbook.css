@@ -1,24 +1,39 @@
 .exercise {
 }
 
-.extext{
-  margin-left: 20px;
-  margin-bottom: 20px;
+.extext {
+    margin-left: 20px;
+    margin-bottom: 20px;
 }
 
-
 .exname {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .summary {
-  display: none
+    display: none
 }
 
 .edgePath path {
-  stroke: white;
+    stroke: white;
 }
 
 .parseTree .node text {
-  //font-size: 30px;
+/ / font-size : 30 px;
+}
+
+.single-img {
+    margin-top: 30px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.centered-div {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.frame {
+    border-radius: 20px;
 }
