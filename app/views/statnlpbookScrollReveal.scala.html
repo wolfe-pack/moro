@@ -5,43 +5,56 @@
 <!DOCTYPE html>
 
 <html>
-<head>
-    <meta name="viewport" content="width=120">
-    <title>@{document.name}</title>
-    @staticImports()
-    @wolfeImports()
-    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/statnlpbook.css")">
-    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/statnlpbookScrollReveal.css")">
+    <head>
+        <meta name="viewport" content="width=120">
+        <title>@{
+            document.name
+        }</title>
+        @staticImports()
+        @wolfeImports()
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/statnlpbook.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/statnlpbookScrollReveal.css")">
 
-</head>
-<body class="wrap">
-    <header>
-        <nav class="mobile-nav show-on-mobiles">
-            <!--{% include primary-nav-items.html %}-->
-        </nav>
-        <div class="grid">
-            <div class="unit center-on-mobiles">
-                <h1>
-                    <a href="http://localhost:9000/template/statnlpbook/00_intro">
-                        <h1 class="logo-text">StatNLP</h1>
-                    </a>
-                </h1>
+    </head>
+    <body class="wrap">
+        <header>
+            <nav class="mobile-nav show-on-mobiles">
+                    <!--{% include primary-nav-items.html %}-->
+            </nav>
+            <div class="grid">
+                <div class="center-on-mobiles">
+                    <h1>
+                        <a href="http://localhost:9000/template/statnlpbook/00_intro">
+                            <h1 class="logo-text">StatNLP</h1>
+                        </a>
+                    </h1>
+                    [<a id="toggle-view" href="">Text</a>]
+                    <script>
+                    $(function() {
+                        var url = window.location.href;
+                        var toggle = $("#toggle-view");
+                        toggle.attr("href",url.replace("statnlpbookScrollReveal","statnlpbook"));
+                    });
+                    </script>
+
+                </div>
             </div>
-        </div>
-    </header>
-    <section>
-        <div class="grid">
-            <div>
-                @for(c <- compilers) { @Html(c.prefixHTML) }
+        </header>
+        <section>
+            <div class="grid">
+                <div>
+                @for(c <- compilers) {
+                    @Html(c.prefixHTML)
+                }
+                </div>
+                <div id="static_content" class="unit center-on-mobiles">
+                    <h1>@Html(document.name)</h1>
+                </div>
+                @staticContent("static_content", document, compilers, docRoot, user, "chaos", config.allowExecution("statnlpbook"))
             </div>
-            <div id="static_content" class="unit center-on-mobiles">
-                <h1>@Html(document.name)</h1>
-            </div>
-            @staticContent("static_content", document, compilers, docRoot, user, "chaos", config.allowExecution("statnlpbook"))
-        </div>
-    </section>
-    <script src="@routes.Assets.at("javascripts/scrollReveal.min.js")" type="text/javascript"></script>
-    <script>
+        </section>
+        <script src="@routes.Assets.at("javascripts/scrollReveal.min.js")" type="text/javascript"></script>
+        <script>
 
       window.setTimeout(function() {
         //get all cell wrappers and add data-sr fields
@@ -124,6 +137,6 @@
       }, 1000);
 
     </script>
-</body>
+    </body>
 </html>
 

@@ -5,39 +5,51 @@
 <!DOCTYPE html>
 
 <html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@{document.name}</title>
-    @staticImports()
-    @wolfeImports()
-    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/statnlpbook.css")">
-</head>
-<body class="wrap">
-    <header>
-        <nav class="mobile-nav show-on-mobiles">
-            <!--{% include primary-nav-items.html %}-->
-        </nav>
-        <div class="grid">
-            <div class="unit center-on-mobiles">
-                <h1>
-                    <a href="http://localhost:9000/template/statnlpbook/00_intro">
-                        <h1 class="logo-text">StatNLP</h1>
-                    </a>
-                </h1>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@{
+            document.name
+        }</title>
+        @staticImports()
+        @wolfeImports()
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/statnlpbook.css")">
+    </head>
+    <body class="wrap">
+        <header>
+            <nav class="mobile-nav show-on-mobiles">
+                    <!--{% include primary-nav-items.html %}-->
+            </nav>
+            <div class="grid">
+                <div class="center-on-mobiles">
+                    <h1>
+                        <a href="http://localhost:9000/template/statnlpbook/00_intro">
+                            <h1 class="logo-text">StatNLP</h1>
+                        </a>
+                    </h1>
+                    [<a id="toggle-view" href="">Slides</a>]
+                    <script>
+                    $(function() {
+                        var url = window.location.href;
+                        var toggle = $("#toggle-view");
+                        toggle.attr("href",url.replace("statnlpbook","statnlpbookScrollReveal"));
+                    });
+                    </script>
+                </div>
             </div>
-        </div>
-    </header>
-    <section>
-        <div class="grid">
-            <div>
-                @for(c <- compilers) { @Html(c.prefixHTML) }
+        </header>
+        <section>
+            <div class="grid">
+                <div>
+                @for(c <- compilers) {
+                    @Html(c.prefixHTML)
+                }
+                </div>
+                <div id="static_content" class="unit center-on-mobiles">
+                    <h1>@Html(document.name)</h1>
+                </div>
+                @staticContent("static_content", document, compilers, docRoot, user, "chaos", config.allowExecution("statnlpbook"))
             </div>
-            <div id="static_content" class="unit center-on-mobiles">
-                <h1>@Html(document.name)</h1>
-            </div>
-            @staticContent("static_content", document, compilers, docRoot, user, "chaos", config.allowExecution("statnlpbook"))
-        </div>
-    </section>
-</body>
+        </section>
+    </body>
 </html>
 
