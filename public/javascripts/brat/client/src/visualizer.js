@@ -3,7 +3,7 @@
 
 var Visualizer = (function($, window, undefined) {
     var fontLoadTimeout = 5000; // 5 seconds
-  
+
     var DocumentData = function(text) {
       this.text = text;
       this.chunks = [];
@@ -1301,6 +1301,9 @@ Util.profileStart('init');
         // clear the SVG
         svg.clear(true);
         if (!data || data.length == 0) return;
+
+        //that.forceWidth = 500;
+
 
         // establish the width according to the enclosing element
         canvasWidth = that.forceWidth || $svgDiv.width();

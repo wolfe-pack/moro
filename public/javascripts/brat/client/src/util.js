@@ -288,23 +288,23 @@ var Util = (function(window, undefined) {
       // Check if we're already dealing with an array of colors
 //         if ( color && color.constructor == Array && color.length == 3 )
 //             return color;
-      
+
       // Look for rgb(num,num,num)
       if (result = rgbNumRE.exec(color))
         return [parseInt(result[1]), parseInt(result[2]), parseInt(result[3])];
-      
+
       // Look for rgb(num%,num%,num%)
       if (result = rgbPercRE.exec(color))
         return [parseFloat(result[1])*2.55, parseFloat(result[2])*2.55, parseFloat(result[3])*2.55];
-      
+
       // Look for #a0b1c2
       if (result = rgbHash6RE.exec(color))
         return [parseInt(result[1],16), parseInt(result[2],16), parseInt(result[3],16)];
-      
+
       // Look for #fff
       if (result = rgbHash3RE.exec(color))
         return [parseInt(result[1]+result[1],16), parseInt(result[2]+result[2],16), parseInt(result[3]+result[3],16)];
-      
+
       // Otherwise, we're most likely dealing with a named color
       return colors[$.trim(color).toLowerCase()];
     }
@@ -317,10 +317,10 @@ var Util = (function(window, undefined) {
       // pad
       r = r.length < 2 ? '0' + r : r;
       g = g.length < 2 ? '0' + g : g;
-      b = b.length < 2 ? '0' + b : b;        
+      b = b.length < 2 ? '0' + b : b;
       return ('#'+r+g+b);
     }
-    
+
     // Functions rgbToHsl and hslToRgb originally from 
     // http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
     // implementation of functions in Wikipedia
@@ -344,7 +344,7 @@ var Util = (function(window, undefined) {
         }
         h /= 6;
       }
-      
+
       return [h, s, l];
     }
 
@@ -371,7 +371,7 @@ var Util = (function(window, undefined) {
         g = hue2rgb(p, q, h);
         b = hue2rgb(p, q, h - 1/3);
       }
-      
+
       return [r * 255, g * 255, b * 255];
     }
 
@@ -554,6 +554,23 @@ var Util = (function(window, undefined) {
     };
 
     // container: ID or jQuery element
+    // collData: the collection data (in the format of the result of
+    //   http://.../brat/ajax.cgi?action=getCollectionInformation&collection=...
+    // docData: the document data (in the format of the result of
+    //   http://.../brat/ajax.cgi?action=getDocument&collection=...&document=...
+    // returns the embedded visualizer's dispatcher object
+    var embedWithForceWidth = function(container, collData, docData, webFontURLs,forceWidth) {
+        var dispatcher = new Dispatcher();
+        var visualizer = new Visualizer(dispatcher, container, webFontURLs);
+        visualizer.forceWidth = forceWidth;
+        docData.collection = null;
+        dispatcher.post('collectionLoaded', [collData]);
+        dispatcher.post('requestRenderData', [docData]);
+        return dispatcher;
+    };
+
+
+    // container: ID or jQuery element
     // collDataURL: the URL of the collection data, or collection data
     //   object (if pre-fetched)
     // docDataURL: the url of the document data (if pre-fetched, use
@@ -604,6 +621,7 @@ var Util = (function(window, undefined) {
       deparam: deparam,
       embed: embed,
       embedByURL: embedByURL,
+      embedWithForceWidth:   embedWithForceWidth
     };
 
 })(window);
