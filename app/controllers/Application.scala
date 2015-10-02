@@ -107,7 +107,7 @@ object Application extends Controller {
         None)) // request.user.map(_.asInstanceOf[MoroUser])
   }
 
-  def save(file: String) = UserAwareAction(parse.json(maxLength = 1024 * 500)) {
+  def save(file: String) = UserAwareAction(parse.json(maxLength = 1024 * 1025 * 10)) {
     implicit request =>
       val json = request.body
       val d = Document.loadJson(json.toString())
