@@ -109,6 +109,9 @@ function drawGraph(graph, divId) {
 function animate(divId, maxFrames) {
   var currentSelection = 0;
   $('#'+divId + ' #frame0').removeClass('hide');
+  for (f = 1; f < maxFrames; f++) {
+    $('#'+divId + ' #frame' + f).addClass('hide');
+  }
 
   $('#'+divId + 'prev').on('click', function () {
     if(currentSelection > 0) {
