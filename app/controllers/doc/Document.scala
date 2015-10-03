@@ -16,7 +16,7 @@ import scala.io.Source
  */
 case class Document(val name: String, cells: Seq[Cell] = Seq.empty, config: Map[String, String] = Map.empty) {
 
-  def save(filepath: String): Unit = Document.save(this, filepath)
+  def save(filepath: String, saveCacheFile: Boolean): Unit = Document.save(this, filepath, saveCacheFile)
 
   override def toString = {
     "Doc(%s)\n%s" format(name, cells.mkString("\t", "\n\t", "\n"))
@@ -88,14 +88,14 @@ object Document {
 
   def toDData(doc: Document) = new DocumentData(doc.name, doc.cells, doc.config)
 
-  def save(doc: Document, filepath: String) = {
+  def save(doc: Document, filepath: String, saveCacheFile: Boolean) = {
     val (ddoc, cache) = doc.withoutCache
     val dd = toDData(ddoc)
     val writer = new PrintWriter(filepath)
     writer.println(JsonWrapper.serializePretty(dd))
     writer.flush()
     writer.close()
-    saveCache(cache, filepath + ".cache")
+    if(saveCacheFile) saveCache(cache, filepath + ".cache")
   }
 
   def saveCache(cache: OutputCache, filepath: String): Unit ={

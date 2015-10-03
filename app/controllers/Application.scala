@@ -112,7 +112,7 @@ object Application extends Controller {
       val json = request.body
       val d = Document.loadJson(json.toString())
       println("/save: " + d.name + " --> " + file)
-      Document.save(d, config.docRoot + file + ".json")
+      Document.save(d, config.docRoot + file + ".json", config.editorGenCacheFile)
       Ok("Save successful: " + d)
   }
 
@@ -133,7 +133,7 @@ object Application extends Controller {
             val name = (json \ "name").as[String]
             val fname = if (path == "") config.docRoot + name + ".json" else config.docRoot + path + "/" + name + ".json"
             val d = new Document(title)
-            Document.save(d, fname)
+            Document.save(d, fname, false)
             println("/dirAdd: " + "fname: %s, title: %s, name: %s, doc: %s" format(fname, title, name, d))
             Ok("success")
           } catch {
