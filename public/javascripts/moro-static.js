@@ -99,7 +99,7 @@ function createStaticCellHTML(id,section,doc,mode,input,compilers) {
     $('#editCell' + id).hide();
   }
   if(mode == 'scala' && input.outputFormat != null) {
-    outputResult(doc, id, input.outputFormat, compilers)
+    outputResult(doc, id, { result: input.outputFormat }, compilers)
     //doc.cells[id].renderDisplay.html(input.outputFormat);
   } else {
     if(!compilers[mode].aggregate) compileStaticCell(id, doc, mode, input, compilers);
