@@ -30,6 +30,14 @@
     font-size: 20px;
 }
 
+.fieldName {
+    font-size: 20px;
+}
+
+.field {
+    font-size: 20px;
+}
+
 .slideStart {
     padding-top: 5%;
     /*height:5%;*/
