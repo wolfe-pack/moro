@@ -1,5 +1,7 @@
 Moro
 ====
+
+[![Join the chat at https://gitter.im/wolfe-pack/moro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/wolfe-pack/moro?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/wolfe-pack/moro.svg?branch=master)](https://travis-ci.org/wolfe-pack/moro)
 
 Interactive documentation and programming with Scala, inspired by IPython notebook.
