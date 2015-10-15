@@ -54,6 +54,10 @@ p, li, code, .exercise {
     font-size: 45px;
 }
 
+blockquote p {
+    font-size: 35px !important;
+}
+
 .MathJax {
     /*font-size: 10px !important;;*/
 }
