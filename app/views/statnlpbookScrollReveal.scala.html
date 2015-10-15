@@ -72,8 +72,10 @@
 //        $(".bratsvg").each(function() {scaleSVG($(this),2)});
 
         //in paragraphs with summary elements, remove everything else
-        $("p").has('.summary').contents().filter(function(){return(this.nodeType === 3)}).remove()
-        $("p").has('.summary').children().not('.summary').remove()
+        $("p").has('.summary').contents().filter(function(){return(this.nodeType === 3)}).remove();
+        $("p").has('.summary').children().not('.summary').remove();
+        $('.book-start').nextUntil('.slide-start').andSelf().remove();
+
 
         //create divs at the start of each slide
         $(".newslide").after("<div class='slideStart'></div>");

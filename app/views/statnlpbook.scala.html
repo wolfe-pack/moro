@@ -50,6 +50,17 @@
                 @staticContent("static_content", document, compilers, docRoot, user, "chaos", config.allowExecution("statnlpbook"))
             </div>
         </section>
+        <script>
+
+           $(function() {
+             console.log("Removing slide-only content");
+             window.setTimeout(function() {
+               console.log($(".slide-start"));
+               console.log($('.slide-start').nextUntil('.slide-end').andSelf());
+               $('.slide-start').nextUntil('.slide-end').andSelf().remove();
+             },1000);
+           });
+        </script>
     </body>
 </html>
 
