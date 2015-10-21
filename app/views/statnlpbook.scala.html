@@ -12,7 +12,7 @@
         }</title>
         @staticImports()
         @wolfeImports()
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/statnlpbook.css")">
+        <link rel="stylesheet" media="screen, print" href="@routes.Assets.at("stylesheets/statnlpbook.css")">
     </head>
     <body class="wrap">
         <header>
@@ -26,7 +26,7 @@
                             <h1 class="logo-text">StatNLP</h1>
                         </a>
                     </h1>
-                    [<a id="toggle-view" href="">Slides</a>]
+                    <div id="slidesButton">[<a id="toggle-view" href="">Slides</a>]</div>
                     <script>
                     $(function() {
                         var url = window.location.href;
