@@ -12,6 +12,7 @@
     .editor {border: thin solid gray !important; border-radius: 5px !important;}
     .cell {margin-top: 10px !important; margin-bottom: 10px !important;}
     .ace_indent-guide {visibility: hidden !important}
+    .grid {width:750px !important;}
 }
 
 
