@@ -112,7 +112,7 @@ object Document {
   }
 
   def load(is: InputStream): Document = {
-    val reader = Source.fromInputStream(is)
+    val reader = Source.fromInputStream(is, "UTF-8")
     val dd = loadJson(reader.getLines().mkString("\n"))
     reader.close()
     dd
